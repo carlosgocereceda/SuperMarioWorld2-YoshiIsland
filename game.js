@@ -20,6 +20,12 @@ var game = function () {
     Q.load("yoshi.png, yoshi.json", function () {
         Q.compileSheets("yoshi.png", "yoshi.json");
 
+        //Animaciones
+        Q.animations('yoshi_animations', {
+            run_right: { frames: [0, 1, 2, 3], rate: 1 / 10 },
+            jumps: { frames: [0, 1, 2, 3], rate: 1 / 10 }
+        });
+
         Q.scene("level1", function (stage) {
             Q.stageTMX("level.tmx", stage);
             var player = stage.insert(new Q.Player());
@@ -44,29 +50,49 @@ var game = function () {
     });
     //Mario
     Q.Sprite.extend("Player", {
-        // the init constructor is called on creation
         init: function (p) {
-            // You can call the parent's constructor with this._super(..)
             this._super(p, {
+                sprite: "yoshi_animations",
                 sheet: "yoshiR", // Sprite que esta dentro de mario_small.json
                 x: 300, //x donde aparecerá
                 jumpSpeed: -400,
                 y: 500 //y donde aparecerá
             });
-            // Add in pre-made components to get up and running quickly
-            // The `2d` component adds in default 2d collision detection
-            // and kinetics (velocity, gravity)
-            // The `platformerControls` makes the player controllable by the
-            // default input actions (left, right to move, up or action to jump)
-            // It also checks to make sure the player is on a horizontal surface before
-            // letting them jump.
             this.add('2d, platformerControls, tween, animation');
-            //this.on("bump.bottom",this,"stomp");
-            // Write event handlers to respond hook into behaviors.
-            // hit.sprite is called everytime the player collides with a sprite
         },
         step: function (dt) {
+            if (this.p.y > 700) {
+                Q.stageScene("endGame", 1, { label: "You Died" });
+                this.p.x = 300;
+                this.p.y = 500;
+            }
+            else {
+                if (this.p.vx > 0) {
+                    this.p.sheet = "yoshiR";
+                    this.play("run_right");
+                } else if (this.p.vx < 0) {
+                    //this.play("run_left");
+                } else {
+                    //this.play("stand_" + this.p.direction);
+                }
+                if (this.p.vy > 0) {
+                    
+                    /*if (this.p.vx > 0)
+                        //this.play("run_down_right");
+                    else
+                        //this.play("run_down_left");*/
+                }
+                else if (this.p.vy < 0) {
+                    console.log("salto");
+                    this.p.sheet = "yoshiJumps";
+                    this.play("jumps");
+                    /*if (this.p.vx > 0)
+                        this.play("run_up_right");
+                    else
+                        this.play("run_up_left");*/
 
+                }
+            }
         }
 
 
