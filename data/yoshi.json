@@ -1,3 +1,4 @@
 {
-	"yoshiR":{"sx":10,"sy":3,"tileW":30,"tileH":32,"frames":3}
+	"yoshiR":{"sx":180,"sy":3,"tileW":35,"tileH":32,"frames":3},
+	"yoshiJumps":{"sx":185,"sy":173,"tileW":35,"tileH":40,"frames":3}
 }
