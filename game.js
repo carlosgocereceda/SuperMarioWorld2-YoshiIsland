@@ -17,13 +17,18 @@ var game = function () {
         // And turn on default input controls and touch input (for UI)
         .controls().touch()
     //Se cargan los recursos
-    Q.load("yoshi.png, yoshi.json", function () {
-        Q.compileSheets("yoshi.png", "yoshi.json");
+    Q.load("yoshiJunto.png, yoshi.json", function () {
+        Q.compileSheets("yoshiJunto.png", "yoshi.json");
 
         //Animaciones
         Q.animations('yoshi_animations', {
             run_right: { frames: [0, 1, 2, 3], rate: 1 / 10 },
-            jumps: { frames: [0, 1, 2, 3], rate: 1 / 10 }
+            run_left: { frames: [29, 30, 31, 32], rate: 1 / 10 },
+            jumps: { frames: [0, 1, 2, 3], rate: 1 / 10 },
+            run_down_right: { frames: [0, 1, 2, 3], rate: 1 / 10 },
+            run_down_left : { frames: [0, 1, 2, 3], rate: 1 / 10 },
+            run_up_right:  { frames: [0, 1, 2, 3], rate: 1 / 10 },
+            run_up_left: { frames: [0, 1, 2, 3], rate: 1 / 10 }
         });
 
         Q.scene("level1", function (stage) {
@@ -63,6 +68,7 @@ var game = function () {
         step: function (dt) {
             if (this.p.y > 700) {
                 Q.stageScene("endGame", 1, { label: "You Died" });
+                console.log("cayendo");
                 this.p.x = 300;
                 this.p.y = 500;
             }
@@ -71,28 +77,24 @@ var game = function () {
                     this.p.sheet = "yoshiR";
                     this.play("run_right");
                 } else if (this.p.vx < 0) {
-                    //this.play("run_left");
-                } else {
-                    //this.play("stand_" + this.p.direction);
+                    this.p.sheet = "yoshiR";
+                    this.play("run_left");
                 }
                 if (this.p.vy > 0) {
-                    
-                    /*if (this.p.vx > 0)
-                        //this.play("run_down_right");
+                    if (this.p.vx > 0)
+                        this.play("run_down_right");
                     else
-                        //this.play("run_down_left");*/
+                        this.play("run_down_left");
                 }
                 else if (this.p.vy < 0) {
-                    console.log("salto");
-                    this.p.sheet = "yoshiJumps";
-                    this.play("jumps");
-                    /*if (this.p.vx > 0)
+                    if (this.p.vx > 0)
                         this.play("run_up_right");
                     else
-                        this.play("run_up_left");*/
+                        this.play("run_up_left");
 
                 }
             }
+
         }
 
 
