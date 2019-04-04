@@ -32,9 +32,10 @@ var game = function () {
         });
 
         Q.scene("level1", function (stage) {
-            Q.stageTMX("level.tmx", stage);
+            Q.stageTMX("yoshi.tmx", stage);
             var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
+            stage.viewport.scale = 2;
             /*var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.insert(new Q.Bloopa({x:2850}));
@@ -48,7 +49,7 @@ var game = function () {
             stage.insert(new Q.Princess());
             stage.insert(new Q.Goomba({ x: 800 }));*/
         });
-        Q.loadTMX("level.tmx", function () {
+        Q.loadTMX("yoshi.tmx", function () {
             Q.stageScene("level1");
         });
         
@@ -59,9 +60,9 @@ var game = function () {
             this._super(p, {
                 sprite: "yoshi_animations",
                 sheet: "yoshiR", // Sprite que esta dentro de mario_small.json
-                x: 300, //x donde aparecerá
+                x: 350, //x donde aparecerá
                 jumpSpeed: -400,
-                y: 500 //y donde aparecerá
+                y: 450 //y donde aparecerá
             });
             this.add('2d, platformerControls, tween, animation');
         },
