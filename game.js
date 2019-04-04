@@ -17,9 +17,13 @@ var game = function () {
         // And turn on default input controls and touch input (for UI)
         .controls().touch()
     //Se cargan los recursos
-    Q.load("", function () {
+    Q.load("yoshi.png, yoshi.json", function () {
+        Q.compileSheets("yoshi.png", "yoshi.json");
+
         Q.scene("level1", function (stage) {
             Q.stageTMX("level.tmx", stage);
+            var player = stage.insert(new Q.Player());
+            stage.add("viewport").follow(player);
             /*var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.insert(new Q.Bloopa({x:2850}));
@@ -34,8 +38,37 @@ var game = function () {
             stage.insert(new Q.Goomba({ x: 800 }));*/
         });
         Q.loadTMX("level.tmx", function () {
-            Q.stageScene("mainMenu");
+            Q.stageScene("level1");
         });
         
+    });
+    //Mario
+    Q.Sprite.extend("Player", {
+        // the init constructor is called on creation
+        init: function (p) {
+            // You can call the parent's constructor with this._super(..)
+            this._super(p, {
+                sheet: "yoshiR", // Sprite que esta dentro de mario_small.json
+                x: 300, //x donde aparecerá
+                jumpSpeed: -400,
+                y: 500 //y donde aparecerá
+            });
+            // Add in pre-made components to get up and running quickly
+            // The `2d` component adds in default 2d collision detection
+            // and kinetics (velocity, gravity)
+            // The `platformerControls` makes the player controllable by the
+            // default input actions (left, right to move, up or action to jump)
+            // It also checks to make sure the player is on a horizontal surface before
+            // letting them jump.
+            this.add('2d, platformerControls, tween, animation');
+            //this.on("bump.bottom",this,"stomp");
+            // Write event handlers to respond hook into behaviors.
+            // hit.sprite is called everytime the player collides with a sprite
+        },
+        step: function (dt) {
+
+        }
+
+
     });
 }
