@@ -31,7 +31,7 @@ var game = function () {
             run_up_left: { frames: [0, 1], rate: 1 / 10 },
             stand_right: { frames: [0], rate: 1 / 10 },
             stand_left: { frames: [0], rate: 1 / 10 },
-            attack_right: { frames: [0,1,2,3,4,5,6], loop: false, rate: 1 / 10, trigger: "stopAttack" }
+            attack: { frames: [0,1,2,3,4,5,6], loop: false, rate: 1 / 10, trigger: "stopAttack" }
         });
 
         Q.scene("level1", function (stage) {
@@ -77,9 +77,9 @@ var game = function () {
         },
         attack : function(){
             this.p.atancando = true;
-            this.p.sheet = "yoshiAttackRight";
             console.log("atacando");
-            this.play("attack_right");
+            this.p.sheet = "yoshiAttack_" + this.p.direction;
+            this.play("attack");
         },
         step: function (dt) {
             if (this.p.y > 700) {
