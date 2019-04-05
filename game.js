@@ -31,7 +31,9 @@ var game = function () {
             run_up_left: { frames: [0, 1], rate: 1 / 10 },
             stand_right: { frames: [0], rate: 1 / 10 },
             stand_left: { frames: [0], rate: 1 / 10 },
-            attack: { frames: [0,1,2,3,4,5,6], loop: false, rate: 1 / 10, trigger: "stopAttack" }
+            attack_right: { frames: [0,1,2,3,4,5,6], loop: false, rate: 1 / 10, trigger: "stopAttack" },
+            attack_left:{ frames: [0,1,2,3,4,5,6], loop: false, rate: 1 / 10, flip: "x", trigger: "stopAttack_left" },
+            stand_left_corrector: { frames: [0], flip: "", rate: 1 / 10 }
         });
 
         Q.scene("level1", function (stage) {
@@ -71,15 +73,19 @@ var game = function () {
             this.add('2d, platformerControls, tween, animation');
             Q.input.on("down", this, "attack");
             this.on("stopAttack", function(){
-                console.log("stop attack");
                 this.p.atancando = false;
+            });
+            this.on("stopAttack_left", function(){
+                this.p.atancando = false;
+                //this.p.flip = "x";
+                this.play("stand_left_corrector");
             });
         },
         attack : function(){
             this.p.atancando = true;
             console.log("atacando");
-            this.p.sheet = "yoshiAttack_" + this.p.direction;
-            this.play("attack");
+            this.p.sheet = "yoshiAttack_right";
+            this.play("attack_" + this.p.direction);
         },
         step: function (dt) {
             if (this.p.y > 700) {
@@ -102,7 +108,8 @@ var game = function () {
                     else{
                         this.p.sheet = "yoshiL";
                     }
-                    this.play("stand_" + this.p.direction);
+                    //this.play("stand_" + this.p.direction);
+                    this.play("stand_left_corrector");
                 }
 
             }
