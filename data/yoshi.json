@@ -1,4 +1,8 @@
 {
-	"yoshiR":{"sx":180,"sy":0,"tileW":37,"tileH":35,"frames":40},
-	"yoshiJumps":{"sx":185,"sy":173,"tileW":35,"tileH":40,"frames":3}
+	"yoshiR":{"sx":180,"sy":0,"tileW":35,"tileH":35,"frames":40},
+	"yoshiJumpsRight":{"sx":5,"sy":171,"tileW":35,"tileH":40,"frames":3},
+	"yoshiJumpsLeft":{"sx":736,"sy":941,"tileW":35,"tileH":40,"frames":3},
+	"yoshiL":{"sx":385,"sy":768,"tileW":35,"tileH":35,"frames":40},
+	"yoshiAttackRight" : {"sx":133,"sy":215,"tileW":78,"tileH":35,"frames":8}
 }
+ 

@@ -15,7 +15,7 @@ var game = function () {
             downsampleHeight: 768 // is larger than or equal to 1024x768 
         })
         // And turn on default input controls and touch input (for UI)
-        .controls().touch()
+        .controls(true)
     //Se cargan los recursos
     Q.load("yoshiJunto.png, yoshi.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
@@ -23,12 +23,15 @@ var game = function () {
         //Animaciones
         Q.animations('yoshi_animations', {
             run_right: { frames: [0, 1, 2, 3], rate: 1 / 10 },
-            run_left: { frames: [29, 30, 31, 32], rate: 1 / 10 },
+            run_left: { frames: [0, 1, 2, 3], rate: 1 / 10 },
             jumps: { frames: [0, 1, 2, 3], rate: 1 / 10 },
             run_down_right: { frames: [0, 1, 2, 3], rate: 1 / 10 },
-            run_down_left : { frames: [0, 1, 2, 3], rate: 1 / 10 },
-            run_up_right:  { frames: [0, 1, 2, 3], rate: 1 / 10 },
-            run_up_left: { frames: [0, 1, 2, 3], rate: 1 / 10 }
+            run_down_left: { frames: [0, 1, 2, 3], rate: 1 / 10 },
+            run_up_right: { frames: [0, 1], rate: 1 / 10 },
+            run_up_left: { frames: [0, 1], rate: 1 / 10 },
+            stand_right: { frames: [0], rate: 1 / 10 },
+            stand_left: { frames: [0], rate: 1 / 10 },
+            attack_right: { frames: [0,1,2,3,4,5,6], loop: false, rate: 1 / 10, trigger: "stopAttack" }
         });
 
         Q.scene("level1", function (stage) {
@@ -52,9 +55,9 @@ var game = function () {
         Q.loadTMX("yoshi.tmx", function () {
             Q.stageScene("level1");
         });
-        
+
     });
-    //Mario
+    //Yoshi
     Q.Sprite.extend("Player", {
         init: function (p) {
             this._super(p, {
@@ -62,9 +65,21 @@ var game = function () {
                 sheet: "yoshiR", // Sprite que esta dentro de mario_small.json
                 x: 350, //x donde aparecerá
                 jumpSpeed: -400,
-                y: 450 //y donde aparecerá
+                y: 450, //y donde aparecerá,
+                atancando: false
             });
             this.add('2d, platformerControls, tween, animation');
+            Q.input.on("down", this, "attack");
+            this.on("stopAttack", function(){
+                console.log("stop attack");
+                this.p.atancando = false;
+            });
+        },
+        attack : function(){
+            this.p.atancando = true;
+            this.p.sheet = "yoshiAttackRight";
+            console.log("atacando");
+            this.play("attack_right");
         },
         step: function (dt) {
             if (this.p.y > 700) {
@@ -73,27 +88,23 @@ var game = function () {
                 this.p.x = 300;
                 this.p.y = 500;
             }
-            else {
+            else if(!this.p.atancando){
                 if (this.p.vx > 0) {
                     this.p.sheet = "yoshiR";
                     this.play("run_right");
                 } else if (this.p.vx < 0) {
-                    this.p.sheet = "yoshiR";
+                    this.p.sheet = "yoshiL";
                     this.play("run_left");
+                } else {
+                    if(this.p.direction == "right"){
+                        this.p.sheet = "yoshiR";
+                    }
+                    else{
+                        this.p.sheet = "yoshiL";
+                    }
+                    this.play("stand_" + this.p.direction);
                 }
-                if (this.p.vy > 0) {
-                    if (this.p.vx > 0)
-                        this.play("run_down_right");
-                    else
-                        this.play("run_down_left");
-                }
-                else if (this.p.vy < 0) {
-                    if (this.p.vx > 0)
-                        this.play("run_up_right");
-                    else
-                        this.play("run_up_left");
 
-                }
             }
 
         }
