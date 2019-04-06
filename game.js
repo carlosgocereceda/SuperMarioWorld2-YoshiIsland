@@ -37,7 +37,10 @@ var game = function () {
             stand_left_corrector: { frames: [0], flip: "", rate: 1 / 10 }
         });
         //Animaciones de enemy1
-
+        Q.animations('enemy1_animations', {
+            run_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 5 },
+            run_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 5 }
+        })
 
         Q.scene("level1", function (stage) {
             Q.stageTMX("yoshi.tmx", stage);
@@ -67,11 +70,17 @@ var game = function () {
     Q.Sprite.extend("Enemy1", {
         init: function (p) {
             this._super(p, {
-                //sprite: "yoshi_animations",
+                sprite: "enemy1_animations",
                 sheet: "enemy1",
                 vx: 50
             });
-            this.add('2d, aiBounce');
+            this.add('2d, aiBounce, animation');
+        },
+        step: function (dt) {
+            if (this.p.vx > 0)
+                this.play("run_right");
+            else
+                this.play("run_left");
         }
         
     });
