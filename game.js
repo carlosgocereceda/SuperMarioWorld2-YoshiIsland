@@ -75,6 +75,11 @@ var game = function () {
                 vx: 50
             });
             this.add('2d, aiBounce, animation');
+            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    console.log("tocado");
+                }
+            });
         },
         step: function (dt) {
             if (this.p.vx > 0)
@@ -82,6 +87,7 @@ var game = function () {
             else
                 this.play("run_left");
         }
+        
         
     });
     //Yoshi
