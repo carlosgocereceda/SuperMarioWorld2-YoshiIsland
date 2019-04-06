@@ -17,10 +17,11 @@ var game = function () {
         // And turn on default input controls and touch input (for UI)
         .controls(true)
     //Se cargan los recursos
-    Q.load("yoshiJunto.png, yoshi.json", function () {
+    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
+        Q.compileSheets("enemigos.png", "enemy1.json");
 
-        //Animaciones
+        //Animaciones de yoshi
         Q.animations('yoshi_animations', {
             run_right: { frames: [0, 1, 2, 3], rate: 1 / 10 },
             run_left: { frames: [0, 1, 2, 3], rate: 1 / 10 },
@@ -35,12 +36,15 @@ var game = function () {
             attack_left:{ frames: [0,1,2,3,4,5,6], loop: false, rate: 1 / 10, flip: "x", trigger: "stopAttack_left" },
             stand_left_corrector: { frames: [0], flip: "", rate: 1 / 10 }
         });
+        //Animaciones de enemy1
+
 
         Q.scene("level1", function (stage) {
             Q.stageTMX("yoshi.tmx", stage);
             var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
+            stage.insert(new Q.Enemy1({x:400, vy: 450, y: 300}));
             /*var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.insert(new Q.Bloopa({x:2850}));
@@ -58,6 +62,18 @@ var game = function () {
             Q.stageScene("level1");
         });
 
+    });
+    //Enemigo1
+    Q.Sprite.extend("Enemy1", {
+        init: function (p) {
+            this._super(p, {
+                //sprite: "yoshi_animations",
+                sheet: "enemy1",
+                vx: 50
+            });
+            this.add('2d, aiBounce');
+        }
+        
     });
     //Yoshi
     Q.Sprite.extend("Player", {
