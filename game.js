@@ -32,8 +32,8 @@ var game = function () {
             run_up_left: { frames: [0, 1], rate: 1 / 10 },
             stand_right: { frames: [0], rate: 1 / 10 },
             stand_left: { frames: [0], rate: 1 / 10 },
-            attack_right: { frames: [0,1,2,3,4,5,6], loop: false, rate: 1 / 10, trigger: "stopAttack" },
-            attack_left:{ frames: [0,1,2,3,4,5,6], loop: false, rate: 1 / 10, flip: "x", trigger: "stopAttack_left" },
+            attack_right: { frames: [0, 1, 2, 3, 4, 5, 6], loop: false, rate: 1 / 10, trigger: "stopAttack" },
+            attack_left: { frames: [0, 1, 2, 3, 4, 5, 6], loop: false, rate: 1 / 10, flip: "x", trigger: "stopAttack_left" },
             stand_left_corrector: { frames: [0], flip: "", rate: 1 / 10 }
         });
         //Animaciones de enemy1
@@ -47,7 +47,7 @@ var game = function () {
             var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
-            stage.insert(new Q.Enemy1({x:400, vy: 450, y: 300}));
+            stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 300 }));
             /*var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.insert(new Q.Bloopa({x:2850}));
@@ -75,9 +75,10 @@ var game = function () {
                 vx: 50
             });
             this.add('2d, aiBounce, animation');
-            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
-                if (collision.obj.isA("Player")) {
-                    console.log("tocado");
+            this.on("bump.left", function (collision) {
+                if (collision.obj) {
+                    console.log("tocado ");
+                    console.log(collision.obj);
                 }
             });
         },
@@ -87,8 +88,8 @@ var game = function () {
             else
                 this.play("run_left");
         }
-        
-        
+
+
     });
     //Yoshi
     Q.Sprite.extend("Player", {
@@ -103,18 +104,37 @@ var game = function () {
             });
             this.add('2d, platformerControls, tween, animation');
             Q.input.on("down", this, "attack");
-            this.on("stopAttack", function(){
+            this.on("stopAttack", function () {
                 this.p.atancando = false;
             });
-            this.on("stopAttack_left", function(){
+            this.on("stopAttack_left", function () {
                 this.p.atancando = false;
                 //this.p.flip = "x";
                 this.play("stand_left_corrector");
             });
+            
         },
-        attack : function(){
+        attack: function () {
             this.p.atancando = true;
             console.log("atacando");
+            console.log(this.stage.items);
+            var items = this.stage.items;
+            for(let i = 0; i < items.length; i++){
+                if(items[i].isA("Enemy1")){
+                    //if(items[i].)
+                    let medidas = items[i]["p"];
+                    let x_ = Number(medidas["x"]);
+                    let y_ = Number(medidas["y"]);
+                    console.log(x_ +" "+ y_);
+                    console.log(this.p.x +" "+ this.p.y);
+                    if(Math.abs(Number(this.p.x) - x_) < 75 && Math.abs(Number(this.p.y) - y_ < 3)){
+                        console.log("lo mato");
+                        console.log(Number(this.p.x - x_) + " " + Number(this.p.y - y_));
+                        items[i].destroy();
+                    }
+                }
+                
+            }
             this.p.sheet = "yoshiAttack_right";
             this.play("attack_" + this.p.direction);
         },
@@ -125,7 +145,7 @@ var game = function () {
                 this.p.x = 300;
                 this.p.y = 500;
             }
-            else if(!this.p.atancando){
+            else if (!this.p.atancando) {
                 if (this.p.vx > 0) {
                     this.p.sheet = "yoshiR";
                     this.play("run_right");
@@ -133,10 +153,10 @@ var game = function () {
                     this.p.sheet = "yoshiL";
                     this.play("run_left");
                 } else {
-                    if(this.p.direction == "right"){
+                    if (this.p.direction == "right") {
                         this.p.sheet = "yoshiR";
                     }
-                    else{
+                    else {
                         this.p.sheet = "yoshiL";
                     }
                     //this.play("stand_" + this.p.direction);
