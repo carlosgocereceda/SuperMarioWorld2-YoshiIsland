@@ -17,9 +17,10 @@ var game = function () {
         // And turn on default input controls and touch input (for UI)
         .controls(true)
     //Se cargan los recursos
-    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json", function () {
+    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
         Q.compileSheets("enemigos.png", "enemy1.json");
+        Q.compileSheets("enemigos.png", "enemy2.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -39,18 +40,25 @@ var game = function () {
             volando_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 10 },
             volando_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 10 }
         });
-        //Animaciones de enemy1
+        //Animaciones de fantasma verde(enemy1)
         Q.animations('enemy1_animations', {
             run_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 5 },
             run_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 5 }
         })
+        // Animacion de fantasma rojo(enemy2)
+        Q.animations('enemy2_animations', {
+            run_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 5 },
+            run_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 5 }
+        })
+
 
         Q.scene("level1", function (stage) {
             Q.stageTMX("yoshi.tmx", stage);
             var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
-            stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 300 }));
+            stage.insert(new Q.Enemy1({ x: 550, vy: 450, y: 300 }));
+            stage.insert(new Q.Enemy2({ x: 450, vy: 450, y: 300}));
             /*var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.insert(new Q.Bloopa({x:2850}));
@@ -69,7 +77,7 @@ var game = function () {
         });
 
     });
-    //Enemigo1
+    //Enemigo1(fantasma verde)
     Q.Sprite.extend("Enemy1", {
         init: function (p) {
             this._super(p, {
@@ -93,6 +101,29 @@ var game = function () {
         }
 
 
+    });
+     //Enemy2(fantasma rojo)
+     Q.Sprite.extend("Enemy2", {
+        init: function (p) {
+            this._super(p, {
+                sprite: "enemy2_animations",
+                sheet: "enemy2",
+                vx: 70
+            });
+            this.add('2d, aiBounce, animation');
+            this.on("bump.left", function (collision) {
+                if (collision.obj) {
+                    console.log("tocado ");
+                    console.log(collision.obj);
+                }
+            });
+        },
+        step: function (dt) {
+            if (this.p.vx > 0)
+                this.play("run_right");
+            else
+                this.play("run_left");
+        }
     });
     //Yoshi
     Q.Sprite.extend("Player", {
@@ -147,8 +178,7 @@ var game = function () {
             console.log(this.stage.items);
             var items = this.stage.items;
             for (let i = 0; i < items.length; i++) {
-                if (items[i].isA("Enemy1")) {
-                    //if(items[i].)
+                if (items[i].isA("Enemy1") || items[i].isA("Enemy2")) {
                     let medidas = items[i]["p"];
                     let x_ = Number(medidas["x"]);
                     let y_ = Number(medidas["y"]);
