@@ -17,10 +17,11 @@ var game = function () {
         // And turn on default input controls and touch input (for UI)
         .controls(true)
     //Se cargan los recursos
-    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json", function () {
+    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png, Shy_Guy_morado.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
         Q.compileSheets("enemigos.png", "enemy1.json");
         Q.compileSheets("enemigos.png", "enemy2.json");
+        Q.compileSheets("Shy_Guy_morado.png", "Shy_Guy_morado.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -51,6 +52,12 @@ var game = function () {
             run_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 5 }
         })
 
+        // Animacion de Shy Guy morado(enemy3)
+        Q.animations('enemy3_animations', {
+            run_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 5 },
+            run_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 5 }
+        })
+
 
         Q.scene("level1", function (stage) {
             Q.stageTMX("yoshi.tmx", stage);
@@ -61,20 +68,8 @@ var game = function () {
             stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 660 }));
             stage.insert(new Q.Enemy1({ x: 600, vy: 450, vx: -50, y: 660 }));
             stage.insert(new Q.Enemy1({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600 }));
-            stage.insert(new Q.Enemy2({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2900, vy: 450, vx: 50, y: 600 }));
-            //stage.insert(new Q.Enemy1({ x: 1000, vy: 450, vx: -50, y: 700 }));
-            /*var player = stage.insert(new Q.Player());
-            stage.add("viewport").follow(player);
-            stage.insert(new Q.Bloopa({x:2850}));
-            stage.insert(new Q.Bloopa({x:3100, vy: 80, y: 300}));
-            stage.insert(new Q.Bloopa({x:2600, vy: 100, y: 500, miny: 300, maxy: 450}));
-            stage.insert(new Q.Bloopa({x:2400, vy: 200, y: 500, miny: 300, maxy: 500}));
-            stage.insert(new Q.Bloopa({x:2190, vy: 300, y: 500, miny: 350, maxy: 550}));
-            stage.insert(new Q.Bloopa({x:3300, vy: 150, y: 350}));
-            stage.insert(new Q.Coin());
-            stage.insert(new Q.Goomba());
-            stage.insert(new Q.Princess());
-            stage.insert(new Q.Goomba({ x: 800 }));*/
+            stage.insert(new Q.Enemy2({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
+            stage.insert(new Q.Enemy3({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
         });
         Q.loadTMX("yoshi.tmx", function () {
             Q.stageScene("level1");
@@ -94,11 +89,6 @@ var game = function () {
                 y_caida: 0
             });
             this.add('2d, aiBounce, animation');
-            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
-                if (collision.obj.isA("Player")) {
-                    collision.obj.destroy();
-                }
-            });
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
                 	console.log("You died!");
@@ -144,11 +134,6 @@ var game = function () {
                 y_caida: 0
             });
             this.add('2d, aiBounce, animation');
-            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
-                if (collision.obj.isA("Player")) {
-                    collision.obj.destroy();
-                }
-            });
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
                 	console.log("You died!");
@@ -179,13 +164,57 @@ var game = function () {
             }
         }
     });
+
+	//Enemy3(fantasma morado)
+     Q.Sprite.extend("Enemy3", {
+        init: function (p) {
+            this._super(p, {
+                sprite: "enemy3_animations",
+                sheet: "enemy3",
+                vx: 50,
+                reaparecer: false,
+                x_reaparicion: 0,
+                y_reaparicion: 0,
+                y_caida: 0
+            });
+            this.add('2d, aiBounce, animation');
+            this.on("bump.left,bump.right,bump.bottom", function (collision) {
+                if (collision.obj.isA("Player")) {
+                	console.log("You died!");
+                    //Q.stageScene("endGame", 1, { label: "You Died" });
+                    collision.obj.destroy();
+                }
+            });           
+            //Si le salta encima el player lo mata y salta más
+            this.on("bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    console.log("die");
+                    collision.obj.p.vy = -500;
+                    this.destroy();
+                }
+            });
+        },
+        step: function (dt) {
+            if (this.p.vx > 0)
+                this.play("run_right");
+            else
+                this.play("run_left");
+            if(this.p.reaparecer) {
+            	if(this.p.y >= this.p.y_caida) {
+            		this.p.x = this.p.x_reaparicion;
+            		this.p.y = this.p.y_reaparicion;
+            	}
+            }
+        }
+    });
+
     //Yoshi
     Q.Sprite.extend("Player", {
         init: function (p) {
             this._super(p, {
                 sprite: "yoshi_animations",
                 sheet: "yoshiR", // Sprite que esta dentro de mario_small.json
-                x: 200, //x donde aparecerá
+                x: 350, //x donde aparecerá
                 jumpSpeed: -400,
                 y: 700, //y donde aparecerá,
                 atancando: false,
