@@ -35,7 +35,7 @@ var game = function () {
             attack_right: { frames: [0, 1, 2, 3, 4, 5, 6], loop: false, rate: 1 / 10, trigger: "stopAttack" },
             attack_left: { frames: [0, 1, 2, 3, 4, 5, 6], loop: false, rate: 1 / 10, flip: "x", trigger: "stopAttack_left" },
             stand_left_corrector: { frames: [0], flip: "", rate: 1 / 10 },
-            impulso_right: { frames: [0, 1, 2, 3, 4, 5, 6], flip: "", loop: false, rate: 1 / 10},
+            impulso_right: { frames: [0, 1, 2, 3, 4, 5], flip: "", loop: false, rate: 1 / 10},
             volando_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 10 }
         });
         //Animaciones de enemy1
@@ -174,8 +174,8 @@ var game = function () {
             if (this.p.y > 700) {
                 Q.stageScene("endGame", 1, { label: "You Died" });
                 console.log("cayendo");
-                this.p.x = 300;
-                this.p.y = 500;
+                this.p.x = 350;
+                this.p.y = 420;
             }
             else if (!this.p.atancando) {
                 if (this.p.vx > 0 && this.p.vy == 0) {
