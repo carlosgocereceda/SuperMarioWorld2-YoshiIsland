@@ -57,9 +57,11 @@ var game = function () {
             var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
-            stage.insert(new Q.Enemy2({ x: 450, vy: 450, y: 300}));
-            stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 300 }));// y: 700
-            stage.insert(new Q.Enemy1({ x: 600, vy: 450, vx: -50, y: 300 }));// y: 700
+            stage.insert(new Q.Enemy2({ x: 1000, vy: 450, y: 660}));
+            stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 660 }));
+            stage.insert(new Q.Enemy1({ x: 600, vy: 450, vx: -50, y: 660 }));
+            stage.insert(new Q.Enemy1({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600 }));
+            stage.insert(new Q.Enemy2({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2900, vy: 450, vx: 50, y: 600 }));
             //stage.insert(new Q.Enemy1({ x: 1000, vy: 450, vx: -50, y: 700 }));
             /*var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
@@ -85,7 +87,11 @@ var game = function () {
             this._super(p, {
                 sprite: "enemy1_animations",
                 sheet: "enemy1",
-                vx: 50
+                vx: 50,
+                reaparecer: false,
+                x_reaparicion: 0,
+                y_reaparicion: 0,
+                y_caida: 0
             });
             this.add('2d, aiBounce, animation');
             this.on("bump.left", function (collision) {
@@ -94,12 +100,34 @@ var game = function () {
                     console.log(collision.obj);
                 }
             });
+            this.on("bump.left,bump.right,bump.bottom", function (collision) {
+                if (collision.obj.isA("Player")) {
+                	console.log("You died!");
+                    //Q.stageScene("endGame", 1, { label: "You Died" });
+                    collision.obj.destroy();
+                }
+            });
+            
+            //Si le salta encima el player lo mata y salta más
+            this.on("bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    console.log("die");
+                    collision.obj.p.vy = -500;
+                    this.destroy();
+                }
+            });
         },
         step: function (dt) {
             if (this.p.vx > 0)
                 this.play("run_right");
             else
                 this.play("run_left");
+            if(this.p.reaparecer) {
+            	if(this.p.y >= this.p.y_caida) {
+            		this.p.x = this.p.x_reaparicion;
+            		this.p.y = this.p.y_reaparicion;
+            	}
+            }
         }
 
 
@@ -110,7 +138,11 @@ var game = function () {
             this._super(p, {
                 sprite: "enemy2_animations",
                 sheet: "enemy2",
-                vx: 70
+                vx: 70,
+                reaparecer: false,
+                x_reaparicion: 0,
+                y_reaparicion: 0,
+                y_caida: 0
             });
             this.add('2d, aiBounce, animation');
             this.on("bump.left", function (collision) {
@@ -119,12 +151,34 @@ var game = function () {
                     console.log(collision.obj);
                 }
             });
+            this.on("bump.left,bump.right,bump.bottom", function (collision) {
+                if (collision.obj.isA("Player")) {
+                	console.log("You died!");
+                    //Q.stageScene("endGame", 1, { label: "You Died" });
+                    collision.obj.destroy();
+                }
+            });
+            
+            //Si le salta encima el player lo mata y salta más
+            this.on("bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    console.log("die");
+                    collision.obj.p.vy = -500;
+                    this.destroy();
+                }
+            });
         },
         step: function (dt) {
             if (this.p.vx > 0)
                 this.play("run_right");
             else
                 this.play("run_left");
+            if(this.p.reaparecer) {
+            	if(this.p.y >= this.p.y_caida) {
+            		this.p.x = this.p.x_reaparicion;
+            		this.p.y = this.p.y_reaparicion;
+            	}
+            }
         }
     });
     //Yoshi
@@ -135,7 +189,7 @@ var game = function () {
                 sheet: "yoshiR", // Sprite que esta dentro de mario_small.json
                 x: 350, //x donde aparecerá
                 jumpSpeed: -400,
-                y: 300, //y donde aparecerá,
+                y: 700, //y donde aparecerá,
                 atancando: false,
                 boost: false
             });
