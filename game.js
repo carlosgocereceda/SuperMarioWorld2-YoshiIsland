@@ -68,6 +68,7 @@ var game = function () {
             stage.insert(new Q.Enemy2({ x: 1000, vy: 450, y: 660}));
             stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 660 }));
             stage.insert(new Q.Enemy1({ x: 600, vy: 450, vx: -50, y: 660 }));
+            stage.insert(new Q.Enemy3({ x: 1100, vx: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true }));
             stage.insert(new Q.Enemy1({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.Enemy2({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.Enemy3({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
@@ -110,7 +111,7 @@ var game = function () {
                 y_caida: 0
             });
             this.add('2d, aiBounce, animation');
-            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
+            this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
                     Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
@@ -194,13 +195,17 @@ var game = function () {
                 reaparecer: false,
                 x_reaparicion: 0,
                 y_reaparicion: 0,
-                y_caida: 0
+                y_caida: 0,
+                darVuelta: false,
+                x_vueltaMax: 0,
+                x_vueltaMin: 0,
+                dandoVuelta: false
             });
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
                 	console.log("You died!");
-                    //Q.stageScene("endGame", 1, { label: "You Died" });
+                    Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
             });           
@@ -223,6 +228,13 @@ var game = function () {
             		this.p.x = this.p.x_reaparicion;
             		this.p.y = this.p.y_reaparicion;
             	}
+            }
+            if(this.p.darVuelta && !this.p.dandoVuelta) {
+            	this.p.dandoVuelta = true;
+            	if(this.p.x >= this.p.x_vueltaMax || this.p.x <= this.p.x_vueltaMin) {
+            		this.p.vx = - this.p.vx;
+            	}
+            	this.p.dandoVuelta = false;
             }
         }
     });
@@ -276,7 +288,7 @@ var game = function () {
             console.log(this.stage.items);
             var items = this.stage.items;
             for (let i = 0; i < items.length; i++) {
-                if (items[i].isA("Enemy1") || items[i].isA("Enemy2")) {
+                if (items[i].isA("Enemy1") || items[i].isA("Enemy2") || items[i].isA("Enemy3")) {
                     let medidas = items[i]["p"];
                     let x_ = Number(medidas["x"]);
                     let y_ = Number(medidas["y"]);
