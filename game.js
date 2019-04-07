@@ -57,8 +57,10 @@ var game = function () {
             var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
-            stage.insert(new Q.Enemy1({ x: 550, vy: 450, y: 300 }));
             stage.insert(new Q.Enemy2({ x: 450, vy: 450, y: 300}));
+            stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 700 }));
+            stage.insert(new Q.Enemy1({ x: 600, vy: 450, vx: -50, y: 700 }));
+            stage.insert(new Q.Enemy1({ x: 1000, vy: 450, vx: -50, y: 700 }));
             /*var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.insert(new Q.Bloopa({x:2850}));
@@ -133,7 +135,7 @@ var game = function () {
                 sheet: "yoshiR", // Sprite que esta dentro de mario_small.json
                 x: 350, //x donde aparecerá
                 jumpSpeed: -400,
-                y: 450, //y donde aparecerá,
+                y: 700, //y donde aparecerá,
                 atancando: false,
                 boost: false
             });
@@ -196,11 +198,11 @@ var game = function () {
             this.play("attack_" + this.p.direction);
         },
         step: function (dt) {
-            if (this.p.y > 700) {
+            if (this.p.y > 900) {
                 Q.stageScene("endGame", 1, { label: "You Died" });
                 console.log("cayendo");
                 this.p.x = 350;
-                this.p.y = 420;
+                this.p.y = 700;
             }
             else if (!this.p.atancando) {
                 if (this.p.vx > 0 && this.p.vy == 0) {
