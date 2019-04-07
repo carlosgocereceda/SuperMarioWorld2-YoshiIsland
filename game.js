@@ -15,7 +15,7 @@ var game = function () {
             downsampleHeight: 768 // is larger than or equal to 1024x768 
         })
         // And turn on default input controls and touch input (for UI)
-        .controls(true)
+        .controls().touch()
     //Se cargan los recursos
     Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png, Shy_Guy_morado.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
@@ -37,7 +37,7 @@ var game = function () {
             attack_right: { frames: [0, 1, 2, 3, 4, 5, 6], loop: false, rate: 1 / 10, trigger: "stopAttack" },
             attack_left: { frames: [0, 1, 2, 3, 4, 5, 6], loop: false, rate: 1 / 10, flip: "x", trigger: "stopAttack_left" },
             stand_left_corrector: { frames: [0], flip: "", rate: 1 / 10 },
-            impulso_right: { frames: [0, 1, 2, 3, 4, 5], flip: "", loop: false, rate: 1 / 10},
+            impulso_right: { frames: [0, 1, 2, 3, 4, 5], flip: "", loop: false, rate: 1 / 10 },
             volando_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 10 },
             volando_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 10 }
         });
@@ -64,6 +64,7 @@ var game = function () {
             var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
+
             stage.insert(new Q.Enemy2({ x: 1000, vy: 450, y: 660}));
             stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 660 }));
             stage.insert(new Q.Enemy1({ x: 600, vy: 450, vx: -50, y: 660 }));
@@ -73,6 +74,26 @@ var game = function () {
         });
         Q.loadTMX("yoshi.tmx", function () {
             Q.stageScene("level1");
+        });
+        //Ventana de fin del juego
+        Q.scene('endGame', function (stage) {
+            var box = stage.insert(new Q.UI.Container({
+                x: Q.width / 2, y: Q.height / 2, fill: "rgba(1,0,0,0.5)"
+            }));
+
+            var button = box.insert(new Q.UI.Button({
+                x: 0, y: 0, fill: "#CCCCCC",
+                label: "Play Again"
+            }))
+            var label = box.insert(new Q.UI.Text({
+                x: 10, y: -10 - button.p.h,
+                label: stage.options.label
+            }));
+            button.on("click", function () {
+                Q.clearStages();
+                Q.stageScene("level1");
+            });
+            box.fit(20);
         });
 
     });
@@ -89,10 +110,9 @@ var game = function () {
                 y_caida: 0
             });
             this.add('2d, aiBounce, animation');
-            this.on("bump.left,bump.right,bump.bottom", function (collision) {
+            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	console.log("You died!");
-                    //Q.stageScene("endGame", 1, { label: "You Died" });
+                    Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
             });
@@ -121,8 +141,8 @@ var game = function () {
 
 
     });
-     //Enemy2(fantasma rojo)
-     Q.Sprite.extend("Enemy2", {
+    //Enemy2(fantasma rojo)
+    Q.Sprite.extend("Enemy2", {
         init: function (p) {
             this._super(p, {
                 sprite: "enemy2_animations",
@@ -136,8 +156,7 @@ var game = function () {
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	console.log("You died!");
-                    //Q.stageScene("endGame", 1, { label: "You Died" });
+                    Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
             });
@@ -214,7 +233,7 @@ var game = function () {
             this._super(p, {
                 sprite: "yoshi_animations",
                 sheet: "yoshiR", // Sprite que esta dentro de mario_small.json
-                x: 350, //x donde aparecerá
+                x: 330, //x donde aparecerá
                 jumpSpeed: -400,
                 y: 700, //y donde aparecerá,
                 atancando: false,
@@ -282,7 +301,7 @@ var game = function () {
                 this.p.y = 700;
             }
             else if (!this.p.atancando) {
-                if(this.p.vy == 0){
+                if (this.p.vy == 0) {
                     if (this.p.vx > 0) {
                         this.p.sheet = "yoshiR";
                         this.play("run_right");
