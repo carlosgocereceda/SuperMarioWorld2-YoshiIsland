@@ -88,10 +88,9 @@ var game = function () {
                 vx: 50
             });
             this.add('2d, aiBounce, animation');
-            this.on("bump.left", function (collision) {
-                if (collision.obj) {
-                    console.log("tocado ");
-                    console.log(collision.obj);
+            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    collision.obj.destroy();
                 }
             });
         },
@@ -113,10 +112,9 @@ var game = function () {
                 vx: 70
             });
             this.add('2d, aiBounce, animation');
-            this.on("bump.left", function (collision) {
-                if (collision.obj) {
-                    console.log("tocado ");
-                    console.log(collision.obj);
+            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    collision.obj.destroy();
                 }
             });
         },
