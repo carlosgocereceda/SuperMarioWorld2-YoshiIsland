@@ -17,11 +17,12 @@ var game = function () {
         // And turn on default input controls and touch input (for UI)
         .controls().touch()
     //Se cargan los recursos
-    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png, Shy_Guy_morado.json", function () {
+    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png, Shy_Guy_morado.json, level_end.png, level_end.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
         Q.compileSheets("enemigos.png", "enemy1.json");
         Q.compileSheets("enemigos.png", "enemy2.json");
         Q.compileSheets("Shy_Guy_morado.png", "Shy_Guy_morado.json");
+        Q.compileSheets("level_end.png", "level_end.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -72,6 +73,7 @@ var game = function () {
             stage.insert(new Q.Enemy1({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.Enemy2({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.Enemy3({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
+            stage.insert(new Q.Flower({ x: 4362, y:550 }));
         });
         Q.loadTMX("yoshi.tmx", function () {
             Q.stageScene("level1");
@@ -79,7 +81,7 @@ var game = function () {
         //Ventana de fin del juego
         Q.scene('endGame', function (stage) {
             var box = stage.insert(new Q.UI.Container({
-                x: Q.width / 2, y: Q.height / 2, fill: "rgba(1,0,0,0.5)"
+                x: Q.width / 2, y: Q.height / 2, fill: "rgba(255,255,255,0.5)"
             }));
 
             var button = box.insert(new Q.UI.Button({
@@ -236,6 +238,25 @@ var game = function () {
             	}
             	this.p.dandoVuelta = false;
             }
+        }
+    });
+
+     //Flor (Final del nivel)
+     Q.Sprite.extend("Flower", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "end",
+                x: 0,
+                y: 0
+            });
+            this.p.gravityY = 0;
+            this.add('2d, tween');
+            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                	this.destroy();
+                	//Pasar al nivel 2
+                }
+            });           
         }
     });
 
