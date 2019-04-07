@@ -94,10 +94,9 @@ var game = function () {
                 y_caida: 0
             });
             this.add('2d, aiBounce, animation');
-            this.on("bump.left", function (collision) {
-                if (collision.obj) {
-                    console.log("tocado ");
-                    console.log(collision.obj);
+            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    collision.obj.destroy();
                 }
             });
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
@@ -145,10 +144,9 @@ var game = function () {
                 y_caida: 0
             });
             this.add('2d, aiBounce, animation');
-            this.on("bump.left", function (collision) {
-                if (collision.obj) {
-                    console.log("tocado ");
-                    console.log(collision.obj);
+            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    collision.obj.destroy();
                 }
             });
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
@@ -187,7 +185,7 @@ var game = function () {
             this._super(p, {
                 sprite: "yoshi_animations",
                 sheet: "yoshiR", // Sprite que esta dentro de mario_small.json
-                x: 350, //x donde aparecerá
+                x: 200, //x donde aparecerá
                 jumpSpeed: -400,
                 y: 700, //y donde aparecerá,
                 atancando: false,
@@ -222,10 +220,6 @@ var game = function () {
                 this.p.gravity = 0.3;
                 this.p.boost = false;
 
-            } else {
-                console.log("boost desactivado");
-                this.p.gravity = 1;
-                this.p.boost = false;
             }
         },
         attack: function () {
@@ -259,23 +253,23 @@ var game = function () {
                 this.p.y = 700;
             }
             else if (!this.p.atancando) {
-                if (this.p.vx > 0 && this.p.vy == 0) {
-                    this.p.sheet = "yoshiR";
-                    this.play("run_right");
-                } else if (this.p.vx < 0 && this.p.vy == 0) {
-                    this.p.sheet = "yoshiL";
-                    this.play("run_left");
-                } else if (this.p.vy == 0) {
-                    if (this.p.direction == "right") {
+                if(this.p.vy == 0){
+                    if (this.p.vx > 0) {
                         this.p.sheet = "yoshiR";
-                    }
-                    else {
+                        this.play("run_right");
+                    } else if (this.p.vx < 0) {
                         this.p.sheet = "yoshiL";
+                        this.play("run_left");
+                    } else {
+                        if (this.p.direction == "right") {
+                            this.p.sheet = "yoshiR";
+                        }
+                        else {
+                            this.p.sheet = "yoshiL";
+                        }
+                        this.play("stand_left_corrector");
                     }
-                    //this.play("stand_" + this.p.direction);
-                    this.play("stand_left_corrector");
                 }
-
             }
 
         }
