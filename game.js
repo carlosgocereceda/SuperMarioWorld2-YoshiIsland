@@ -58,9 +58,9 @@ var game = function () {
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
             stage.insert(new Q.Enemy2({ x: 450, vy: 450, y: 300}));
-            stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 700 }));
-            stage.insert(new Q.Enemy1({ x: 600, vy: 450, vx: -50, y: 700 }));
-            stage.insert(new Q.Enemy1({ x: 1000, vy: 450, vx: -50, y: 700 }));
+            stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 300 }));// y: 700
+            stage.insert(new Q.Enemy1({ x: 600, vy: 450, vx: -50, y: 300 }));// y: 700
+            //stage.insert(new Q.Enemy1({ x: 1000, vy: 450, vx: -50, y: 700 }));
             /*var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.insert(new Q.Bloopa({x:2850}));
@@ -135,7 +135,7 @@ var game = function () {
                 sheet: "yoshiR", // Sprite que esta dentro de mario_small.json
                 x: 350, //x donde aparecerá
                 jumpSpeed: -400,
-                y: 700, //y donde aparecerá,
+                y: 300, //y donde aparecerá,
                 atancando: false,
                 boost: false
             });
