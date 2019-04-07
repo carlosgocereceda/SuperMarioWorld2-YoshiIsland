@@ -36,7 +36,8 @@ var game = function () {
             attack_left: { frames: [0, 1, 2, 3, 4, 5, 6], loop: false, rate: 1 / 10, flip: "x", trigger: "stopAttack_left" },
             stand_left_corrector: { frames: [0], flip: "", rate: 1 / 10 },
             impulso_right: { frames: [0, 1, 2, 3, 4, 5], flip: "", loop: false, rate: 1 / 10},
-            volando_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 10 }
+            volando_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 10 },
+            volando_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 10 }
         });
         //Animaciones de enemy1
         Q.animations('enemy1_animations', {
@@ -116,11 +117,6 @@ var game = function () {
                 //this.p.flip = "x";
                 this.play("stand_left_corrector");
             });
-            this.on("flyRight", function () {
-                this.p.sheet = "yoshi_volando";
-                this.play("volando_right");
-            });
-
         },
         boost: function () {
             console.log("boost");
@@ -130,12 +126,11 @@ var game = function () {
                 this.play("impulso_right");
                 this.p.gravity = 1;
                 this.p.boost = true;
-
             }
             else if (this.p.boost && this.p.vy != 0) {
                 console.log(this.p.vy);
                 this.p.sheet = "yoshi_volando";
-                this.play("volando_right");
+                this.play("volando_" + this.p.direction);
                 this.p.vy = -200;
                 this.p.gravity = 0.3;
                 this.p.boost = false;
