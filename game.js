@@ -283,11 +283,13 @@ var game = function () {
                 y: 700, //y donde aparecerá,
                 atancando: false,
                 boost: false,
-                huevos: 0
+                huevos: 0,
+                disparando: false
             });
             this.add('2d, platformerControls, tween, animation');
             Q.input.on("down", this, "attack");
             Q.input.on("up", this, "boost");
+            Q.input.on("fire", this, "disparo");
             this.on("stopAttack", function () {
                 this.p.atancando = false;
             });
@@ -314,6 +316,27 @@ var game = function () {
                 this.p.gravity = 0.3;
                 this.p.boost = false;
 
+            }
+        },
+        disparo: function(){
+            this.p.disparando = true;
+            console.log("disparo");
+            if(this.p.huevos > 0){
+                var items = this.stage.items;
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].isA("Egg")) {
+                        console.log(items[i]["p"]["vy"]);
+                        if(this.p.direction == "right"){
+                            items[i]["p"]["x"] = this.p.x + 20;
+                            items[i]["p"]["vx"] = 300; 
+                        }
+                        else{
+                            items[i]["p"]["x"] = this.p.x - 20;
+                            items[i]["p"]["vx"] = -300; 
+                        }
+                                               
+                    }
+                }
             }
         },
         attack: function () {
@@ -344,7 +367,7 @@ var game = function () {
             this.play("attack_" + this.p.direction);
         },
         step: function (dt) {
-            if(this.p.huevos > 0){
+            if(this.p.huevos > 0 && !this.p.disparando){
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
                     if (items[i].isA("Egg")) {
