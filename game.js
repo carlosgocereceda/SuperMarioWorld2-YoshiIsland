@@ -15,12 +15,14 @@ var game = function () {
         // And turn on default input controls and touch input (for UI)
         .controls().touch()
     //Se cargan los recursos
-    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png, Shy_Guy_morado.json, level_end.png, level_end.json", function () {
+    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png," +
+    " Shy_Guy_morado.json, level_end.png, level_end.json, huevos.png, egg.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
         Q.compileSheets("enemigos.png", "enemy1.json");
         Q.compileSheets("enemigos.png", "enemy2.json");
         Q.compileSheets("Shy_Guy_morado.png", "Shy_Guy_morado.json");
         Q.compileSheets("level_end.png", "level_end.json");
+        Q.compileSheets("huevos.png", "egg.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -72,6 +74,7 @@ var game = function () {
             stage.insert(new Q.Enemy2({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.Enemy3({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.Flower({ x: 4362, y:550 }));
+            stage.insert(new Q.Egg({x:330, y:700}));
         });
         Q.loadTMX("yoshi.tmx", function () {
             Q.stageScene("level1");
@@ -184,7 +187,6 @@ var game = function () {
             }
         }
     });
-
 	//Enemy3(fantasma morado)
      Q.Sprite.extend("Enemy3", {
         init: function (p) {
@@ -257,6 +259,18 @@ var game = function () {
             });           
         }
     });
+    //Huevo
+    Q.Sprite.extend("Egg", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "egg",
+                x: 0,
+                y: 0
+            });
+            this.add('2d, tween');      
+        }
+    });
+
 
     //Yoshi
     Q.Sprite.extend("Player", {
