@@ -119,6 +119,11 @@ var game = function () {
                     Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
+                else if(collision.obj.isA("Egg")){
+                    collision.obj.p.vy = -500;
+                    this.destroy();
+                    collision.obj.destroy();
+                }
             });
             
             //Si le salta encima el player lo mata y salta más
@@ -338,6 +343,7 @@ var game = function () {
                     }
                 }
             }
+            //this.p.disparando = false;
         },
         attack: function () {
             this.p.atancando = true;
