@@ -332,8 +332,10 @@ var game = function () {
                         console.log("lo mato");
                         console.log(Number(this.p.x - x_) + " " + Number(this.p.y - y_));
                         items[i].destroy();
-                        this.stage.insert(new Q.Egg({x:this.p.x-20, y:this.p.y}));
-                        this.p.huevos += 1;
+                        if(this.p.huevos == 0){ //de momento solo un huevo
+                            this.stage.insert(new Q.Egg({x:this.p.x-20, y:this.p.y}));
+                            this.p.huevos += 1;
+                        }
                     }
                 }
 
@@ -342,6 +344,24 @@ var game = function () {
             this.play("attack_" + this.p.direction);
         },
         step: function (dt) {
+            if(this.p.huevos > 0){
+                var items = this.stage.items;
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].isA("Egg")) {
+                        if(this.p.direction == "right"){
+                            items[i]["p"]["x"] = this.p.x -15;
+                            if(this.p.vy == 0)
+                            items[i]["p"]["y"] = this.p.y;
+                        }
+                        else{
+                            items[i]["p"]["x"] = this.p.x + 15;
+                            if(this.p.vy == 0)
+                            items[i]["p"]["y"] = this.p.y;
+                        }
+                        
+                    }
+                }
+            }
             if (this.p.y > 900) {
                 Q.stageScene("endGame", 1, { label: "You Died" });
                 console.log("cayendo");
