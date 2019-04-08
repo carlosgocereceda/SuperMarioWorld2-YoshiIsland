@@ -168,6 +168,11 @@ var game = function () {
                     Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
+                else if(collision.obj.isA("Egg")){
+                    collision.obj.p.vy = -500;
+                    this.destroy();
+                    collision.obj.destroy();
+                }
             });
             
             //Si le salta encima el player lo mata y salta más
@@ -223,6 +228,11 @@ var game = function () {
                     collision.obj.p.vy = -500;
                     this.destroy();
                 }
+                else if(collision.obj.isA("Egg")){
+                    collision.obj.p.vy = -500;
+                    this.destroy();
+                    collision.obj.destroy();
+                }
             });
         },
         step: function (dt) {
@@ -270,13 +280,12 @@ var game = function () {
             this._super(p, {
                 sheet: "egg",
                 x: 0,
-                y: 0
+                y: 0,
+                disparado: false
             });
             this.add('2d, tween');      
         }
     });
-
-
     //Yoshi
     Q.Sprite.extend("Player", {
         init: function (p) {
@@ -288,8 +297,7 @@ var game = function () {
                 y: 700, //y donde aparecerá,
                 atancando: false,
                 boost: false,
-                huevos: 0,
-                disparando: false
+                huevos: 0
             });
             this.add('2d, platformerControls, tween, animation');
             Q.input.on("down", this, "attack");
@@ -324,12 +332,12 @@ var game = function () {
             }
         },
         disparo: function(){
-            this.p.disparando = true;
             console.log("disparo");
             if(this.p.huevos > 0){
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
                     if (items[i].isA("Egg")) {
+                        items[i]["p"]["disparado"] = true;
                         console.log(items[i]["p"]["vy"]);
                         if(this.p.direction == "right"){
                             items[i]["p"]["x"] = this.p.x + 20;
@@ -339,11 +347,11 @@ var game = function () {
                             items[i]["p"]["x"] = this.p.x - 20;
                             items[i]["p"]["vx"] = -300; 
                         }
-                                               
+                                              
                     }
                 }
             }
-            //this.p.disparando = false;
+            this.p.huevos = 0;
         },
         attack: function () {
             this.p.atancando = true;
@@ -373,10 +381,10 @@ var game = function () {
             this.play("attack_" + this.p.direction);
         },
         step: function (dt) {
-            if(this.p.huevos > 0 && !this.p.disparando){
+            if(this.p.huevos > 0){
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
-                    if (items[i].isA("Egg")) {
+                    if (items[i].isA("Egg") && !  items[i]["p"]["disparado"]) {
                         if(this.p.direction == "right"){
                             items[i]["p"]["x"] = this.p.x -15;
                             if(this.p.vy == 0)
@@ -387,7 +395,6 @@ var game = function () {
                             if(this.p.vy == 0)
                             items[i]["p"]["y"] = this.p.y;
                         }
-                        
                     }
                 }
             }
@@ -418,7 +425,5 @@ var game = function () {
             }
 
         }
-
-
     });
 }
