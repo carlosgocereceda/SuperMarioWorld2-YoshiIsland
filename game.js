@@ -74,7 +74,7 @@ var game = function () {
             stage.insert(new Q.Enemy2({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.Enemy3({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.Flower({ x: 4362, y:550 }));
-            stage.insert(new Q.Egg({x:330, y:700}));
+            
         });
         Q.loadTMX("yoshi.tmx", function () {
             Q.stageScene("level1");
@@ -282,7 +282,8 @@ var game = function () {
                 jumpSpeed: -400,
                 y: 700, //y donde aparecerá,
                 atancando: false,
-                boost: false
+                boost: false,
+                huevos: 0
             });
             this.add('2d, platformerControls, tween, animation');
             Q.input.on("down", this, "attack");
@@ -331,6 +332,8 @@ var game = function () {
                         console.log("lo mato");
                         console.log(Number(this.p.x - x_) + " " + Number(this.p.y - y_));
                         items[i].destroy();
+                        this.stage.insert(new Q.Egg({x:this.p.x-20, y:this.p.y}));
+                        this.p.huevos += 1;
                     }
                 }
 
