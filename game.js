@@ -6,8 +6,6 @@ var game = function () {
         // Maximize this game to whatever the size of the browser is
         .setup({
             maximize: true,
-            //width: 320, // Set the default width to 320 pixels
-            //height: 480, // Set the default height to 480 pixels
             upsampleWidth: 420, // Double the pixel density of the
             upsampleHeight: 320, // game if the w or h is 420x320
             // or smaller (useful for retina phones)
