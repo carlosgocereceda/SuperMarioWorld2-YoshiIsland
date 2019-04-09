@@ -15,12 +15,13 @@ var game = function () {
         // And turn on default input controls and touch input (for UI)
         .controls().touch()
     //Se cargan los recursos
-    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png, Shy_Guy_morado.json, level_end.png, level_end.json", function () {
+    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png, Shy_Guy_morado.json, level_end.png, level_end.json, koopaVolador.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
         Q.compileSheets("enemigos.png", "enemy1.json");
         Q.compileSheets("enemigos.png", "enemy2.json");
         Q.compileSheets("Shy_Guy_morado.png", "Shy_Guy_morado.json");
         Q.compileSheets("level_end.png", "level_end.json");
+        Q.compileSheets("enemigos.png", "koopaVolador.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -57,6 +58,12 @@ var game = function () {
             run_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 5 }
         })
 
+        // Animacion Koopa Volador(enemy4)
+        Q.animations('enemy4_animations', {
+            run_right: { frames: [0, 1, 2, 3, 4, 5], flip: "", rate: 1 / 5 },
+            run_left: { frames: [0, 1, 2, 3, 4, 5], flip: "x", rate: 1 / 5 }
+        })
+
 
         Q.scene("level1", function (stage) {
             Q.stageTMX("yoshi.tmx", stage);
@@ -67,10 +74,12 @@ var game = function () {
             stage.insert(new Q.Enemy2({ x: 1000, vy: 450, y: 660}));
             stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 660 }));
             stage.insert(new Q.Enemy1({ x: 600, vy: 450, vx: -50, y: 660 }));
-            stage.insert(new Q.Enemy3({ x: 1100, vx: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true }));
+            stage.insert(new Q.Enemy3({ x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true }));
             stage.insert(new Q.Enemy1({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.Enemy2({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.Enemy3({ reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
+            stage.insert(new Q.Enemy4({x: 1100, y: 500, velocidad: 50, vx: 50, minX: 1070, maxX: 1400}));
+            stage.insert(new Q.Enemy4({horizontal: false, x: 1490, y: 500, velocidad: 70, vy: 70, minY: 350, maxY: 550}));
             stage.insert(new Q.Flower({ x: 4362, y:550 }));
         });
         Q.loadTMX("yoshi.tmx", function () {
@@ -191,7 +200,7 @@ var game = function () {
             this._super(p, {
                 sprite: "enemy3_animations",
                 sheet: "enemy3",
-                vx: 50,
+                vx: 0,
                 reaparecer: false,
                 x_reaparicion: 0,
                 y_reaparicion: 0,
@@ -199,6 +208,7 @@ var game = function () {
                 darVuelta: false,
                 x_vueltaMax: 0,
                 x_vueltaMin: 0,
+                velocidad: 0,
                 dandoVuelta: false
             });
             this.add('2d, aiBounce, animation');
@@ -230,11 +240,12 @@ var game = function () {
             	}
             }
             if(this.p.darVuelta && !this.p.dandoVuelta) {
-            	this.p.dandoVuelta = true;
-            	if(this.p.x >= this.p.x_vueltaMax || this.p.x <= this.p.x_vueltaMin) {
-            		this.p.vx = - this.p.vx;
+            	if(this.p.x >= this.p.x_vueltaMax) {
+            		this.p.vx = - this.p.velocidad;
             	}
-            	this.p.dandoVuelta = false;
+            	else if(this.p.x <= this.p.x_vueltaMin) {
+            		this.p.vx = this.p.velocidad;
+            	}
             }
         }
     });
@@ -256,6 +267,66 @@ var game = function () {
                 }
             });           
         }
+    });
+
+     //Koopa Volador
+    Q.Sprite.extend("Enemy4", {
+        init: function (p) {
+            this._super(p, {
+            	sprite: "enemy4_animations",
+                sheet: "enemy4",
+                x: 600,
+                y: 400,
+                vx: 0,
+                vy: 0,
+                maxY: 0,
+                minY: 0,
+                minX: 0,
+                maxX: 0,
+                velocidad: 0,
+                horizontal: true
+            });
+            this.p.gravityY = 0;
+            this.add('2d, aiBounce, animation'); //Para la IA que lo mueve de derecha a izquierda
+            //Si le tocan por la izquierda, derecha o por debajo y es el player, pierde
+            this.on("bump.left,bump.right,bump.bottom", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    Q.stageScene("endGame", 1, { label: "You Died" });
+                    collision.obj.destroy();
+                }
+            });
+            //Si le salta encima el player lo mata y salta más
+            this.on("bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    console.log("die");
+                    collision.obj.p.vy = -500;
+                    this.destroy();
+                }
+            });
+        },
+        step: function (dt) {
+        	if(!this.p.horizontal){
+	            if (this.p.y >= this.p.maxY) {
+	                this.p.vy = - this.p.velocidad;
+	            }
+	            else if (this.p.y <= this.p.minY) {
+	                this.p.vy = this.p.velocidad;
+	            }
+        	}
+        	else {
+        		if (this.p.x >= this.p.maxX) {
+	                this.p.vx = - this.p.velocidad;
+	            }
+	            else if (this.p.x <= this.p.minX) {
+	                this.p.vx = this.p.velocidad;
+	            }
+        	}
+        	if (this.p.vx > 0)
+                this.play("run_right");
+            else
+                this.play("run_left");
+        }
+
     });
 
     //Yoshi
@@ -307,7 +378,7 @@ var game = function () {
             console.log(this.stage.items);
             var items = this.stage.items;
             for (let i = 0; i < items.length; i++) {
-                if (items[i].isA("Enemy1") || items[i].isA("Enemy2") || items[i].isA("Enemy3")) {
+                if (items[i].isA("Enemy1") || items[i].isA("Enemy2") || items[i].isA("Enemy3") || items[i].isA("Enemy4")) {
                     let medidas = items[i]["p"];
                     let x_ = Number(medidas["x"]);
                     let y_ = Number(medidas["y"]);
@@ -326,7 +397,7 @@ var game = function () {
         },
         step: function (dt) {
             if (this.p.y > 900) {
-                Q.stageScene("endGame", 1, { label: "You Died" });
+                //Q.stageScene("endGame", 1, { label: "You Died" });
                 console.log("cayendo");
                 this.p.x = 350;
                 this.p.y = 700;
