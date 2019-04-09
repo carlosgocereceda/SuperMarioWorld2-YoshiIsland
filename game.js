@@ -84,6 +84,7 @@ var game = function () {
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
             huevos = 0;
+            nivel = 1;
             stage.insert(new Q.Enemy2({ x: 1000, vy: 450, y: 660}));
             stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 660 }));
             stage.insert(new Q.Enemy1({ x: 600, vy: 450, vx: -50, y: 660 }));
@@ -98,11 +99,13 @@ var game = function () {
         });
 
          Q.scene("level2", function (stage) {
+         	nivel = 2;
             Q.stageTMX("yoshi2.tmx", stage);
-            var player = stage.insert(new Q.Player({y: 300}));
+            var player = stage.insert(new Q.Player({y: 650}));
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
-            huevos = 0;           
+            huevos = 0;
+            stage.insert(new Q.Flower({ x: 3175, y:450 }));           
         });
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx", function () {
@@ -531,10 +534,16 @@ var game = function () {
                 }
             }
             if (this.p.y > 900) {
-                //Q.stageScene("endGame", 1, { label: "You Died" });
+                Q.stageScene("endGame", 1, { label: "You Died" });
                 console.log("cayendo");
-                this.p.x = 350;
-                this.p.y = 700;
+                if(nivel == 1){
+	                this.p.x = 350;
+	                this.p.y = 700;
+            	}
+            	else if (nivel == 2) {
+            		this.p.x = 350;
+            		this.p.y = 650;
+            	}
             }
             else if (!this.p.atancando) {
                 if (this.p.vy == 0) {
