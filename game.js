@@ -78,6 +78,7 @@ var game = function () {
 
 
         Q.scene("level1", function (stage) {
+        	console.log("entro a nivel 1");
             Q.stageTMX("yoshi.tmx", stage);
             var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
@@ -95,9 +96,43 @@ var game = function () {
             stage.insert(new Q.Flower({ x: 4362, y:550 }));
             
         });
-        Q.loadTMX("yoshi.tmx", function () {
-            Q.stageScene("level1");
+
+         Q.scene("level2", function (stage) {
+            Q.stageTMX("yoshi2.tmx", stage);
+            var player = stage.insert(new Q.Player({y: 300}));
+            stage.add("viewport").follow(player);
+            stage.viewport.scale = 2;
+            huevos = 0;           
         });
+
+        Q.loadTMX("yoshi.tmx, yoshi2.tmx", function () {
+        	console.log("pinto yoshi 1");
+            if(nivel == 1)Q.stageScene("level1");
+            else if(nivel == 2) Q.stageScene("level2");
+        });
+
+         Q.scene('winGame', function (stage) {
+            var box = stage.insert(new Q.UI.Container({
+                x: Q.width / 2, y: Q.height / 2, fill: "rgba(255,255,255,0.5)"
+            }));
+
+            var button = box.insert(new Q.UI.Button({
+                x: 0, y: 0, fill: "#CCCCCC",
+                label: "Play Next Level"
+            }))
+            var label = box.insert(new Q.UI.Text({
+                x: 10, y: -10 - button.p.h,
+                label: "You win Level " + nivel
+            }));
+            nivel += 1;
+            button.on("click", function () {
+                Q.clearStages();
+                if(nivel == 1) Q.stageScene("level1");
+            	else if(nivel == 2) Q.stageScene("level2");
+            });
+            box.fit(20);
+        });
+
         //Ventana de fin del juego
         Q.scene('endGame', function (stage) {
             var box = stage.insert(new Q.UI.Container({
@@ -114,7 +149,8 @@ var game = function () {
             }));
             button.on("click", function () {
                 Q.clearStages();
-                Q.stageScene("level1");
+                if(nivel == 1) Q.stageScene("level1");
+            	else if(nivel == 2) Q.stageScene("level2");
             });
             box.fit(20);
         });
@@ -291,7 +327,7 @@ var game = function () {
             this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
                 	this.destroy();
-                	//Pasar al nivel 2
+                	Q.stageScene("winGame", 1);
                 }
             });           
         }
