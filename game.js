@@ -363,7 +363,13 @@ var game = function () {
                 disparado: false
             });
             this.p.gravityY = 0;
-            this.add('2d, tween');      
+            this.add('2d, tween');  
+            this.on("bump.top, bump.left,bump.right,bump.bottom", function (collision) {
+                if (!collision.obj.isA("Player")) {
+                    this.destroy();
+                }
+            }); 
+
         }
     });
 
