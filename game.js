@@ -1,4 +1,5 @@
 var game = function () {
+    var nivel = 1;
     //Función a la que se llamará cuando se cargue el juego
     //Objeto Quinus con los modulos que necesitamos
     var Q = window.Q = Quintus()
