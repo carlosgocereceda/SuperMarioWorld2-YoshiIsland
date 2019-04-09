@@ -80,10 +80,10 @@ var game = function () {
             stage.viewport.scale = 2;
             huevos = 0;
             nivel = 1;
-            stage.insert(new Q.EnemyTerrestre({sheet: "enemy2", x: 1000,vx: 50, vy: 450, y: 660}));
-            stage.insert(new Q.EnemyTerrestre({sheet: "enemy1", x: 400, vx: 50,vy: 450, y: 660 }));
-            stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1",x: 600, vy: 450, vx: -50, y: 660 }));
-            stage.insert(new Q.EnemyTerrestre({sheet: "enemy3", x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true }));
+            stage.insert(new Q.EnemyTerrestre({sheet: "enemy2", x: 1000,vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800,}));
+            stage.insert(new Q.EnemyTerrestre({sheet: "enemy1", x: 400, vx: 50,vy: 450, y: 660,  x_reaparicion: 400, y_reaparicion: 660, y_caida: 800,}));
+            stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1",x: 600, vy: 450, vx: -50, y: 660,  x_reaparicion: 600, y_reaparicion: 660, y_caida: 800,}));
+            stage.insert(new Q.EnemyTerrestre({sheet: "enemy3", x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true,  x_reaparicion: 1100, y_reaparicion: 600, y_caida: 800,}));
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy1", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy2", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy3", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
@@ -162,17 +162,17 @@ var game = function () {
         init: function (p) {
             this._super(p, {
                 sprite: "enemy1_animations",
-                sheet: "",
-                vx: 0,
-                reaparecer: false,
-                x_reaparicion: 0,
-                y_reaparicion: 0,
-                y_caida: 0,
+                sheet: "", //Obligatorio
+                vx: 0, //Obligatorio
+                reaparecer: true, //Obligatorio
+                x_reaparicion: 0, //Obligatorio si reaparicion = true
+                y_reaparicion: 0, //Obligatorio si reaparicion = true
+                y_caida: 0, //Obligatorio si reaparicion = true
                 darVuelta: false,
-                x_vueltaMax: 0,
-                x_vueltaMin: 0,
-                velocidad: 0,
-                dandoVuelta: false
+                x_vueltaMax: 0, //Obligatorio si darVuelta = true
+                x_vueltaMin: 0,	//Obligatorio si darVuelta = true
+                velocidad: 0 //Obligatorio si darVuelta = true
+                //x e y también son obligatorias
             });
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
@@ -182,21 +182,55 @@ var game = function () {
                     collision.obj.destroy();
                 }
                 else if(collision.obj.isA("Egg")){
-                	console.log("LE HE DADOOOOOOOOOOOO")
-                    this.destroy();
+                	console.log("LE HE DADOOOOOOOOOOOO");
+                	if(this.p.reaparecer){
+                		var nuevo = new Q.EnemyTerrestre({sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+                		 y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion, vy: this.p.vy, 
+                		 vx: this.p.vx, y: this.p.y_reaparicion , darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
+                		 x_vueltaMax: this.p.x_vueltaMax, x_vueltaMin: this.p.x_vueltaMin});
+                		var stag = this.stage;
+                		this.destroy();
+                		window.setTimeout(function(){
+							stag.insert(nuevo);
+						}, 10000);
+                	}
+                    else this.destroy();
+
                     collision.obj.destroy();
                 }
             });           
-            //Si le salta encima el player lo mata y salta más
+            //Si le salta encima el player lo mata
             this.on("bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
                     console.log("die");
                     collision.obj.p.vy = -500;
-                    this.destroy();
+                    if(this.p.reaparecer){
+                		var nuevo = new Q.EnemyTerrestre({sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+                		 y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion, vy: this.p.vy, 
+                		 vx: this.p.vx, y: this.p.y_reaparicion , darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
+                		 x_vueltaMax: this.p.x_vueltaMax, x_vueltaMin: this.p.x_vueltaMin});
+                		var stag = this.stage;
+                		this.destroy();
+                		window.setTimeout(function(){
+							stag.insert(nuevo);
+						}, 10000);
+                	}
+                    else this.destroy();
                 }
                 else if(collision.obj.isA("Egg")){
                 	console.log("LE HE DADOOOOOOOOOOOO")
-                    this.destroy();
+                    if(this.p.reaparecer){
+                		var nuevo = new Q.EnemyTerrestre({sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+                		 y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion, vy: this.p.vy, 
+                		 vx: this.p.vx, y: this.p.y_reaparicion , darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
+                		 x_vueltaMax: this.p.x_vueltaMax, x_vueltaMin: this.p.x_vueltaMin});
+                		var stag = this.stage;
+                		this.destroy();
+                		window.setTimeout(function(){
+							stag.insert(nuevo);
+						}, 10000);
+                	}
+                    else this.destroy();
                     collision.obj.destroy();
                 }
             });
@@ -206,13 +240,13 @@ var game = function () {
                 this.play("run_right");
             else
                 this.play("run_left");
-            if(this.p.reaparecer) {
+            if(this.p.reaparecer) { //Reaparición si el enmigo se cae
             	if(this.p.y >= this.p.y_caida) {
             		this.p.x = this.p.x_reaparicion;
             		this.p.y = this.p.y_reaparicion;
             	}
             }
-            if(this.p.darVuelta && !this.p.dandoVuelta) {
+            if(this.p.darVuelta && !this.p.dandoVuelta) { //Movimiento cuando no hay obstaculos
             	if(this.p.x >= this.p.x_vueltaMax) {
             		this.p.vx = - this.p.velocidad;
             	}
@@ -248,17 +282,20 @@ var game = function () {
         init: function (p) {
             this._super(p, {
             	sprite: "enemy1_animations",
-                sheet: "",
-                x: 600,
-                y: 400,
-                vx: 0,
-                vy: 0,
-                maxY: 0,
-                minY: 0,
-                minX: 0,
-                maxX: 0,
-                velocidad: 0,
-                horizontal: true
+                sheet: "", ////Obligatorio
+                x: 600, //Obligatorio
+                y: 400, //Obligatorio
+                vx: 0, //Obligatorio si quieres que se mueva horizontalmente
+                vy: 0, //Obligatorio si quieres que se mueva verticalmente
+                maxY: 0, //Obligatorio si horizontal = false
+                minY: 0, //Obligatorio si horizontal = false
+                minX: 0, //Obligatorio si horizontal = true
+                maxX: 0, //Obligatorio si horizontal = true
+                velocidad: 0, 
+                horizontal: true, //Obligatorio, indica si se mueve en horizontal (true) o vertical (false)
+                reaparecer: true, //Obligatorio
+                x_reaparicion: 0, ///Obligatorio si reaparecer = true
+                y_reaparicion: 0 //Obligatorio si reaparecer = true
             });
             this.p.gravityY = 0;
             this.add('2d, aiBounce, animation'); //Para la IA que lo mueve de derecha a izquierda
@@ -270,26 +307,59 @@ var game = function () {
                 }
                 else if(collision.obj.isA("Egg")){
                 	console.log("LE HE DADOOOOOOOOOOOO")
-                    this.destroy();
+                    if(this.p.reaparecer){
+                		var nuevo = new Q.EnemyVolador({sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+                		 y_reaparicion: this.p.y_reaparicion, x: this.p.x_reaparicion, vy: this.p.vy, 
+                		 vx: this.p.vx, y: this.p.y_reaparicion , velocidad: this.p.velocidad, horizontal: this.p.horizontal,
+                		 maxX: this.p.maxX, maxY: this.p.maxY, minX: this.p.minX, minY: this.p.minY});
+                		var stag = this.stage;
+                		this.destroy();
+                		window.setTimeout(function(){
+							stag.insert(nuevo);
+						}, 10000);
+                	}
+                    else this.destroy();
                     collision.obj.destroy();
                 }
             });
-            //Si le salta encima el player lo mata y salta más
+            //Si le salta encima el player lo mata
             this.on("bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
                     console.log("die");
                     collision.obj.p.vy = -500;
-                    this.destroy();
+                    if(this.p.reaparecer){
+                		var nuevo = new Q.EnemyVolador({sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+                		 y_reaparicion: this.p.y_reaparicion, x: this.p.x_reaparicion, vy: this.p.vy, 
+                		 vx: this.p.vx, y: this.p.y_reaparicion , velocidad: this.p.velocidad, horizontal: this.p.horizontal,
+                		 maxX: this.p.maxX, maxY: this.p.maxY, minX: this.p.minX, minY: this.p.minY});
+                		var stag = this.stage;
+                		this.destroy();
+                		window.setTimeout(function(){
+							stag.insert(nuevo);
+						}, 10000);
+                	}
+                    else this.destroy();
                 }
                 else if(collision.obj.isA("Egg")){
                 	console.log("LE HE DADOOOOOOOOOOOO")
-                    this.destroy();
+                    if(this.p.reaparecer){
+                		var nuevo = new Q.EnemyVolador({sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+                		 y_reaparicion: this.p.y_reaparicion, x: this.p.x_reaparicion, vy: this.p.vy, 
+                		 vx: this.p.vx, y: this.p.y_reaparicion , velocidad: this.p.velocidad, horizontal: this.p.horizontal,
+                		 maxX: this.p.maxX, maxY: this.p.maxY, minX: this.p.minX, minY: this.p.minY});
+                		var stag = this.stage;
+                		this.destroy();
+                		window.setTimeout(function(){
+							stag.insert(nuevo);
+						}, 10000);
+                	}
+                    else this.destroy();
                     collision.obj.destroy();
                 }
             });
         },
         step: function (dt) {
-        	if(!this.p.horizontal){
+        	if(!this.p.horizontal){ //Movimiento vertical
 	            if (this.p.y >= this.p.maxY) {
 	                this.p.vy = - this.p.velocidad;
 	            }
@@ -297,7 +367,7 @@ var game = function () {
 	                this.p.vy = this.p.velocidad;
 	            }
         	}
-        	else {
+        	else { //Movimiento horizontal
         		if (this.p.x >= this.p.maxX) {
 	                this.p.vx = - this.p.velocidad;
 	            }
@@ -325,7 +395,7 @@ var game = function () {
             this.p.gravityY = 0;
             this.add('2d, tween');  
             this.on("bump.left,bump.right", function (collision) {
-                if (!collision.obj.isA("Player") && this.p.disparado) {
+                if (!collision.obj.isA("Player") && !collision.obj.isA("EnemyTerrestre") && !collision.obj.isA("EnemyVolador") && this.p.disparado) {
                     this.destroy();
                    huevos = 0;
                 }
@@ -413,8 +483,35 @@ var game = function () {
                     console.log(this.p.x + " " + this.p.y);
                     if (Math.abs(Number(this.p.x) - x_) < 75 && Math.abs(Number(this.p.y) - y_ < 3)) {
                         console.log("lo mato");
-                        console.log(Number(this.p.x - x_) + " " + Number(this.p.y - y_));
-                        items[i].destroy();
+                        //console.log(Number(this.p.x - x_) + " " + Number(this.p.y - y_));
+                        if(items[i].isA("EnemyTerrestre") && items[i]["p"]["reaparecer"]){
+                        	console.log("HOLIIIIIIIIII")
+							var nuevo = new Q.EnemyTerrestre({sprite: items[i]["p"]["sprite"], sheet: items[i]["p"]["sheet"],
+							 reaparecer: items[i]["p"]["reaparecer"], x_reaparicion: items[i]["p"]["x_reaparicion"],
+	                		 y_reaparicion: items[i]["p"]["y_reaparicion"], y_caida: items[i]["p"]["y_caida"], 
+	                		 x: items[i]["p"]["x_reaparicion"], vy: items[i]["p"]["vy"], vx: items[i]["p"]["vx"],
+	                		 y: items[i]["p"]["y_reaparicion"] , darVuelta: items[i]["p"]["darVuelta"], velocidad: items[i]["p"]["velocidad"],
+	                		 x_vueltaMax: items[i]["p"]["x_vueltaMax"], x_vueltaMin: items[i]["p"]["x_vueltaMin"]});
+	                		var stag = this.stage;
+	                		items[i].destroy();
+	                		window.setTimeout(function(){
+								stag.insert(nuevo);
+							}, 10000);
+                	}
+                	else if(items[i].isA("EnemyVolador") && items[i].reaparecer){
+                		var nuevo = new Q.EnemyVolador({sprite: items[i]["p"]["sprite"], sheet: items[i]["p"]["sheet"],
+						reaparecer: items[i]["p"]["reaparecer"], x_reaparicion: items[i]["p"]["x_reaparicion"],
+	                	y_reaparicion: items[i]["p"]["y_reaparicion"], x: items[i]["p"]["x_reaparicion"], vy: items[i]["p"]["vy"], vx: items[i]["p"]["vx"],
+	                	y: items[i]["p"]["y_reaparicion"] , velocidad: items[i]["p"]["velocidad"], horizontal: items[i]["p"]["horizontal"],
+                		maxX: items[i]["p"]["maxX"], maxY: iitems[i]["p"]["maxY"], minX: items[i]["p"]["minX"], minY: items[i]["p"]["minY"]});
+                		var stag = this.stage;
+                		items[i].destroy();
+                		window.setTimeout(function(){
+							stag.insert(nuevo);
+						}, 10000);
+					}
+                    else items[i].destroy();
+                       
                        // if(this.p.huevos == 0){ //de momento solo un huevo
                        if(huevos == 0){
                             this.stage.insert(new Q.Egg({x:this.p.x-20, y:this.p.y}));
