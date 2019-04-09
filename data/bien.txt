@@ -1,0 +1,11 @@
+this.on("bump.left,bump.right,bump.bottom", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    Q.stageScene("endGame", 1, { label: "You Died" });
+                    collision.obj.destroy();
+                }
+                else if(collision.obj.isA("Egg")){
+                    collision.obj.p.vy = -500;
+                    this.destroy();
+                    collision.obj.destroy();
+                }
+            });

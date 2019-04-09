@@ -18,7 +18,8 @@ var game = function () {
         .controls().touch()
     //Se cargan los recursos
     Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png," +
-    " Shy_Guy_morado.json, level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json", function () {
+    " Shy_Guy_morado.json, level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json, " +
+    "piedraCae.png, piedraCae.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
         
         // Enemigos nivel 1 terrestres
@@ -34,6 +35,9 @@ var game = function () {
 
         // Enemigos voladores (nivel 1)
         Q.compileSheets("enemigos.png", "koopaVolador.json");
+
+        //Piedra que cae (nivel 2)
+        Q.compileSheets("piedraCae.png", "piedraCae.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -105,12 +109,13 @@ var game = function () {
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
             huevos = 0;
+            stage.insert(new Q.PiedraCae({ x: 1090, y:435, y_origen: 435, maxY: 550, tCaida: 3}));  
             stage.insert(new Q.Flower({ x: 3175, y:450 }));           
         });
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx", function () {
         	console.log("pinto yoshi 1");
-            if(nivel == 1)Q.stageScene("level1");
+            if(nivel == 1)Q.stageScene("level2");
             else if(nivel == 2) Q.stageScene("level2");
         });
 
@@ -401,6 +406,8 @@ var game = function () {
 
     });
 
+    //Fantasmas Voladores
+
     //Huevo
     Q.Sprite.extend("Egg", {
         init: function (p) {
@@ -565,6 +572,40 @@ var game = function () {
                 }
             }
 
+        }
+    });
+
+	//Objetos
+	//Piedra que cae
+     Q.Sprite.extend("PiedraCae", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "piedra",
+                x: 0,
+                y: 0,
+                vy: 0,
+                y_origen: 0,
+                tiempo: 0,
+                max_Y: 0,
+                tCaida: 0
+            });
+            this.p.gravityY = 0;
+            this.add('2d, tween');
+            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                }
+            });           
+        },
+        step: function (dt) {
+        	this.p.tiempo += dt;
+        	if(this.p.tiempo >= this.p.tCaida) {
+        		this.p.vy = 50;
+        	}
+            if (this.p.y >= this.p.maxY) {
+            	this.p.tiempo = 0;
+            	this.p.vy = 0;
+                this.p.y = this.p.y_origen;
+            }
         }
     });
 }
