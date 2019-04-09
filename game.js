@@ -1,4 +1,6 @@
 var game = function () {
+    var nivel = 1;
+    var huevos;
     //Función a la que se llamará cuando se cargue el juego
     //Objeto Quinus con los modulos que necesitamos
     var Q = window.Q = Quintus()
@@ -18,12 +20,20 @@ var game = function () {
     Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png," +
     " Shy_Guy_morado.json, level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
+        
+        // Enemigos nivel 1 terrestres
         Q.compileSheets("enemigos.png", "enemy1.json");
         Q.compileSheets("enemigos.png", "enemy2.json");
         Q.compileSheets("Shy_Guy_morado.png", "Shy_Guy_morado.json");
+        
+        // Fin del nivel (flor del final)
         Q.compileSheets("level_end.png", "level_end.json");
-        Q.compileSheets("enemigos.png", "koopaVolador.json");
+       
+        // Huevo de Yoshi
         Q.compileSheets("huevos.png", "egg.json");
+
+        // Enemigos voladores (nivel 1)
+        Q.compileSheets("enemigos.png", "koopaVolador.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -72,6 +82,7 @@ var game = function () {
             var player = stage.insert(new Q.Player());
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
+            huevos = 0;
             stage.insert(new Q.Enemy2({ x: 1000, vy: 450, y: 660}));
             stage.insert(new Q.Enemy1({ x: 400, vy: 450, y: 660 }));
             stage.insert(new Q.Enemy1({ x: 600, vy: 450, vx: -50, y: 660 }));
@@ -361,7 +372,14 @@ var game = function () {
                 disparado: false
             });
             this.p.gravityY = 0;
-            this.add('2d, tween');      
+            this.add('2d, tween');  
+            this.on("bump.left,bump.right", function (collision) {
+                if (!collision.obj.isA("Player")) {
+                    this.destroy();
+                   huevos = 0;
+                }
+            }); 
+
         }
     });
 
@@ -375,8 +393,7 @@ var game = function () {
                 jumpSpeed: -400,
                 y: 700, //y donde aparecerá,
                 atancando: false,
-                boost: false,
-                huevos: 0
+                boost: false
             });
             this.add('2d, platformerControls, tween, animation');
             Q.input.on("down", this, "attack");
@@ -411,7 +428,8 @@ var game = function () {
         },
         disparo: function(){
             console.log("disparo");
-            if(this.p.huevos > 0){
+            //if(this.p.huevos > 0){
+            if(huevos > 0){
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
                     if (items[i].isA("Egg")) {
@@ -424,12 +442,11 @@ var game = function () {
                         else{
                             items[i]["p"]["x"] = this.p.x - 20;
                             items[i]["p"]["vx"] = -300; 
-                        }
-                                              
+                        }                        
                     }
                 }
             }
-            this.p.huevos = 0;
+           huevos = 0;
         },
         attack: function () {
             this.p.atancando = true;
@@ -447,9 +464,11 @@ var game = function () {
                         console.log("lo mato");
                         console.log(Number(this.p.x - x_) + " " + Number(this.p.y - y_));
                         items[i].destroy();
-                        if(this.p.huevos == 0){ //de momento solo un huevo
+                       // if(this.p.huevos == 0){ //de momento solo un huevo
+                       if(huevos == 0){
                             this.stage.insert(new Q.Egg({x:this.p.x-20, y:this.p.y}));
-                            this.p.huevos += 1;
+                            //this.p.huevos += 1;
+                            huevos += 1;
                         }
                     }
                 }
@@ -459,7 +478,8 @@ var game = function () {
             this.play("attack_" + this.p.direction);
         },
         step: function (dt) {
-            if(this.p.huevos > 0){
+            //if(this.p.huevos > 0){
+            if(huevos > 0){
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
                     if (items[i].isA("Egg") && !items[i]["p"]["disparado"]) {
