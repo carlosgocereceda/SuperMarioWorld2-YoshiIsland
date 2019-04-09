@@ -108,7 +108,7 @@ var game = function () {
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx", function () {
         	console.log("pinto yoshi 1");
-            if(nivel == 1)Q.stageScene("level2");
+            if(nivel == 1)Q.stageScene("level1");
             else if(nivel == 2) Q.stageScene("level2");
         });
 
@@ -157,7 +157,7 @@ var game = function () {
         });
 
     });
-	//Enemy3(fantasma morado)
+	//Enemy(fantasmas de colores)
      Q.Sprite.extend("Enemy", {
         init: function (p) {
             this._super(p, {
@@ -181,6 +181,11 @@ var game = function () {
                     Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
+                else if(collision.obj.isA("Egg")){
+                	console.log("LE HE DADOOOOOOOOOOOO")
+                    this.destroy();
+                    collision.obj.destroy();
+                }
             });           
             //Si le salta encima el player lo mata y salta más
             this.on("bump.top", function (collision) {
@@ -190,7 +195,7 @@ var game = function () {
                     this.destroy();
                 }
                 else if(collision.obj.isA("Egg")){
-                    collision.obj.p.vy = -500;
+                	console.log("LE HE DADOOOOOOOOOOOO")
                     this.destroy();
                     collision.obj.destroy();
                 }
@@ -263,6 +268,11 @@ var game = function () {
                     Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
+                else if(collision.obj.isA("Egg")){
+                	console.log("LE HE DADOOOOOOOOOOOO")
+                    this.destroy();
+                    collision.obj.destroy();
+                }
             });
             //Si le salta encima el player lo mata y salta más
             this.on("bump.top", function (collision) {
@@ -271,8 +281,8 @@ var game = function () {
                     collision.obj.p.vy = -500;
                     this.destroy();
                 }
-                 else if(collision.obj.isA("Egg")){
-                    collision.obj.p.vy = -500;
+                else if(collision.obj.isA("Egg")){
+                	console.log("LE HE DADOOOOOOOOOOOO")
                     this.destroy();
                     collision.obj.destroy();
                 }
@@ -329,11 +339,10 @@ var game = function () {
                     collision.obj.destroy();
                 }
                 else if(collision.obj.isA("Egg")){
-                    console.log("Entra el hue")
-                   collision.obj.p.vy = -500;
-                   this.destroy();
-                   collision.obj.destroy();
-               }
+                	console.log("LE HE DADOOOOOOOOOOOO")
+                    this.destroy();
+                    collision.obj.destroy();
+                }
             });
             //Si le salta encima el player lo mata y salta más
             this.on("bump.top", function (collision) {
@@ -342,9 +351,8 @@ var game = function () {
                     collision.obj.p.vy = -500;
                     this.destroy();
                 }
-                 else if(collision.obj.isA("Egg")){
-                     console.log("Entra el hue")
-                    collision.obj.p.vy = -500;
+                else if(collision.obj.isA("Egg")){
+                	console.log("LE HE DADOOOOOOOOOOOO")
                     this.destroy();
                     collision.obj.destroy();
                 }
@@ -387,7 +395,7 @@ var game = function () {
             this.p.gravityY = 0;
             this.add('2d, tween');  
             this.on("bump.left,bump.right", function (collision) {
-                if (!collision.obj.isA("Player")) {
+                if (!collision.obj.isA("Player") && this.p.disparado) {
                     this.destroy();
                    huevos = 0;
                 }
