@@ -15,13 +15,15 @@ var game = function () {
         // And turn on default input controls and touch input (for UI)
         .controls().touch()
     //Se cargan los recursos
-    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png, Shy_Guy_morado.json, level_end.png, level_end.json, koopaVolador.json", function () {
+    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png," +
+    " Shy_Guy_morado.json, level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
         Q.compileSheets("enemigos.png", "enemy1.json");
         Q.compileSheets("enemigos.png", "enemy2.json");
         Q.compileSheets("Shy_Guy_morado.png", "Shy_Guy_morado.json");
         Q.compileSheets("level_end.png", "level_end.json");
         Q.compileSheets("enemigos.png", "koopaVolador.json");
+        Q.compileSheets("huevos.png", "egg.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -81,6 +83,7 @@ var game = function () {
             stage.insert(new Q.Enemy4({x: 1100, y: 500, velocidad: 50, vx: 50, minX: 1070, maxX: 1400}));
             stage.insert(new Q.Enemy4({horizontal: false, x: 1490, y: 500, velocidad: 70, vy: 70, minY: 350, maxY: 550}));
             stage.insert(new Q.Flower({ x: 4362, y:550 }));
+            
         });
         Q.loadTMX("yoshi.tmx", function () {
             Q.stageScene("level1");
@@ -123,6 +126,11 @@ var game = function () {
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
                     Q.stageScene("endGame", 1, { label: "You Died" });
+                    collision.obj.destroy();
+                }
+                else if(collision.obj.isA("Egg")){
+                    collision.obj.p.vy = -500;
+                    this.destroy();
                     collision.obj.destroy();
                 }
             });
@@ -169,6 +177,11 @@ var game = function () {
                     Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
+                else if(collision.obj.isA("Egg")){
+                    collision.obj.p.vy = -500;
+                    this.destroy();
+                    collision.obj.destroy();
+                }
             });
             
             //Si le salta encima el player lo mata y salta más
@@ -193,7 +206,6 @@ var game = function () {
             }
         }
     });
-
 	//Enemy3(fantasma morado)
      Q.Sprite.extend("Enemy3", {
         init: function (p) {
@@ -225,6 +237,11 @@ var game = function () {
                     console.log("die");
                     collision.obj.p.vy = -500;
                     this.destroy();
+                }
+                else if(collision.obj.isA("Egg")){
+                    collision.obj.p.vy = -500;
+                    this.destroy();
+                    collision.obj.destroy();
                 }
             });
         },
@@ -329,6 +346,19 @@ var game = function () {
 
     });
 
+    //Huevo
+    Q.Sprite.extend("Egg", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "egg",
+                x: 0,
+                y: 0,
+                disparado: false
+            });
+            this.add('2d, tween');      
+        }
+    });
+
     //Yoshi
     Q.Sprite.extend("Player", {
         init: function (p) {
@@ -339,11 +369,13 @@ var game = function () {
                 jumpSpeed: -400,
                 y: 700, //y donde aparecerá,
                 atancando: false,
-                boost: false
+                boost: false,
+                huevos: 0
             });
             this.add('2d, platformerControls, tween, animation');
             Q.input.on("down", this, "attack");
             Q.input.on("up", this, "boost");
+            Q.input.on("fire", this, "disparo");
             this.on("stopAttack", function () {
                 this.p.atancando = false;
             });
@@ -372,6 +404,28 @@ var game = function () {
 
             }
         },
+        disparo: function(){
+            console.log("disparo");
+            if(this.p.huevos > 0){
+                var items = this.stage.items;
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].isA("Egg")) {
+                        items[i]["p"]["disparado"] = true;
+                        console.log(items[i]["p"]["vy"]);
+                        if(this.p.direction == "right"){
+                            items[i]["p"]["x"] = this.p.x + 20;
+                            items[i]["p"]["vx"] = 300; 
+                        }
+                        else{
+                            items[i]["p"]["x"] = this.p.x - 20;
+                            items[i]["p"]["vx"] = -300; 
+                        }
+                                              
+                    }
+                }
+            }
+            this.p.huevos = 0;
+        },
         attack: function () {
             this.p.atancando = true;
             console.log("atacando");
@@ -388,6 +442,10 @@ var game = function () {
                         console.log("lo mato");
                         console.log(Number(this.p.x - x_) + " " + Number(this.p.y - y_));
                         items[i].destroy();
+                        if(this.p.huevos == 0){ //de momento solo un huevo
+                            this.stage.insert(new Q.Egg({x:this.p.x-20, y:this.p.y}));
+                            this.p.huevos += 1;
+                        }
                     }
                 }
 
@@ -396,6 +454,23 @@ var game = function () {
             this.play("attack_" + this.p.direction);
         },
         step: function (dt) {
+            if(this.p.huevos > 0){
+                var items = this.stage.items;
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].isA("Egg") && !  items[i]["p"]["disparado"]) {
+                        if(this.p.direction == "right"){
+                            items[i]["p"]["x"] = this.p.x -15;
+                            if(this.p.vy == 0)
+                            items[i]["p"]["y"] = this.p.y;
+                        }
+                        else{
+                            items[i]["p"]["x"] = this.p.x + 15;
+                            if(this.p.vy == 0)
+                            items[i]["p"]["y"] = this.p.y;
+                        }
+                    }
+                }
+            }
             if (this.p.y > 900) {
                 //Q.stageScene("endGame", 1, { label: "You Died" });
                 console.log("cayendo");
@@ -423,7 +498,5 @@ var game = function () {
             }
 
         }
-
-
     });
 }
