@@ -274,7 +274,8 @@ var game = function () {
             this._super(p, {
                 sheet: "end",
                 x: 0,
-                y: 0
+                y: 0,
+                vy: 0
             });
             this.p.gravityY = 0;
             this.add('2d, tween');
@@ -320,6 +321,11 @@ var game = function () {
                     collision.obj.p.vy = -500;
                     this.destroy();
                 }
+                 else if(collision.obj.isA("Egg")){
+                    collision.obj.p.vy = -500;
+                    this.destroy();
+                    collision.obj.destroy();
+                }
             });
         },
         step: function (dt) {
@@ -356,6 +362,7 @@ var game = function () {
                 y: 0,
                 disparado: false
             });
+            this.p.gravityY = 0;
             this.add('2d, tween');      
         }
     });
@@ -382,7 +389,6 @@ var game = function () {
             });
             this.on("stopAttack_left", function () {
                 this.p.atancando = false;
-                //this.p.flip = "x";
                 this.play("stand_left_corrector");
             });
         },
@@ -458,15 +464,13 @@ var game = function () {
             if(this.p.huevos > 0){
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
-                    if (items[i].isA("Egg") && !  items[i]["p"]["disparado"]) {
+                    if (items[i].isA("Egg") && !items[i]["p"]["disparado"]) {
                         if(this.p.direction == "right"){
                             items[i]["p"]["x"] = this.p.x -15;
-                            if(this.p.vy == 0)
                             items[i]["p"]["y"] = this.p.y;
                         }
                         else{
                             items[i]["p"]["x"] = this.p.x + 15;
-                            if(this.p.vy == 0)
                             items[i]["p"]["y"] = this.p.y;
                         }
                     }
