@@ -80,18 +80,18 @@ var game = function () {
             stage.viewport.scale = 2;
             huevos = 0;
             nivel = 1;
-            stage.insert(new Q.Enemy({sheet: "enemy2", x: 1000,vx: 50, vy: 450, y: 660}));
-            stage.insert(new Q.Enemy({sheet: "enemy1", x: 400, vx: 50,vy: 450, y: 660 }));
-            stage.insert(new Q.Enemy({ sheet: "enemy1",x: 600, vy: 450, vx: -50, y: 660 }));
-            stage.insert(new Q.Enemy({sheet: "enemy3", x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true }));
-            stage.insert(new Q.Enemy({sheet: "enemy1", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600 }));
-            stage.insert(new Q.Enemy({sheet: "enemy2", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
-            stage.insert(new Q.Enemy({sheet: "enemy3", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
-            stage.insert(new Q.Enemy4({x: 1100, y: 500, velocidad: 50, vx: 50, minX: 1070, maxX: 1400}));
-            stage.insert(new Q.Enemy4({horizontal: false, x: 1490, y: 500, velocidad: 70, vy: 70, minY: 350, maxY: 550}));
+            stage.insert(new Q.EnemyTerrestre({sheet: "enemy2", x: 1000,vx: 50, vy: 450, y: 660}));
+            stage.insert(new Q.EnemyTerrestre({sheet: "enemy1", x: 400, vx: 50,vy: 450, y: 660 }));
+            stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1",x: 600, vy: 450, vx: -50, y: 660 }));
+            stage.insert(new Q.EnemyTerrestre({sheet: "enemy3", x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true }));
+            stage.insert(new Q.EnemyTerrestre({sheet: "enemy1", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600 }));
+            stage.insert(new Q.EnemyTerrestre({sheet: "enemy2", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
+            stage.insert(new Q.EnemyTerrestre({sheet: "enemy3", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy10", x: 1100, y: 500, velocidad: 50, vx: 50, minX: 1070, maxX: 1400}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy10", horizontal: false, x: 1490, y: 500, velocidad: 70, vy: 70, minY: 350, maxY: 550}));
             stage.insert(new Q.Flower({ x: 4362, y:550 }));
             // Nuevo
-            //stage.insert(new Q.Enemy5({sheet: "enemy6", horizontal: false, x: 450, y: 660, velocidad: 70, vy: 70, minY: 350, maxY: 700}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy4", horizontal: false, x: 450, y: 660, velocidad: 70, vy: 70, minY: 350, maxY: 600}));
             
         });
 
@@ -157,8 +157,8 @@ var game = function () {
         });
 
     });
-	//Enemy(fantasmas de colores)
-     Q.Sprite.extend("Enemy", {
+	//Enemy(fantasmas de colores terrestres)
+     Q.Sprite.extend("EnemyTerrestre", {
         init: function (p) {
             this._super(p, {
                 sprite: "enemy1_animations",
@@ -243,82 +243,12 @@ var game = function () {
         }
     });
 
-     //Koopa Volador
-    Q.Sprite.extend("Enemy4", {
-        init: function (p) {
-            this._super(p, {
-            	sprite: "enemy4_animations",
-                sheet: "enemy4",
-                x: 600,
-                y: 400,
-                vx: 0,
-                vy: 0,
-                maxY: 0,
-                minY: 0,
-                minX: 0,
-                maxX: 0,
-                velocidad: 0,
-                horizontal: true
-            });
-            this.p.gravityY = 0;
-            this.add('2d, aiBounce, animation'); //Para la IA que lo mueve de derecha a izquierda
-            //Si le tocan por la izquierda, derecha o por debajo y es el player, pierde
-            this.on("bump.left,bump.right,bump.bottom", function (collision) {
-                if (collision.obj.isA("Player")) {
-                    Q.stageScene("endGame", 1, { label: "You Died" });
-                    collision.obj.destroy();
-                }
-                else if(collision.obj.isA("Egg")){
-                	console.log("LE HE DADOOOOOOOOOOOO")
-                    this.destroy();
-                    collision.obj.destroy();
-                }
-            });
-            //Si le salta encima el player lo mata y salta más
-            this.on("bump.top", function (collision) {
-                if (collision.obj.isA("Player")) {
-                    console.log("die");
-                    collision.obj.p.vy = -500;
-                    this.destroy();
-                }
-                else if(collision.obj.isA("Egg")){
-                	console.log("LE HE DADOOOOOOOOOOOO")
-                    this.destroy();
-                    collision.obj.destroy();
-                }
-            });
-        },
-        step: function (dt) {
-        	if(!this.p.horizontal){
-	            if (this.p.y >= this.p.maxY) {
-	                this.p.vy = - this.p.velocidad;
-	            }
-	            else if (this.p.y <= this.p.minY) {
-	                this.p.vy = this.p.velocidad;
-	            }
-        	}
-        	else {
-        		if (this.p.x >= this.p.maxX) {
-	                this.p.vx = - this.p.velocidad;
-	            }
-	            else if (this.p.x <= this.p.minX) {
-	                this.p.vx = this.p.velocidad;
-	            }
-        	}
-        	if (this.p.vx > 0)
-                this.play("run_right");
-            else
-                this.play("run_left");
-        }
-
-    });
-
-    // Enemy5(fantasma volador verde)
-    Q.Sprite.extend("Enemy5", {
+     //(Koopa Volador, Fantasmas de colores Voladores)
+    Q.Sprite.extend("EnemyVolador", {
         init: function (p) {
             this._super(p, {
             	sprite: "enemy1_animations",
-                sheet: "enemy5",
+                sheet: "",
                 x: 600,
                 y: 400,
                 vx: 0,
@@ -475,7 +405,7 @@ var game = function () {
             console.log(this.stage.items);
             var items = this.stage.items;
             for (let i = 0; i < items.length; i++) {
-                if (items[i].isA("Enemy") || items[i].isA("Enemy4")) {
+                if (items[i].isA("EnemyTerrestre") || items[i].isA("EnemyVolador")) {
                     let medidas = items[i]["p"];
                     let x_ = Number(medidas["x"]);
                     let y_ = Number(medidas["y"]);

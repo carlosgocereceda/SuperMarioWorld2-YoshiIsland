@@ -1,7 +1,7 @@
 {
-    "enemy5":{"sx":0,"sy":0,"tileW":30,"tileH":60,"frames":4},
-    "enemy6":{"sx":0,"sy":50,"tileW":30,"tileH":60,"frames":4},
-    "enemy7":{"sx":0,"sy":0,"tileW":30,"tileH":60,"frames":4},
-    "enemy8":{"sx":0,"sy":0,"tileW":30,"tileH":60,"frames":4}
+    "enemy4":{"sx":0,"sy":0,"tileW":30,"tileH":60,"frames":4},
+    "enemy5":{"sx":0,"sy":50,"tileW":30,"tileH":60,"frames":4},
+    "enemy6":{"sx":0,"sy":0,"tileW":30,"tileH":60,"frames":4},
+    "enemy7":{"sx":0,"sy":0,"tileW":30,"tileH":60,"frames":4}
 
 }
