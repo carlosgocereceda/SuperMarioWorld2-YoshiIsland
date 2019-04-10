@@ -24,8 +24,6 @@ var game = function () {
         
         // Enemigos nivel 1 terrestres
         Q.compileSheets("enemigos.png", "enemyTerrestres.json");
-        Q.compileSheets("enemigos.png", "enemyTerrestres.json");
-        Q.compileSheets("Shy_Guy_morado.png", "enemyTerrestres.json");
         
         // Fin del nivel (flor del final)
         Q.compileSheets("level_end.png", "level_end.json");
