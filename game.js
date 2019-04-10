@@ -85,15 +85,15 @@ var game = function () {
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy1", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy2", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy3", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
-            stage.insert(new Q.EnemyVolador({sheet: "enemy10", x: 1100, y: 500, velocidad: 50, vx: 50, minX: 1070, maxX: 1400}));
-            stage.insert(new Q.EnemyVolador({sheet: "enemy10", horizontal: false, x: 1490, y: 500, velocidad: 70, vy: 70, minY: 350, maxY: 550}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy4", x: 1100, y: 490, velocidad: 50, vx: 50, minX: 1070, maxX: 1400, x_reaparicion: 1100, y_reaparicion: 490}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy5", horizontal: false, x: 1490, y: 500, velocidad: 70, vy: 70, minY: 350, maxY: 550, x_reaparicion: 1490, y_reaparicion: 500}));
             stage.insert(new Q.Flower({ x: 4362, y:550 }));
             // Nuevo
-            stage.insert(new Q.EnemyVolador({sheet: "enemy4", horizontal: false, x: 450, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600}));
-            stage.insert(new Q.EnemyVolador({sheet: "enemy5", horizontal: false, x: 500, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600}));
-            stage.insert(new Q.EnemyVolador({sheet: "enemy6", horizontal: false, x: 550, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600}));
-            stage.insert(new Q.EnemyVolador({sheet: "enemy7", horizontal: false, x: 600, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600}));
-            stage.insert(new Q.EnemyVolador({sheet: "enemy8", horizontal: false, x: 650, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy4", horizontal: false, x: 450, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600, x_reaparicion: 2635, y_reaparicion: 600}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy5", horizontal: false, x: 500, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600, x_reaparicion: 2635, y_reaparicion: 600}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy6", horizontal: false, x: 550, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600, x_reaparicion: 2635, y_reaparicion: 600}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy7", horizontal: false, x: 600, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600, x_reaparicion: 2635, y_reaparicion: 600}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy8", horizontal: false, x: 650, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600, x_reaparicion: 2635, y_reaparicion: 600}));
             
         });
 
