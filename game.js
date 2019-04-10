@@ -63,7 +63,7 @@ var game = function () {
         })
 
         // Animacion Koopa Volador(enemy4)
-        Q.animations('enemy4_animations', {
+        Q.animations('enemy9_animations', {
             run_right: { frames: [0, 1, 2, 3, 4, 5], flip: "", rate: 1 / 5 },
             run_left: { frames: [0, 1, 2, 3, 4, 5], flip: "x", rate: 1 / 5 }
         })
@@ -104,13 +104,17 @@ var game = function () {
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
             huevos = 0;
-            stage.insert(new Q.PiedraCae({ x: 1090, y:435, y_origen: 435, maxY: 550, tCaida: 3}));  
+            stage.insert(new Q.PiedraCae({ x: 1090, y:435, y_origen: 435, maxY: 550, tCaida: 3})); 
+            stage.insert(new Q.PiedraCae({ x: 1200, y:435, y_origen: 435, maxY: 550, tCaida: 4}));
+            stage.insert(new Q.PiedraCae({ x: 1309, y:435, y_origen: 435, maxY: 550, tCaida: 5}));
+            stage.insert(new Q.PiedraCae({ x: 1409, y:435, y_origen: 435, maxY: 550, tCaida: 6}));
+            stage.insert(new Q.PiedraCae({ x: 1509, y:435, y_origen: 435, maxY: 550, tCaida: 7}));
             stage.insert(new Q.Flower({ x: 3175, y:450 }));           
         });
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx", function () {
         	console.log("pinto yoshi 1");
-            if(nivel == 1)Q.stageScene("level1");
+            if(nivel == 1)Q.stageScene("level2");
             else if(nivel == 2) Q.stageScene("level2");
         });
 
