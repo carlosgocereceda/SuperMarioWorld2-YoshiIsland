@@ -19,7 +19,8 @@ var game = function () {
     //Se cargan los recursos
     Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemyTerrestres.json, Shy_Guy_morado.png," +
     "level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json," +
-    "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json", function () {
+    "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json, "+
+    "ascensor.png, ascensor.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
         
         // Enemigos nivel 1 terrestres
@@ -37,6 +38,8 @@ var game = function () {
 
         //Piedra que cae (nivel 2)
         Q.compileSheets("piedraCae.png", "piedraCae.json");
+        //Ascensor nivel 2
+        Q.compileSheets("ascensor.png", "ascensor.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -78,22 +81,30 @@ var game = function () {
             stage.viewport.scale = 2;
             huevos = 0;
             nivel = 1;
+            //Enemigos terrestres
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy2", x: 1000,vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800,}));
-            //stage.insert(new Q.EnemyTerrestre({sheet: "enemy1", x: 400, vx: 50,vy: 450, y: 660,  x_reaparicion: 400, y_reaparicion: 660, y_caida: 800,}));
-            //stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1",x: 600, vy: 450, vx: -50, y: 660,  x_reaparicion: 600, y_reaparicion: 660, y_caida: 800,}));
+            stage.insert(new Q.EnemyTerrestre({sheet: "enemy1", x: 400, vx: 50,vy: 450, y: 660,  x_reaparicion: 400, y_reaparicion: 660, y_caida: 800,}));
+            stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1",x: 600, vy: 450, vx: -50, y: 660,  x_reaparicion: 600, y_reaparicion: 660, y_caida: 800,}));
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy3", x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true,  x_reaparicion: 1100, y_reaparicion: 600, y_caida: 800,}));
+            //Enemigos de las tuberias
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy1", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy2", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy3", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
+            //Enemigos antes de las nubes
             stage.insert(new Q.EnemyVolador({sheet: "enemy4", x: 1100, y: 490, velocidad: 50, vx: 50, minX: 1070, maxX: 1400, x_reaparicion: 1100, y_reaparicion: 490}));
             stage.insert(new Q.EnemyVolador({sheet: "enemy5", horizontal: false, x: 1490, y: 500, velocidad: 70, vy: 70, minY: 350, maxY: 550, x_reaparicion: 1490, y_reaparicion: 500}));
-            stage.insert(new Q.Flower({ x: 4362, y:550 }));
-            // Nuevo
-            stage.insert(new Q.EnemyVolador({sheet: "enemy4", horizontal: false, x: 450, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600, x_reaparicion: 2635, y_reaparicion: 600}));
-            stage.insert(new Q.EnemyVolador({sheet: "enemy5", horizontal: false, x: 500, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600, x_reaparicion: 2635, y_reaparicion: 600}));
-            stage.insert(new Q.EnemyVolador({sheet: "enemy6", horizontal: false, x: 550, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600, x_reaparicion: 2635, y_reaparicion: 600}));
-            stage.insert(new Q.EnemyVolador({sheet: "enemy7", horizontal: false, x: 600, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600, x_reaparicion: 2635, y_reaparicion: 600}));
-            stage.insert(new Q.EnemyVolador({sheet: "enemy8", horizontal: false, x: 650, y: 660, velocidad: 70, vy: 70, minY: 300, maxY: 600, x_reaparicion: 2635, y_reaparicion: 600}));
+            //Eneigos de las nubes
+            stage.insert(new Q.EnemyVolador({sheet: "enemy6", horizontal: false, x: 1800, y: 500, velocidad: 90, vy: 90, minY: 350, maxY: 600, x_reaparicion: 1800, y_reaparicion: 500}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy7", horizontal: false, x: 2100, y: 500, velocidad: 90, vy: 90, minY: 450, maxY: 600, x_reaparicion: 2100, y_reaparicion: 500}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy8", horizontal: false, x: 2350, y: 400, velocidad: 90, vy: 90, minY: 400, maxY: 600, x_reaparicion: 2350, y_reaparicion: 400}));
+            // Enemigos zona de piedras
+            stage.insert(new Q.EnemyVolador({sheet: "enemy4", horizontal: false, x: 3850, y: 660, velocidad: 80, vy: 80, minY: 550, maxY: 700, x_reaparicion: 3850, y_reaparicion: 660}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy5", horizontal: false, x: 3500, y: 660, velocidad: 60, vy: 60, minY: 600, maxY: 800, x_reaparicion: 3500, y_reaparicion: 660}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy6", horizontal: false, x: 4080, y: 660, velocidad: 85, vy: 85, minY: 550, maxY: 700, x_reaparicion: 4080, y_reaparicion: 660}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy7", horizontal: false, x: 4300, y: 660, velocidad: 70, vy: 70, minY: 500, maxY: 800, x_reaparicion: 4300, y_reaparicion: 660}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy8", horizontal: false, x: 3700, y: 660, velocidad: 90, vy: 90, minY: 600, maxY: 800, x_reaparicion: 3700, y_reaparicion: 660}));
+            //Final
+             stage.insert(new Q.Flower({ x: 4362, y:550 }));
             
         });
 
@@ -109,12 +120,13 @@ var game = function () {
             stage.insert(new Q.PiedraCae({ x: 1309, y:435, y_origen: 435, maxY: 550, tCaida: 5}));
             stage.insert(new Q.PiedraCae({ x: 1409, y:435, y_origen: 435, maxY: 550, tCaida: 6}));
             stage.insert(new Q.PiedraCae({ x: 1509, y:435, y_origen: 435, maxY: 550, tCaida: 7}));
+            stage.insert(new Q.Ascensor({ x: 1940, y:435, y_origen: 435, maxY: 800, minY: 434, velocidad: 50}));
             stage.insert(new Q.Flower({ x: 3175, y:450 }));           
         });
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx", function () {
         	console.log("pinto yoshi 1");
-            if(nivel == 1)Q.stageScene("level2");
+            if(nivel == 1)Q.stageScene("level1");
             else if(nivel == 2) Q.stageScene("level2");
         });
 
@@ -436,7 +448,7 @@ var game = function () {
             this.on("stopAttack_left", function () {
                 this.p.atancando = false;
                 this.play("stand_left_corrector");
-            });
+            }); 
         },
         boost: function () {
             console.log("boost");
@@ -536,6 +548,8 @@ var game = function () {
             this.play("attack_" + this.p.direction);
         },
         step: function (dt) {
+        	console.log("gravedad");
+        	console.log(this.p.gravityY);
             //if(this.p.huevos > 0){
             if(huevos > 0){
                 var items = this.stage.items;
@@ -617,6 +631,40 @@ var game = function () {
             	this.p.tiempo = 0;
             	this.p.vy = 0;
                 this.p.y = this.p.y_origen;
+            }
+        }
+    });
+
+	//Ascensor
+     Q.Sprite.extend("Ascensor", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "ascensor",
+                x: 0,
+                y: 0,
+                vy: 0,
+                minY: 0,
+                max_Y: 0,
+                velocidad: 0,
+            });
+            this.p.gravityY = 0;
+            this.add('2d, tween');
+            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {         	
+                	if (this.p.y >= this.p.maxY) {
+            			this.p.vy = 0;
+            		}
+            		else this.p.vy = this.p.velocidad;
+                }
+            });        
+        },
+        step: function (dt) {
+        	console.log(this.p.vy)
+        	if(this.p.y <= this.p.minY) {
+        		this.p.vy = 0;
+        	}
+            else if (this.p.y >= this.p.maxY) {
+            	this.p.vy = - this.p.velocidad;
             }
         }
     });
