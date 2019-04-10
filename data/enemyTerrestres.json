@@ -1,0 +1,23 @@
+{
+  "enemy1": {
+    "sx": 0,
+    "sy": 269,
+    "tileW": 42,
+    "tileH": 35,
+    "frames": 4
+  },
+  "enemy2": {
+    "sx": 161,
+    "sy": 269,
+    "tileW": 42,
+    "tileH": 35,
+    "frames": 4
+  },
+  "enemy3": {
+    "sx": 0,
+    "sy": 0,
+    "tileW": 42,
+    "tileH": 35,
+    "frames": 4
+  }
+}
