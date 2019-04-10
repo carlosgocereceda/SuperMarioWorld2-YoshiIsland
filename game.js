@@ -17,15 +17,15 @@ var game = function () {
         // And turn on default input controls and touch input (for UI)
         .controls().touch()
     //Se cargan los recursos
-    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemy1.json, enemy2.json, Shy_Guy_morado.png," +
-    " Shy_Guy_morado.json, level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json, " +
+    Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemyTerrestres.json, Shy_Guy_morado.png," +
+    "level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json," +
     "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
         
         // Enemigos nivel 1 terrestres
-        Q.compileSheets("enemigos.png", "enemy1.json");
-        Q.compileSheets("enemigos.png", "enemy2.json");
-        Q.compileSheets("Shy_Guy_morado.png", "Shy_Guy_morado.json");
+        Q.compileSheets("enemigos.png", "enemyTerrestres.json");
+        Q.compileSheets("enemigos.png", "enemyTerrestres.json");
+        Q.compileSheets("Shy_Guy_morado.png", "enemyTerrestres.json");
         
         // Fin del nivel (flor del final)
         Q.compileSheets("level_end.png", "level_end.json");
@@ -183,6 +183,7 @@ var game = function () {
                 }
                 else if(collision.obj.isA("Egg")){
                 	console.log("LE HE DADOOOOOOOOOOOO");
+                	huevos = 0;
                 	if(this.p.reaparecer){
                 		var nuevo = new Q.EnemyTerrestre({sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
                 		 y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion, vy: this.p.vy, 
@@ -219,6 +220,7 @@ var game = function () {
                 }
                 else if(collision.obj.isA("Egg")){
                 	console.log("LE HE DADOOOOOOOOOOOO")
+                	huevos = 0;
                     if(this.p.reaparecer){
                 		var nuevo = new Q.EnemyTerrestre({sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
                 		 y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion, vy: this.p.vy, 
@@ -307,6 +309,7 @@ var game = function () {
                 }
                 else if(collision.obj.isA("Egg")){
                 	console.log("LE HE DADOOOOOOOOOOOO")
+                	huevos = 0;
                     if(this.p.reaparecer){
                 		var nuevo = new Q.EnemyVolador({sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
                 		 y_reaparicion: this.p.y_reaparicion, x: this.p.x_reaparicion, vy: this.p.vy, 
@@ -342,6 +345,7 @@ var game = function () {
                 }
                 else if(collision.obj.isA("Egg")){
                 	console.log("LE HE DADOOOOOOOOOOOO")
+                	huevos = 0;
                     if(this.p.reaparecer){
                 		var nuevo = new Q.EnemyVolador({sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
                 		 y_reaparicion: this.p.y_reaparicion, x: this.p.x_reaparicion, vy: this.p.vy, 
@@ -516,7 +520,7 @@ var game = function () {
                        if(huevos == 0){
                             this.stage.insert(new Q.Egg({x:this.p.x-20, y:this.p.y}));
                             //this.p.huevos += 1;
-                            huevos += 1;
+                            huevos = 1;
                         }
                     }
                 }
