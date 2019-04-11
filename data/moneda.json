@@ -1,0 +1,9 @@
+{
+    "moneda":{
+        "sx": 0,
+        "sy": 0,
+        "tileW": 37,
+        "tileH": 37,
+        "frames": 0
+    }
+}

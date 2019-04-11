@@ -20,7 +20,7 @@ var game = function () {
     Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemyTerrestres.json, Shy_Guy_morado.png," +
     "level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json," +
     "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json, "+
-    "ascensor.png, ascensor.json", function () {
+    "ascensor.png, ascensor.json, moneda.png, moneda.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
         
         // Enemigos nivel 1 terrestres
@@ -40,6 +40,10 @@ var game = function () {
         Q.compileSheets("piedraCae.png", "piedraCae.json");
         //Ascensor nivel 2
         Q.compileSheets("ascensor.png", "ascensor.json");
+
+        // Moneda
+        Q.compileSheets("moneda.png", "moneda.json");
+       
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -81,8 +85,14 @@ var game = function () {
             stage.viewport.scale = 2;
             huevos = 0;
             nivel = 1;
+            Q.state.reset({totalMonedas: 0});
+            // Monedas
+            stage.insert(new Q.Moneda({x: 400, y: 600}));
+            stage.insert(new Q.Moneda({x: 2630, y: 600}));
+            stage.insert(new Q.Moneda({x: 3950, y: 610}));
+            
             //Enemigos terrestres
-            stage.insert(new Q.EnemyTerrestre({sheet: "enemy2", x: 1000,vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800,}));
+           /* stage.insert(new Q.EnemyTerrestre({sheet: "enemy2", x: 1000,vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800,}));
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy1", x: 400, vx: 50,vy: 450, y: 660,  x_reaparicion: 400, y_reaparicion: 660, y_caida: 800,}));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1",x: 600, vy: 450, vx: -50, y: 660,  x_reaparicion: 600, y_reaparicion: 660, y_caida: 800,}));
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy3", x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true,  x_reaparicion: 1100, y_reaparicion: 600, y_caida: 800,}));
@@ -103,7 +113,7 @@ var game = function () {
             stage.insert(new Q.EnemyVolador({sheet: "enemy6", horizontal: false, x: 4080, y: 660, velocidad: 85, vy: 85, minY: 550, maxY: 700, x_reaparicion: 4080, y_reaparicion: 660}));
             stage.insert(new Q.EnemyVolador({sheet: "enemy7", horizontal: false, x: 4300, y: 660, velocidad: 70, vy: 70, minY: 500, maxY: 800, x_reaparicion: 4300, y_reaparicion: 660}));
             stage.insert(new Q.EnemyVolador({sheet: "enemy8", horizontal: false, x: 3700, y: 660, velocidad: 90, vy: 90, minY: 600, maxY: 800, x_reaparicion: 3700, y_reaparicion: 660}));
-            //Final
+            //Final*/
              stage.insert(new Q.Flower({ x: 4362, y:550 }));
             
         });
@@ -129,7 +139,10 @@ var game = function () {
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx", function () {
         	console.log("pinto yoshi 1");
-            if(nivel == 1)Q.stageScene("level2");
+            if(nivel == 1){
+                Q.stageScene("level1");
+                Q.stageScene("sumaMonedas",1);
+            }
             else if(nivel == 2) Q.stageScene("level2");
         });
 
@@ -177,6 +190,33 @@ var game = function () {
             box.fit(20);
         });
 
+    });
+
+    Q.scene("sumaMonedas", function(stage) {
+        var label = stage.insert(new Q.UI.Text({ x: Q.width/2, y: 50, label: "Coins: 0" }));
+        Q.state.on("change.totalMonedas", this, function( coin ) {
+            label.p.label = "Coins: " + coin;
+        });	
+    });
+    
+
+    // Moneda
+    Q.Sprite.extend("Moneda", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "moneda",
+                puntos: 2
+            });
+            this.p.gravityY = 0;
+            this.add('2d, tween');
+            this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    Q.state.inc("totalMonedas", 1);
+                    this.destroy();                   
+                }
+            });  
+
+        }
     });
 	//Enemy(fantasmas de colores terrestres)
      Q.Sprite.extend("EnemyTerrestre", {
