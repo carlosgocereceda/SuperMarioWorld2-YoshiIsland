@@ -516,12 +516,20 @@ var game = function () {
 
                 }
             }
-            else{
+            else {
                 this.p.y -= 2;
             }
         },
         disparo: function () {
             console.log("disparo");
+            if (this.p.helicoptero) {
+                if(this.p.direction == "left")
+                    var egg = new Q.Egg({ x: this.p.x - 20, y: this.p.y });
+                else 
+                    var egg = new Q.Egg({ x: this.p.x + 20, y: this.p.y });
+                this.stage.insert(egg);
+                huevos += 1;
+            }
             //if(this.p.huevos > 0){
             if (huevos > 0) {
                 var items = this.stage.items;
@@ -541,6 +549,7 @@ var game = function () {
                 }
             }
             huevos = 0;
+
         },
         attack: function () {
             if (!this.p.helicoptero) {
@@ -603,7 +612,7 @@ var game = function () {
                 this.p.sheet = "yoshiAttack_right";
                 this.play("attack_" + this.p.direction);
             }
-            else{
+            else {
                 this.p.y += 2;
             }
         },
