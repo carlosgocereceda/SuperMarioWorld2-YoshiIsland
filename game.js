@@ -115,18 +115,21 @@ var game = function () {
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
             huevos = 0;
+            stage.insert(new Q.EnemyVolador({sheet: "enemy9", x: 1100, y: 390, velocidad: 50, vx: 50, minX: 1070, maxX: 1500, x_reaparicion: 1100, y_reaparicion: 390}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy9", horizontal: false, x: 800, y: 400, velocidad: 70, vy: 70, minY: 390, maxY: 550, x_reaparicion: 800, y_reaparicion: 400}));
+            stage.insert(new Q.EnemyVolador({sheet: "enemy9", horizontal: false, x: 1600, y: 400, velocidad: 90, vy: 90, minY: 390, maxY: 450, x_reaparicion: 1600, y_reaparicion: 400}));
             stage.insert(new Q.PiedraCae({ x: 1090, y:435, y_origen: 435, maxY: 550, tCaida: 3})); 
             stage.insert(new Q.PiedraCae({ x: 1200, y:435, y_origen: 435, maxY: 550, tCaida: 4}));
             stage.insert(new Q.PiedraCae({ x: 1309, y:435, y_origen: 435, maxY: 550, tCaida: 5}));
-            stage.insert(new Q.PiedraCae({ x: 1409, y:435, y_origen: 435, maxY: 550, tCaida: 6}));
-            stage.insert(new Q.PiedraCae({ x: 1509, y:435, y_origen: 435, maxY: 550, tCaida: 7}));
+            stage.insert(new Q.PiedraCae({ x: 1409, y:435, y_origen: 435, maxY: 550, tCaida: 4}));
+            stage.insert(new Q.PiedraCae({ x: 1509, y:435, y_origen: 435, maxY: 550, tCaida: 3}));
             stage.insert(new Q.Ascensor({ x: 1940, y:435, y_origen: 435, maxY: 800, minY: 434, velocidad: 50}));
             stage.insert(new Q.Flower({ x: 3175, y:450 }));           
         });
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx", function () {
         	console.log("pinto yoshi 1");
-            if(nivel == 1)Q.stageScene("level1");
+            if(nivel == 1)Q.stageScene("level2");
             else if(nivel == 2) Q.stageScene("level2");
         });
 
@@ -548,8 +551,6 @@ var game = function () {
             this.play("attack_" + this.p.direction);
         },
         step: function (dt) {
-        	console.log("gravedad");
-        	console.log(this.p.gravityY);
             //if(this.p.huevos > 0){
             if(huevos > 0){
                 var items = this.stage.items;
@@ -625,7 +626,7 @@ var game = function () {
         step: function (dt) {
         	this.p.tiempo += dt;
         	if(this.p.tiempo >= this.p.tCaida) {
-        		this.p.vy = 50;
+        		this.p.vy = 70;
         	}
             if (this.p.y >= this.p.maxY) {
             	this.p.tiempo = 0;
@@ -659,7 +660,6 @@ var game = function () {
             });        
         },
         step: function (dt) {
-        	console.log(this.p.vy)
         	if(this.p.y <= this.p.minY) {
         		this.p.vy = 0;
         	}

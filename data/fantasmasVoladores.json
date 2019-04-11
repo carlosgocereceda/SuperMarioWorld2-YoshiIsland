@@ -1,8 +1,44 @@
 {
-    "enemy4":{"sx":0,"sy":0,"tileW":30,"tileH":60,"frames":4},
-    "enemy5":{"sx":0,"sy":50,"tileW":30,"tileH":60,"frames":4},
-    "enemy6":{"sx":0,"sy":110,"tileW":30,"tileH":60,"frames":4},
-    "enemy7":{"sx":0,"sy":163,"tileW":30,"tileH":60,"frames":4},
-    "enemy8":{"sx":0,"sy":217,"tileW":31,"tileH":60,"frames":4}
-
+  "enemy4": {
+    "sx": 0,
+    "sy": 0,
+    "tileW": 30,
+    "tileH": 60,
+    "frames": 4
+  },
+  "enemy5": {
+    "sx": 0,
+    "sy": 50,
+    "tileW": 30,
+    "tileH": 60,
+    "frames": 4
+  },
+  "enemy6": {
+    "sx": 0,
+    "sy": 110,
+    "tileW": 30,
+    "tileH": 60,
+    "frames": 4
+  },
+  "enemy7": {
+    "sx": 0,
+    "sy": 163,
+    "tileW": 30,
+    "tileH": 60,
+    "frames": 4
+  },
+  "enemy8": {
+    "sx": 0,
+    "sy": 217,
+    "tileW": 31,
+    "tileH": 60,
+    "frames": 4
+  },
+  "enemy9": {
+    "sx": 0,
+    "sy": 268,
+    "tileW": 43,
+    "tileH": 42,
+    "frames": 4
+  }
 }
