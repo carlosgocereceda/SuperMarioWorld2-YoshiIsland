@@ -16,7 +16,10 @@ var game = function () {
         })
         // And turn on default input controls and touch input (for UI)
         .controls().touch()
-
+        Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemyTerrestres.json, Shy_Guy_morado.png," +
+    "level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json," +
+    "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json, "+
+    "ascensor.png, ascensor.json, moneda.png, moneda.json", function () {
         // Enemigos nivel 1 terrestres
         Q.compileSheets("enemigos.png", "enemyTerrestres.json");
 
@@ -28,7 +31,8 @@ var game = function () {
 
         // Moneda
         Q.compileSheets("moneda.png", "moneda.json");
-            // Enemigos voladores (nivel 1)
+           
+        // Enemigos voladores (nivel 1)
         Q.compileSheets("enemigos.png", "koopaVolador.json");
         Q.compileSheets("fantasmasVoladores.png", "fantasmasVoladores.json");
 
@@ -39,6 +43,7 @@ var game = function () {
 
         //Placa para que yoshi se transforme en helicoptero
         Q.compileSheets("YoshiTransformations.png", "placa_helicoptero.json");
+        Q.compileSheets("yoshiJunto.png", "yoshi.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -83,9 +88,7 @@ var game = function () {
             stage.viewport.scale = 2;
             huevos = 0;
             nivel = 1;
-
             stage.insert(new Q.Placa_helicoptero({ x: 450, y: 650 }));
-
             //Enemigos terrestres
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1000, vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800, }));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 400, vx: 50, vy: 450, y: 660, x_reaparicion: 400, y_reaparicion: 660, y_caida: 800, }));
@@ -110,6 +113,11 @@ var game = function () {
             stage.insert(new Q.EnemyVolador({ sheet: "enemy8", horizontal: false, x: 3700, y: 660, velocidad: 90, vy: 90, minY: 600, maxY: 800, x_reaparicion: 3700, y_reaparicion: 660 }));
             //Final
             stage.insert(new Q.Flower({ x: 4362, y: 550 }));
+            Q.state.reset({totalMonedas: 0});
+            // Monedas
+            stage.insert(new Q.Moneda({x: 400, y: 600}));
+            stage.insert(new Q.Moneda({x: 2630, y: 600}));
+            stage.insert(new Q.Moneda({x: 3950, y: 610}));
 
         });
 
@@ -181,6 +189,7 @@ var game = function () {
             });
             box.fit(20);
         });
+    });
     //Enemy(fantasmas de colores terrestres)
     Q.Sprite.extend("EnemyTerrestre", {
         init: function (p) {
