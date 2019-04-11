@@ -20,7 +20,7 @@ var game = function () {
     Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemyTerrestres.json, Shy_Guy_morado.png," +
     "level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json," +
     "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json, "+
-    "ascensor.png, ascensor.json", function () {
+    "ascensor.png, ascensor.json, YoshiTransformations.png, placa_helicoptero.json", function () {
         Q.compileSheets("yoshiJunto.png", "yoshi.json");
         
         // Enemigos nivel 1 terrestres
@@ -41,6 +41,9 @@ var game = function () {
         //Ascensor nivel 2
         Q.compileSheets("ascensor.png", "ascensor.json");
 
+        //Placa para que yoshi se transforme en helicoptero
+        Q.compileSheets("YoshiTransformations.png", "placa_helicoptero.json");
+
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
             run_right: { frames: [0, 1, 2, 3], rate: 1 / 10 },
@@ -57,7 +60,10 @@ var game = function () {
             stand_left_corrector: { frames: [0], flip: "", rate: 1 / 10 },
             impulso_right: { frames: [0, 1, 2, 3, 4, 5], flip: "", loop: false, rate: 1 / 10 },
             volando_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 10 },
-            volando_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 10 }
+            volando_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 10 },
+            yoshi_helicoptero_right: { frames: [0, 1], flip: "x", rate: 1 / 10 },
+            yoshi_helicoptero_left: { frames: [0, 1], flip: "", rate: 1 / 10 }
+
         });
         //Animaciones de fantasma verde(enemy1)
         Q.animations('enemy1_animations', {
@@ -81,6 +87,9 @@ var game = function () {
             stage.viewport.scale = 2;
             huevos = 0;
             nivel = 1;
+
+            stage.insert(new Q.Placa_helicoptero({x: 450, y:650}));
+
             //Enemigos terrestres
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy2", x: 1000,vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800,}));
             stage.insert(new Q.EnemyTerrestre({sheet: "enemy1", x: 400, vx: 50,vy: 450, y: 660,  x_reaparicion: 400, y_reaparicion: 660, y_caida: 800,}));
@@ -129,7 +138,7 @@ var game = function () {
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx", function () {
         	console.log("pinto yoshi 1");
-            if(nivel == 1)Q.stageScene("level2");
+            if(nivel == 1)Q.stageScene("level1");
             else if(nivel == 2) Q.stageScene("level2");
         });
 
@@ -429,6 +438,25 @@ var game = function () {
         }
     });
 
+    //Placa de transformacion en helicoptero
+    Q.Sprite.extend("Placa_helicoptero", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "placa_helicoptero",
+                x: 0,
+                y: 0,
+            });
+            this.p.gravityY = 0;
+            this.add('2d, tween');  
+            this.on("bump.left,bump.right, bump.up, bump.down", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    collision.obj.p.helicoptero = true;
+                    this.destroy();
+                }
+            }); 
+
+        }
+    });
     //Yoshi
     Q.Sprite.extend("Player", {
         init: function (p) {
@@ -439,7 +467,8 @@ var game = function () {
                 jumpSpeed: -400,
                 y: 700, //y donde aparecerá,
                 atancando: false,
-                boost: false
+                boost: false,
+                helicoptero: false
             });
             this.add('2d, platformerControls, tween, animation');
             Q.input.on("down", this, "attack");
@@ -455,21 +484,23 @@ var game = function () {
         },
         boost: function () {
             console.log("boost");
-            if (!this.p.boost && this.p.vy == 0) {
-                console.log("cargando");
-                this.p.sheet = "yoshi_impulso";
-                this.play("impulso_right");
-                this.p.gravity = 1;
-                this.p.boost = true;
-            }
-            else if (this.p.boost && this.p.vy != 0) {
-                console.log(this.p.vy);
-                this.p.sheet = "yoshi_volando";
-                this.play("volando_" + this.p.direction);
-                this.p.vy = -200;
-                this.p.gravity = 0.3;
-                this.p.boost = false;
-
+            if(!this.p.helicoptero){
+                if (!this.p.boost && this.p.vy == 0) {
+                    console.log("cargando");
+                    this.p.sheet = "yoshi_impulso";
+                    this.play("impulso_right");
+                    this.p.gravity = 1;
+                    this.p.boost = true;
+                }
+                else if (this.p.boost && this.p.vy != 0) {
+                    console.log(this.p.vy);
+                    this.p.sheet = "yoshi_volando";
+                    this.play("volando_" + this.p.direction);
+                    this.p.vy = -200;
+                    this.p.gravity = 0.3;
+                    this.p.boost = false;
+    
+                }
             }
         },
         disparo: function(){
@@ -579,7 +610,8 @@ var game = function () {
             		this.p.y = 650;
             	}
             }
-            else if (!this.p.atancando) {
+            else if (!this.p.atancando && !this.p.helicoptero) {
+                console.log(this.p.helicoptero);
                 if (this.p.vy == 0) {
                     if (this.p.vx > 0) {
                         this.p.sheet = "yoshiR";
@@ -597,6 +629,11 @@ var game = function () {
                         this.play("stand_left_corrector");
                     }
                 }
+            }
+            else if(this.p.helicoptero){
+                console.log("helicoptero");
+                this.p.sheet = "yoshi_helicoptero";
+                this.play("yoshi_helicoptero_left");
             }
 
         }
