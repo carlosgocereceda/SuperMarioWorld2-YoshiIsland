@@ -88,7 +88,7 @@ var game = function () {
             stage.viewport.scale = 2;
             huevos = 0;
             nivel = 1;
-            stage.insert(new Q.Placa_helicoptero({ x: 450, y: 650 }));
+            stage.insert(new Q.Placa_helicoptero({ x: 330, y: 700 }));
             //Enemigos terrestres
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1000, vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800, }));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 400, vx: 50, vy: 450, y: 660, x_reaparicion: 400, y_reaparicion: 660, y_caida: 800, }));
@@ -139,11 +139,54 @@ var game = function () {
             stage.insert(new Q.Ascensor({ x: 1940, y: 435, y_origen: 435, maxY: 800, minY: 434, velocidad: 50 }));
             stage.insert(new Q.Flower({ x: 3175, y: 450 }));
         });
+        Q.scene("levelTutorial", function (stage) {
+            nivel = 2;
+            Q.stageTMX("tutorial.tmx", stage);
+            var player = stage.insert(new Q.Player({ y: 500 }));
+            stage.add("viewport").follow(player);
+            stage.viewport.scale = 1.5;
+            huevos = 0;
+            stage.insert(new Q.UI.Text({ 
+                label: "← o → para moverte a izquierda o derecha",
+                color: "black",
+                outlineWidth: 1,
+                align: 'center',
+                x: Q.width/2,
+                y: 450
+              }));
+            stage.insert(new Q.UI.Text({ 
+                label: "↓ para comerte a un emigo, ¡Prueba!",
+                color: "black",
+                outlineWidth: 1,
+                align: 'center',
+                x: 1100,
+                y: 450
+              }));
+              stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1250, vx: 0, vy: 0, y: 450, x_reaparicion: 0, y_reaparicion: 0, y_caida: 800, }));
+            stage.insert(new Q.UI.Text({ 
+                label: "SPACE para lanzar el huevo, ¡Prueba!",
+                color: "black",
+                outlineWidth: 1,
+                align: 'center',
+                x: 1700,
+                y: 450
+                }));
+            stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1850, vx: 0, vy: 0, y: 450, x_reaparicion: 0, y_reaparicion: 0, y_caida: 800, }));
+            stage.insert(new Q.UI.Text({ 
+                label: "↑ para saltar, ↑↑ para planear, ¡Prueba!",
+                color: "black",
+                outlineWidth: 1,
+                align: 'center',
+                x: 2500,
+                y: 450
+                }));
+        });
 
-        Q.loadTMX("yoshi.tmx, yoshi2.tmx", function () {
+        Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx", function () {
             console.log("pinto yoshi 1");
             if (nivel == 1) Q.stageScene("level1");
             else if (nivel == 2) Q.stageScene("level2");
+            //Q.stageScene("levelTutorial");
         });
 
         Q.scene('winGame', function (stage) {
