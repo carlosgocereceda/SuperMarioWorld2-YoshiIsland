@@ -19,7 +19,7 @@ var game = function () {
         Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemyTerrestres.json, Shy_Guy_morado.png," +
     "level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json," +
     "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json, "+
-    "ascensor.png, ascensor.json, moneda.png, moneda.json", function () {
+    "ascensor.png, ascensor.json, moneda.png, moneda.json, YoshiTransformations.png, placa_helicoptero.json", function () {
         // Enemigos nivel 1 terrestres
         Q.compileSheets("enemigos.png", "enemyTerrestres.json");
 
@@ -88,7 +88,7 @@ var game = function () {
             stage.viewport.scale = 2;
             huevos = 0;
             nivel = 1;
-            stage.insert(new Q.Placa_helicoptero({ x: 330, y: 700 }));
+            stage.insert(new Q.Placa_helicoptero({ x: 450, y: 650 }));
             //Enemigos terrestres
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1000, vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800, }));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 400, vx: 50, vy: 450, y: 660, x_reaparicion: 400, y_reaparicion: 660, y_caida: 800, }));
@@ -183,10 +183,10 @@ var game = function () {
         });
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx", function () {
-            console.log("pinto yoshi 1");
-            if (nivel == 1) Q.stageScene("level1");
+        	if (nivel == 0) Q.stageScene("levelTutorial");
+            else if (nivel == 1) Q.stageScene("level1");
             else if (nivel == 2) Q.stageScene("level2");
-            //Q.stageScene("levelTutorial");
+            
         });
 
         Q.scene('winGame', function (stage) {
@@ -568,7 +568,14 @@ var game = function () {
         },
         disparo: function () {
             console.log("disparo");
-            //if(this.p.huevos > 0){
+             if (this.p.helicoptero) {
+                if(this.p.direction == "left")
+                    var egg = new Q.Egg({ x: this.p.x - 20, y: this.p.y });
+                else 
+                    var egg = new Q.Egg({ x: this.p.x + 20, y: this.p.y });
+                this.stage.insert(egg);
+                huevos += 1;
+            }
             if (huevos > 0) {
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
