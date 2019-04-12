@@ -19,7 +19,8 @@ var game = function () {
         Q.load("yoshiJunto.png, yoshi.json, enemigos.png, enemyTerrestres.json, Shy_Guy_morado.png," +
     "level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json," +
     "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json, "+
-    "ascensor.png, ascensor.json, moneda.png, moneda.json, YoshiTransformations.png, placa_helicoptero.json", function () {
+    "ascensor.png, ascensor.json, moneda.png, moneda.json, YoshiTransformations.png, placa_helicoptero.json," +
+    "plantaPirana.png, plantaPirana.json", function () {
         // Enemigos nivel 1 terrestres
         Q.compileSheets("enemigos.png", "enemyTerrestres.json");
 
@@ -40,6 +41,8 @@ var game = function () {
         Q.compileSheets("piedraCae.png", "piedraCae.json");
         //Ascensor nivel 2
         Q.compileSheets("ascensor.png", "ascensor.json");
+
+        Q.compileSheets("plantaPirana.png", "plantaPirana.json");
 
         //Placa para que yoshi se transforme en helicoptero
         Q.compileSheets("YoshiTransformations.png", "placa_helicoptero.json");
@@ -70,6 +73,12 @@ var game = function () {
         Q.animations('enemy1_animations', {
             run_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 5 },
             run_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 5 }
+        })
+
+        //Animaciones de fantasma verde(enemy1)
+        Q.animations('planta_animations', {
+            run_right: { frames: [0, 1], flip: "", rate: 1 / 5 },
+            run_left: { frames: [0, 1], flip: "x", rate: 1 / 5 }
         })
 
         // Animacion Koopa Volador(enemy4)
@@ -128,6 +137,7 @@ var game = function () {
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
             huevos = 0;
+            stage.insert(new Q.Planta ({x: 2570, y:500}));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy9", x: 1100, y: 390, velocidad: 50, vx: 50, minX: 1070, maxX: 1500, x_reaparicion: 1100, y_reaparicion: 390 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy9", horizontal: false, x: 800, y: 400, velocidad: 70, vy: 70, minY: 390, maxY: 550, x_reaparicion: 800, y_reaparicion: 400 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy9", horizontal: false, x: 1600, y: 400, velocidad: 90, vy: 90, minY: 390, maxY: 450, x_reaparicion: 1600, y_reaparicion: 400 }));
@@ -188,7 +198,10 @@ var game = function () {
             	Q.stageScene("level1");
             	Q.stageScene("sumaMonedas",1);
             } 
-            else if (nivel == 2) Q.stageScene("level2");
+            else if (nivel == 2) {
+            	Q.stageScene("level2");
+            	Q.stageScene("sumaMonedas",1);
+            } 
             
         });
 
@@ -605,7 +618,8 @@ var game = function () {
                 console.log(this.stage.items);
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
-                    if (items[i].isA("EnemyTerrestre") || items[i].isA("EnemyVolador")) {
+                    if (items[i].isA("EnemyTerrestre") || items[i].isA("EnemyVolador") 
+                    	|| items[i].isA("Planta")) {
                         let medidas = items[i]["p"];
                         let x_ = Number(medidas["x"]);
                         let y_ = Number(medidas["y"]);
@@ -644,8 +658,19 @@ var game = function () {
                                     stag.insert(nuevo);
                                 }, 10000);
                             }
+                            else if (items[i].isA("Planta") && items[i].reaparecer) {
+                                var nuevo = new Q.Planta({
+                                    sprite: items[i]["p"]["sprite"], sheet: items[i]["p"]["sheet"],
+                                    reaparecer: items[i]["p"]["reaparecer"], x: items[i]["p"]["x"],
+                                    y: items[i]["p"]["y_reaparicion"]
+                                });
+                                var stag = this.stage;
+                                items[i].destroy();
+                                window.setTimeout(function () {
+                                    stag.insert(nuevo);
+                                }, 10000);
+                            }
                             else items[i].destroy();
-
                             // if(this.p.huevos == 0){ //de momento solo un huevo
                             if (huevos == 0) {
                                 this.stage.insert(new Q.Egg({ x: this.p.x - 20, y: this.p.y }));
@@ -814,6 +839,94 @@ var game = function () {
                 }
             });  
 
+        }
+    });
+
+    //Planta
+    Q.Sprite.extend("Planta", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "planta1",
+                sprite: "planta_animations",
+                vx: 0,
+                vy: 0,
+                tiempo: 5,
+                reaparecer: true,
+                izquierda: true
+            });
+            this.add('2d, tween, animation');
+            //Si le tocan por la izquierda, derecha o por debajo y es el player, pierde
+            this.on("bump.left,bump.right,bump.bottom", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    Q.stageScene("endGame", 1, { label: "You Died" });
+                    collision.obj.destroy();
+                }
+                else if (collision.obj.isA("Egg")) {
+                    console.log("LE HE DADOOOOOOOOOOOO")
+                    huevos = 0;
+                    if (this.p.reaparecer) {
+                        var nuevo = new Q.Planta({
+                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x: this.p.x, y: this.p.y
+                        });
+                        var stag = this.stage;
+                        this.destroy();
+                        window.setTimeout(function () {
+                            stag.insert(nuevo);
+                        }, 10000);
+                    }
+                    else this.destroy();
+                    collision.obj.destroy();
+                }
+            });
+            //Si le salta encima el player lo mata
+            this.on("bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    console.log("die");
+                    collision.obj.p.vy = -500;
+                    if (this.p.reaparecer) {
+                        var nuevo = new Q.Planta({
+                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x: this.p.x, y: this.p.y
+                        });
+                        var stag = this.stage;
+                        this.destroy();
+                        window.setTimeout(function () {
+                            stag.insert(nuevo);
+                        }, 10000);
+                    }
+                    else this.destroy();
+                }
+                else if (collision.obj.isA("Egg")) {
+                    console.log("LE HE DADOOOOOOOOOOOO")
+                    huevos = 0;
+                    if (this.p.reaparecer) {
+                        var nuevo = new Q.Planta({
+                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x: this.p.x, y: this.p.y
+                        });
+                        var stag = this.stage;
+                        this.destroy();
+                        window.setTimeout(function () {
+                            stag.insert(nuevo);
+                        }, 10000);
+                    }
+                    else this.destroy();
+                    collision.obj.destroy();
+                }
+            }); 
+
+        },
+        step: function (dt) {
+        	this.p.tiempo += dt;
+            if (this.p.tiempo >= 5) {
+                if(this.p.izquierda) {
+                	this.play("run_right");
+                	this.p.izquierda = false;
+                }
+                else {
+                	this.play("run_left");
+                	this.p.izquierda = true;
+                }
+                this.p.tiempo = 0;
+            }
         }
     });
 }

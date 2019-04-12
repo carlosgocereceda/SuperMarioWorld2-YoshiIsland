@@ -1,0 +1,9 @@
+{
+  "planta1": {
+    "sx": 0,
+    "sy": 0,
+    "tileW": 40,
+    "tileH": 51,
+    "frames": 2
+  }
+}
