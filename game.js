@@ -88,10 +88,10 @@ var game = function () {
             stage.viewport.scale = 2;
             huevos = 0;
             nivel = 1;
-            stage.insert(new Q.Placa_helicoptero({ x: 450, y: 650 }));
+            stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));
             //Enemigos terrestres
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1000, vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800, }));
-            stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 400, vx: 50, vy: 450, y: 660, x_reaparicion: 400, y_reaparicion: 660, y_caida: 800, }));
+            stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 500, vx: 50, vy: 450, y: 660, x_reaparicion: 500, y_reaparicion: 660, y_caida: 800, }));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 600, vy: 450, vx: -50, y: 660, x_reaparicion: 600, y_reaparicion: 660, y_caida: 800, }));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy3", x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true, x_reaparicion: 1100, y_reaparicion: 600, y_caida: 800, }));
             //Enemigos de las tuberias
@@ -115,7 +115,7 @@ var game = function () {
             stage.insert(new Q.Flower({ x: 4362, y: 550 }));
             Q.state.reset({totalMonedas: 0});
             // Monedas
-            stage.insert(new Q.Moneda({x: 400, y: 600}));
+            stage.insert(new Q.Moneda({x: 700, y: 600}));
             stage.insert(new Q.Moneda({x: 2630, y: 600}));
             stage.insert(new Q.Moneda({x: 3950, y: 610}));
 
@@ -184,7 +184,10 @@ var game = function () {
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx", function () {
         	if (nivel == 0) Q.stageScene("levelTutorial");
-            else if (nivel == 1) Q.stageScene("level1");
+            else if (nivel == 1) {
+            	Q.stageScene("level1");
+            	Q.stageScene("sumaMonedas",1);
+            } 
             else if (nivel == 2) Q.stageScene("level2");
             
         });
@@ -521,7 +524,7 @@ var game = function () {
             this._super(p, {
                 sprite: "yoshi_animations",
                 sheet: "yoshiR", // Sprite que esta dentro de mario_small.json
-                x: 330, //x donde aparecerá
+                x: 410, //x donde aparecerá
                 jumpSpeed: -400,
                 y: 700, //y donde aparecerá,
                 atancando: false,
@@ -681,7 +684,7 @@ var game = function () {
                 Q.stageScene("endGame", 1, { label: "You Died" });
                 console.log("cayendo");
                 if (nivel == 1) {
-                    this.p.x = 350;
+                    this.p.x = 430;
                     this.p.y = 700;
                 }
                 else if (nivel == 2) {
@@ -788,7 +791,7 @@ var game = function () {
     });
 
     Q.scene("sumaMonedas", function(stage) {
-        var label = stage.insert(new Q.UI.Text({ x: Q.width/2, y: 50, label: "Coins: 0" }));
+        var label = stage.insert(new Q.UI.Text({ x: Q.width/2 - 500, y: 50, label: "Coins: 0" , color: "rgba(255,164,032,1)"}));
         Q.state.on("change.totalMonedas", this, function( coin ) {
             label.p.label = "Coins: " + coin;
         });	
