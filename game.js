@@ -816,10 +816,18 @@ var game = function () {
     });
 
     Q.scene("sumaMonedas", function(stage) {
-        var label = stage.insert(new Q.UI.Text({ x: Q.width/2 - 500, y: 50, label: "Coins: 0" , color: "rgba(255,164,032,1)"}));
+        var label = stage.insert(new Q.UI.Text({ x: Q.width/2 - 440, y: 35, scale:1.5, label: "0" , color: "rgba(255,164,032,1)"}));
         Q.state.on("change.totalMonedas", this, function( coin ) {
-            label.p.label = "Coins: " + coin;
+            label.p.label = "" + coin;
         });	
+        stage.insert(new Q.UI.Button({
+            asset: 'moneda.png',
+            x: Q.width/2 - 500,
+            scale: 1.5,
+            y: 50
+          }, function() {
+            this.p.angle += 90;
+          }));
     });
     
 
