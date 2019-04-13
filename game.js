@@ -498,7 +498,8 @@ var game = function () {
                 sheet: "egg",
                 x: 0,
                 y: 0,
-                disparado: false
+                disparado: false,
+                sensor: true,
             });
             this.p.gravityY = 0;
             this.add('2d, tween');
