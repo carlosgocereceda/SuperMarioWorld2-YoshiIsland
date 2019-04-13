@@ -1,5 +1,5 @@
 var game = function () {
-    var nivel = 0;
+    var nivel = 1;
     var huevos;
     //Función a la que se llamará cuando se cargue el juego
     //Objeto Quinus con los modulos que necesitamos
@@ -278,12 +278,10 @@ var game = function () {
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
-                    console.log("You died!");
                     Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
-                    console.log("LE HE DADOOOOOOOOOOOO");
                     huevos = 0;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.EnemyTerrestre({
@@ -306,7 +304,6 @@ var game = function () {
             //Si le salta encima el player lo mata
             this.on("bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
-                    console.log("die");
                     collision.obj.p.vy = -500;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.EnemyTerrestre({
@@ -324,7 +321,6 @@ var game = function () {
                     else this.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
-                    console.log("LE HE DADOOOOOOOOOOOO")
                     huevos = 0;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.EnemyTerrestre({
@@ -415,7 +411,6 @@ var game = function () {
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
-                    console.log("LE HE DADOOOOOOOOOOOO")
                     huevos = 0;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.EnemyVolador({
@@ -455,7 +450,6 @@ var game = function () {
                     else this.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
-                    console.log("LE HE DADOOOOOOOOOOOO")
                     huevos = 0;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.EnemyVolador({
@@ -678,7 +672,6 @@ var game = function () {
                                 }, 10000);
                             }
                             else items[i].destroy();
-                            // if(this.p.huevos == 0){ //de momento solo un huevo
                             if (huevos == 0) {
                                 this.stage.insert(new Q.Egg({ x: this.p.x - 20, y: this.p.y }));
                                 //this.p.huevos += 1;
@@ -874,7 +867,6 @@ var game = function () {
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
-                    console.log("LE HE DADOOOOOOOOOOOO")
                     huevos = 0;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.Planta({
@@ -908,7 +900,6 @@ var game = function () {
                     else this.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
-                    console.log("LE HE DADOOOOOOOOOOOO")
                     huevos = 0;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.Planta({
