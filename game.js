@@ -499,7 +499,6 @@ var game = function () {
                 x: 0,
                 y: 0,
                 disparado: false,
-                sensor: true,
             });
             this.p.gravityY = 0;
             this.add('2d, tween');
@@ -829,7 +828,8 @@ var game = function () {
         init: function (p) {
             this._super(p, {
                 sheet: "moneda",
-                puntos: 2
+                puntos: 2,
+                sensor: true
             });
             this.p.gravityY = 0;
             this.add('2d, tween');
