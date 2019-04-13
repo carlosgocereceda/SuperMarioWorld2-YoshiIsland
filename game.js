@@ -1,5 +1,5 @@
 var game = function () {
-    var nivel = 1;
+    var nivel = 0;
     var huevos;
     //Función a la que se llamará cuando se cargue el juego
     //Objeto Quinus con los modulos que necesitamos
@@ -152,7 +152,7 @@ var game = function () {
         Q.scene("levelTutorial", function (stage) {
             nivel = 2;
             Q.stageTMX("tutorial.tmx", stage);
-            var player = stage.insert(new Q.Player({ y: 500 }));
+            var player = stage.insert(new Q.Player({x:Q.width/2 -300, y: 500 }));
             stage.add("viewport").follow(player);
             stage.viewport.scale = 1.5;
             huevos = 0;
@@ -161,8 +161,8 @@ var game = function () {
                 color: "black",
                 outlineWidth: 1,
                 align: 'center',
-                x: Q.width/2,
-                y: 450
+                x: Q.width/2 -200,
+                y: 400
               }));
             stage.insert(new Q.UI.Text({ 
                 label: "↓ para comerte a un emigo, ¡Prueba!",
@@ -170,7 +170,7 @@ var game = function () {
                 outlineWidth: 1,
                 align: 'center',
                 x: 1100,
-                y: 450
+                y: 400
               }));
               stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1250, vx: 0, vy: 0, y: 450, x_reaparicion: 0, y_reaparicion: 0, y_caida: 800, }));
             stage.insert(new Q.UI.Text({ 
@@ -179,7 +179,7 @@ var game = function () {
                 outlineWidth: 1,
                 align: 'center',
                 x: 1700,
-                y: 450
+                y: 400
                 }));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1850, vx: 0, vy: 0, y: 450, x_reaparicion: 0, y_reaparicion: 0, y_caida: 800, }));
             stage.insert(new Q.UI.Text({ 
@@ -188,8 +188,17 @@ var game = function () {
                 outlineWidth: 1,
                 align: 'center',
                 x: 2500,
-                y: 450
+                y: 400
                 }));
+            stage.insert(new Q.UI.Text({ 
+                label: "Toca la placa para convertirte en helicoptero, ¡Prueba!",
+                color: "black",
+                outlineWidth: 1,
+                align: 'center',
+                x: 3900,
+                y: 200
+                }));
+            stage.insert(new Q.Placa_helicoptero({ x: 4000, y: 240 }));
         });
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx", function () {
@@ -559,7 +568,6 @@ var game = function () {
             });
         },
         boost: function () {
-            console.log("boost");
             if (!this.p.helicoptero) {
                 if (!this.p.boost && this.p.vy == 0) {
                     console.log("cargando");
@@ -629,7 +637,6 @@ var game = function () {
                             console.log("lo mato");
                             //console.log(Number(this.p.x - x_) + " " + Number(this.p.y - y_));
                             if (items[i].isA("EnemyTerrestre") && items[i]["p"]["reaparecer"]) {
-                                console.log("HOLIIIIIIIIII")
                                 var nuevo = new Q.EnemyTerrestre({
                                     sprite: items[i]["p"]["sprite"], sheet: items[i]["p"]["sheet"],
                                     reaparecer: items[i]["p"]["reaparecer"], x_reaparicion: items[i]["p"]["x_reaparicion"],
@@ -689,7 +696,6 @@ var game = function () {
             }
         },
         step: function (dt) {
-            //if(this.p.huevos > 0){
             if (huevos > 0) {
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
@@ -707,7 +713,6 @@ var game = function () {
             }
             if (this.p.y > 900) {
                 Q.stageScene("endGame", 1, { label: "You Died" });
-                console.log("cayendo");
                 if (nivel == 1) {
                     this.p.x = 430;
                     this.p.y = 700;
@@ -739,7 +744,6 @@ var game = function () {
             else if (this.p.helicoptero) {
                 this.p.gravityY = 0.5;
                 this.p.vy = 0;
-                console.log("helicoptero");
                 this.p.sheet = "yoshi_helicoptero";
                 this.play("yoshi_helicoptero_" + this.p.direction);
             }
