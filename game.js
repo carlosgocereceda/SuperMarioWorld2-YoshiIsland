@@ -522,7 +522,7 @@ var game = function () {
             });
             this.p.gravityY = 0;
             this.add('2d, tween');
-            this.on("bump.left,bump.right, bump.up, bump.down", function (collision) {
+            this.on("bump.left,bump.right, bump.bottom, bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
                     collision.obj.p.helicoptero = true;
                     this.destroy();
@@ -718,7 +718,6 @@ var game = function () {
                 }
             }
             else if (!this.p.atancando && !this.p.helicoptero) {
-                console.log(this.p.helicoptero);
                 if (this.p.vy == 0) {
                     if (this.p.vx > 0) {
                         this.p.sheet = "yoshiR";
@@ -829,21 +828,21 @@ var game = function () {
             this.p.angle += 90;
           }));
     });
-    
-
     // Moneda
     Q.Sprite.extend("Moneda", {
         init: function (p) {
             this._super(p, {
                 sheet: "moneda",
                 puntos: 2,
-                sensor: true
+                sensor: true,
+                tocada: false
             });
             this.p.gravityY = 0;
             this.add('2d, tween');
             this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
-                if (collision.obj.isA("Player")) {
+                if (collision.obj.isA("Player") && !this.p.tocada) {
                     Q.state.inc("totalMonedas", 1);
+                    this.p.tocada = true;
                     this.destroy();                   
                 }
             });  
