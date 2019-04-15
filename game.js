@@ -1,6 +1,7 @@
 var game = function () {
     var nivel = 1;
     var huevos;
+    var numeroMonedas;
     //Función a la que se llamará cuando se cargue el juego
     //Objeto Quinus con los modulos que necesitamos
     var Q = window.Q = Quintus()
@@ -97,7 +98,8 @@ var game = function () {
             stage.viewport.scale = 2;
             huevos = 0;
             nivel = 1;
-            stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));
+            
+            /*stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));
             //Enemigos terrestres
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1000, vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800, }));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 500, vx: 50, vy: 450, y: 660, x_reaparicion: 500, y_reaparicion: 660, y_caida: 800, }));
@@ -120,10 +122,12 @@ var game = function () {
             stage.insert(new Q.EnemyVolador({ sheet: "enemy6", horizontal: false, x: 4080, y: 660, velocidad: 85, vy: 85, minY: 550, maxY: 700, x_reaparicion: 4080, y_reaparicion: 660 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy7", horizontal: false, x: 4300, y: 660, velocidad: 70, vy: 70, minY: 500, maxY: 800, x_reaparicion: 4300, y_reaparicion: 660 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy8", horizontal: false, x: 3700, y: 660, velocidad: 90, vy: 90, minY: 600, maxY: 800, x_reaparicion: 3700, y_reaparicion: 660 }));
-            //Final
-            stage.insert(new Q.Flower({ x: 4362, y: 550 }));
-            Q.state.reset({totalMonedas: 0});
+           //Final*/
+           // stage.insert(new Q.Flower({ x: 4362, y: 550 }));
+            stage.insert(new Q.Flower({ x: 500, y: 660 }));
+           
             // Monedas
+            Q.state.reset({totalMonedas: 0});
             stage.insert(new Q.Moneda({x: 700, y: 600}));
             stage.insert(new Q.Moneda({x: 2630, y: 600}));
             stage.insert(new Q.Moneda({x: 3950, y: 610}));
@@ -202,14 +206,18 @@ var game = function () {
         });
 
         Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx", function () {
+            console.log("Se metio en el load con nivel: "+nivel);
         	if (nivel == 0) Q.stageScene("levelTutorial");
             else if (nivel == 1) {
-            	Q.stageScene("level1");
+                console.log("HOLA 1");
+                Q.stageScene("level1");
+                numeroMonedas = 0;
             	Q.stageScene("sumaMonedas",1);
             } 
             else if (nivel == 2) {
-            	Q.stageScene("level2");
-            	Q.stageScene("sumaMonedas",1);
+                console.log("HOLA");
+            	//Q.stageScene("level2");
+            	//Q.stageScene("sumaMonedas", 1);
             } 
             
         });
@@ -230,8 +238,27 @@ var game = function () {
             nivel += 1;
             button.on("click", function () {
                 Q.clearStages();
-                if (nivel == 1) Q.stageScene("level1");
-                else if (nivel == 2) Q.stageScene("level2");
+                
+                if (nivel == 1) {
+                    Q.stageScene("level1");
+                    console.log("Cambio nivel "+nivel);
+                }
+                    
+                else if (nivel == 2){
+                    console.log("Cambio nivel "+nivel);
+                    Q.stageScene("level2");
+                    Q.stageScene("sumaMonedas", 1);
+                    console.log("Numero de monedas: "+numeroMonedas);
+                    var i = 0, monedas = numeroMonedas;
+                    while(i != monedas){
+                        Q.state.inc("totalMonedas", 1);
+                        console.log("Veces");
+                        i++;
+                    }
+                    numeroMonedas = monedas;
+                    console.log("Numero de monedas: "+numeroMonedas);
+                    
+                }
             });
             box.fit(20);
         });
@@ -252,8 +279,25 @@ var game = function () {
             }));
             button.on("click", function () {
                 Q.clearStages();
-                if (nivel == 1) Q.stageScene("level1");
-                else if (nivel == 2) Q.stageScene("level2");
+                
+                if (nivel == 1){
+                    
+                    Q.stageScene("level1");
+                    // Crea el cartel
+                    Q.stageScene("sumaMonedas", 1);                    
+                } 
+                else if (nivel == 2){
+                    // Si muere en el nivel 2, pierde las monedas del nivel 1
+                    Q.stageScene("level2");
+                    // Crea el cartel
+                    Q.stageScene("sumaMonedas", 1);
+                    var i = 0, monedas = numeroMonedas - 3;
+                    while(i != monedas){
+                        Q.state.inc("totalMonedas", 1);
+                        i++;
+                    }
+                    numeroMonedas = monedas;
+                } 
             });
             box.fit(20);
         });
@@ -812,9 +856,11 @@ var game = function () {
     });
 
     Q.scene("sumaMonedas", function(stage) {
+        
         var label = stage.insert(new Q.UI.Text({ x: Q.width/2 - 440, y: 35, scale:1.5, label: "0" , color: "rgba(255,164,032,1)"}));
         Q.state.on("change.totalMonedas", this, function( coin ) {
             label.p.label = "" + coin;
+            numeroMonedas++;
         });	
         stage.insert(new Q.UI.Button({
             asset: 'moneda.png',

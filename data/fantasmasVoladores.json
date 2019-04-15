@@ -30,7 +30,7 @@
   "enemy8": {
     "sx": 0,
     "sy": 217,
-    "tileW": 30,
+    "tileW": 31,
     "tileH": 56,
     "frames": 4
   },
