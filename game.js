@@ -99,10 +99,10 @@ var game = function () {
             huevos = 0;
             nivel = 1;
             
-            /*stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));*/
+            stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));
             //Enemigos terrestres
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1000, vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800, }));
-          /*  stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 500, vx: 50, vy: 450, y: 660, x_reaparicion: 500, y_reaparicion: 660, y_caida: 800, }));
+            stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 500, vx: 50, vy: 450, y: 660, x_reaparicion: 500, y_reaparicion: 660, y_caida: 800, }));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 600, vy: 450, vx: -50, y: 660, x_reaparicion: 600, y_reaparicion: 660, y_caida: 800, }));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy3", x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true, x_reaparicion: 1100, y_reaparicion: 600, y_caida: 800, }));
             //Enemigos de las tuberias
@@ -122,9 +122,10 @@ var game = function () {
             stage.insert(new Q.EnemyVolador({ sheet: "enemy6", horizontal: false, x: 4080, y: 660, velocidad: 85, vy: 85, minY: 550, maxY: 700, x_reaparicion: 4080, y_reaparicion: 660 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy7", horizontal: false, x: 4300, y: 660, velocidad: 70, vy: 70, minY: 500, maxY: 800, x_reaparicion: 4300, y_reaparicion: 660 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy8", horizontal: false, x: 3700, y: 660, velocidad: 90, vy: 90, minY: 600, maxY: 800, x_reaparicion: 3700, y_reaparicion: 660 }));
-           //Final*/
-           // stage.insert(new Q.Flower({ x: 4362, y: 550 }));
-            stage.insert(new Q.Flower({ x: 500, y: 660 }));
+           //Final
+            stage.insert(new Q.Flower({ x: 4362, y: 550 }));
+            // NO BORRAR ES PARA PROBAR QUE PASA ENTRE NIVELES
+           // stage.insert(new Q.Flower({ x: 500, y: 660 }));
            
             // Monedas
             Q.state.reset({totalMonedas: 0});
@@ -444,6 +445,8 @@ var game = function () {
                 if (collision.obj.isA("Player")) {
                     this.destroy();
                     Q.stageScene("winGame", 1);
+                   //Q.stageScene("endGame", 1, { label: "You Died" });
+                    collision.obj.destroy();
                 }
             });
         }
