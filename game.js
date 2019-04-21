@@ -1,7 +1,7 @@
 var game = function () {
     var nivel = 1;
     var huevos;
-    var numeroMonedas;
+    var numeroMonedas = [0, 0, 0];
     //Función a la que se llamará cuando se cargue el juego
     //Objeto Quinus con los modulos que necesitamos
     var Q = window.Q = Quintus()
@@ -99,10 +99,10 @@ var game = function () {
             huevos = 0;
             nivel = 1;
             
-            /*stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));
+            /*stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));*/
             //Enemigos terrestres
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1000, vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800, }));
-            stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 500, vx: 50, vy: 450, y: 660, x_reaparicion: 500, y_reaparicion: 660, y_caida: 800, }));
+          /*  stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 500, vx: 50, vy: 450, y: 660, x_reaparicion: 500, y_reaparicion: 660, y_caida: 800, }));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 600, vy: 450, vx: -50, y: 660, x_reaparicion: 600, y_reaparicion: 660, y_caida: 800, }));
             stage.insert(new Q.EnemyTerrestre({ sheet: "enemy3", x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true, x_reaparicion: 1100, y_reaparicion: 600, y_caida: 800, }));
             //Enemigos de las tuberias
@@ -128,6 +128,7 @@ var game = function () {
            
             // Monedas
             Q.state.reset({totalMonedas: 0});
+
             stage.insert(new Q.Moneda({x: 700, y: 600}));
             stage.insert(new Q.Moneda({x: 2630, y: 600}));
             stage.insert(new Q.Moneda({x: 3950, y: 610}));
@@ -205,23 +206,27 @@ var game = function () {
             stage.insert(new Q.Placa_helicoptero({ x: 4000, y: 240 }));
         });
 
+
+        // No se que hace esto
         Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx", function () {
             console.log("Se metio en el load con nivel: "+nivel);
         	if (nivel == 0) Q.stageScene("levelTutorial");
             else if (nivel == 1) {
                 console.log("HOLA 1");
                 Q.stageScene("level1");
-                numeroMonedas = 0;
+                //numeroMonedas[nivel] = 0;
             	Q.stageScene("sumaMonedas",1);
             } 
             else if (nivel == 2) {
                 console.log("HOLA");
-            	//Q.stageScene("level2");
-            	//Q.stageScene("sumaMonedas", 1);
+                Q.stageScene("level2");
+               // numeroMonedas[nivel] = 0;
+            	Q.stageScene("sumaMonedas", 1);
             } 
             
         });
 
+        // Cartel de pasar al siguiente nivel
         Q.scene('winGame', function (stage) {
             var box = stage.insert(new Q.UI.Container({
                 x: Q.width / 2, y: Q.height / 2, fill: "rgba(255,255,255,0.5)"
@@ -241,22 +246,31 @@ var game = function () {
                 
                 if (nivel == 1) {
                     Q.stageScene("level1");
-                    console.log("Cambio nivel "+nivel);
+                    Q.stageScene("sumaMonedas", 1);
                 }
                     
                 else if (nivel == 2){
-                    console.log("Cambio nivel "+nivel);
                     Q.stageScene("level2");
+                    console.log("Cambio de nivel 2");
+                    Q.state.reset({totalMonedas: 0});
                     Q.stageScene("sumaMonedas", 1);
-                    console.log("Numero de monedas: "+numeroMonedas);
-                    var i = 0, monedas = numeroMonedas;
+                    Q.stageScene("sumaMonedas", 1);
+                    console.log("Numero de monedas: "+numeroMonedas[nivel]);
+
+                    var i = 1, monedas = 0;
+                    // Miro las monedas de los anteriores niveles
+                    while(i < nivel){
+                        monedas += numeroMonedas[i];
+                        i++;
+                    }
+                    i = 0;
                     while(i != monedas){
                         Q.state.inc("totalMonedas", 1);
                         console.log("Veces");
                         i++;
                     }
-                    numeroMonedas = monedas;
-                    console.log("Numero de monedas: "+numeroMonedas);
+                    numeroMonedas[nivel] = monedas;
+                    console.log("Numero de monedas: "+numeroMonedas[nivel]);
                     
                 }
             });
@@ -281,22 +295,31 @@ var game = function () {
                 Q.clearStages();
                 
                 if (nivel == 1){
-                    
                     Q.stageScene("level1");
                     // Crea el cartel
-                    Q.stageScene("sumaMonedas", 1);                    
+                    Q.stageScene("sumaMonedas", 1);  
+                                      
                 } 
                 else if (nivel == 2){
                     // Si muere en el nivel 2, pierde las monedas del nivel 1
                     Q.stageScene("level2");
                     // Crea el cartel
+                    // Esto resetea a 0, las monedas
+                    Q.state.reset({totalMonedas: 0});
                     Q.stageScene("sumaMonedas", 1);
-                    var i = 0, monedas = numeroMonedas - 3;
+                    var i = 1, monedas = 0;
+                    // Miro las monedas de los anteriores niveles
+                    while(i < nivel){
+                        monedas += numeroMonedas[i];
+                        i++;
+                    }
+                    i = 0;
+                    console.log("Numero de monedas:" + monedas);
                     while(i != monedas){
                         Q.state.inc("totalMonedas", 1);
                         i++;
                     }
-                    numeroMonedas = monedas;
+                    numeroMonedas[nivel] = monedas;
                 } 
             });
             box.fit(20);
@@ -860,7 +883,7 @@ var game = function () {
         var label = stage.insert(new Q.UI.Text({ x: Q.width/2 - 440, y: 35, scale:1.5, label: "0" , color: "rgba(255,164,032,1)"}));
         Q.state.on("change.totalMonedas", this, function( coin ) {
             label.p.label = "" + coin;
-            numeroMonedas++;
+            numeroMonedas[nivel]++;
         });	
         stage.insert(new Q.UI.Button({
             asset: 'moneda.png',
