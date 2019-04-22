@@ -445,7 +445,6 @@ var game = function () {
                 if (collision.obj.isA("Player")) {
                     this.destroy();
                     Q.stageScene("winGame", 1);
-                   //Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
             });
