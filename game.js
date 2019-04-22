@@ -143,17 +143,33 @@ var game = function () {
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
             huevos = 0;
+            // Planta carnivora
             stage.insert(new Q.Planta ({x: 2570, y:500}));
+           
+            // Enemigos fantasmas blancos
             stage.insert(new Q.EnemyVolador({ sheet: "enemy9", x: 1100, y: 390, velocidad: 50, vx: 50, minX: 1070, maxX: 1500, x_reaparicion: 1100, y_reaparicion: 390 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy9", horizontal: false, x: 800, y: 400, velocidad: 70, vy: 70, minY: 390, maxY: 550, x_reaparicion: 800, y_reaparicion: 400 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy9", horizontal: false, x: 1600, y: 400, velocidad: 90, vy: 90, minY: 390, maxY: 450, x_reaparicion: 1600, y_reaparicion: 400 }));
+           
+            // Piedras que suben y bajan
             stage.insert(new Q.PiedraCae({ x: 1090, y: 435, y_origen: 435, maxY: 550, tCaida: 3 }));
             stage.insert(new Q.PiedraCae({ x: 1200, y: 435, y_origen: 435, maxY: 550, tCaida: 4 }));
             stage.insert(new Q.PiedraCae({ x: 1309, y: 435, y_origen: 435, maxY: 550, tCaida: 5 }));
             stage.insert(new Q.PiedraCae({ x: 1409, y: 435, y_origen: 435, maxY: 550, tCaida: 4 }));
             stage.insert(new Q.PiedraCae({ x: 1509, y: 435, y_origen: 435, maxY: 550, tCaida: 3 }));
+
+            // Ascensor
             stage.insert(new Q.Ascensor({ x: 1940, y: 435, y_origen: 435, maxY: 800, minY: 434, velocidad: 50 }));
+
+            // Meta
             stage.insert(new Q.Flower({ x: 3175, y: 450 }));
+
+            // Monedas
+            stage.insert(new Q.Moneda({x: 700, y: 500}));
+            stage.insert(new Q.Moneda({x: 1309, y: 340}));
+            stage.insert(new Q.Moneda({x: 3050, y: 450}));
+            
+
         });
         Q.scene("levelTutorial", function (stage) {
             nivel = 2;
@@ -880,6 +896,7 @@ var game = function () {
         }
     });
 
+    // Suma monedas al contador
     Q.scene("sumaMonedas", function(stage) {
         
         var label = stage.insert(new Q.UI.Text({ x: Q.width/2 - 440, y: 35, scale:1.5, label: "0" , color: "rgba(255,164,032,1)"}));
