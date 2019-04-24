@@ -591,7 +591,8 @@ var game = function () {
             this.p.gravityY = 0;
             this.add('2d, tween');
             this.on("bump.left,bump.right", function (collision) {
-                if (!collision.obj.isA("Player") && !collision.obj.isA("EnemyTerrestre") && !collision.obj.isA("EnemyVolador") && this.p.disparado) {
+                if (!collision.obj.isA("Player") && !collision.obj.isA("EnemyTerrestre") 
+                	&& !collision.obj.isA("EnemyVolador") && this.p.disparado) {
                     this.destroy();
                     huevos = 0;
                 }
@@ -929,6 +930,9 @@ var game = function () {
                     Q.state.inc("totalMonedas", 1);
                     this.p.tocada = true;
                     this.destroy();                   
+                }
+                else if (collision.obj.isA("Egg")) {
+                	collision.obj.destroy();
                 }
             });  
 
