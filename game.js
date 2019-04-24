@@ -144,7 +144,14 @@ var game = function () {
             stage.viewport.scale = 2;
             huevos = 0;
             // Planta carnivora
-            stage.insert(new Q.Planta ({x: 2570, y:500}));
+            stage.insert(new Q.Planta ({x: 2140, y:710}));
+            stage.insert(new Q.Planta ({x: 2380, y:710}));
+            stage.insert(new Q.Planta ({x: 2510, y:710}));
+            stage.insert(new Q.Planta ({sheet:"planta2" ,x: 2540, y:660, movimiento: false}));
+
+            //Enemigos terrestres
+            stage.insert(new Q.EnemyTerrestre({ sheet: "enemy10", x: 650, vx: 50, velocidad: 50, y: 550, x_vueltaMin: 649, x_vueltaMax: 730, darVuelta: true, x_reaparicion: 650, y_reaparicion: 550, y_caida: 800 }));
+            stage.insert(new Q.EnemyTerrestre({ sprite: "planta_animations", sheet: "enemy11", x: 1750, vx: 50, velocidad: 50, y: 420, x_vueltaMin: 1700, x_vueltaMax: 1795, darVuelta: true, x_reaparicion: 1750, y_reaparicion: 420, y_caida: 800 }));
            
             // Enemigos fantasmas blancos
             stage.insert(new Q.EnemyVolador({ sheet: "enemy9", x: 1100, y: 390, velocidad: 50, vx: 50, minX: 1070, maxX: 1500, x_reaparicion: 1100, y_reaparicion: 390 }));
@@ -171,6 +178,7 @@ var game = function () {
             
 
         });
+
         Q.scene("levelTutorial", function (stage) {
             nivel = 2;
             Q.stageTMX("tutorial.tmx", stage);
@@ -230,7 +238,7 @@ var game = function () {
         	if (nivel == 0) Q.stageScene("levelTutorial");
             else if (nivel == 1) {
                 console.log("HOLA 1");
-                Q.stageScene("level1");
+                Q.stageScene("level2");
                 //numeroMonedas[nivel] = 0;
             	Q.stageScene("sumaMonedas",1);
             } 
@@ -949,11 +957,12 @@ var game = function () {
                 vy: 0,
                 tiempo: 5,
                 reaparecer: true,
-                izquierda: true
+                izquierda: true,
+                movimiento: true
             });
             this.add('2d, tween, animation');
             //Si le tocan por la izquierda, derecha o por debajo y es el player, pierde
-            this.on("bump.left,bump.right,bump.bottom", function (collision) {
+            this.on("bump.left,bump.right,bump.bottom,bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
                     Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
@@ -974,54 +983,27 @@ var game = function () {
                     collision.obj.destroy();
                 }
             });
-            //Si le salta encima el player lo mata
-            this.on("bump.top", function (collision) {
-                if (collision.obj.isA("Player")) {
-                    console.log("die");
-                    collision.obj.p.vy = -500;
-                    if (this.p.reaparecer) {
-                        var nuevo = new Q.Planta({
-                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x: this.p.x, y: this.p.y
-                        });
-                        var stag = this.stage;
-                        this.destroy();
-                        window.setTimeout(function () {
-                            stag.insert(nuevo);
-                        }, 10000);
-                    }
-                    else this.destroy();
-                }
-                else if (collision.obj.isA("Egg")) {
-                    huevos = 0;
-                    if (this.p.reaparecer) {
-                        var nuevo = new Q.Planta({
-                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x: this.p.x, y: this.p.y
-                        });
-                        var stag = this.stage;
-                        this.destroy();
-                        window.setTimeout(function () {
-                            stag.insert(nuevo);
-                        }, 10000);
-                    }
-                    else this.destroy();
-                    collision.obj.destroy();
-                }
-            }); 
-
         },
         step: function (dt) {
         	this.p.tiempo += dt;
-            if (this.p.tiempo >= 5) {
-                if(this.p.izquierda) {
-                	this.play("run_right");
-                	this.p.izquierda = false;
-                }
-                else {
-                	this.play("run_left");
-                	this.p.izquierda = true;
-                }
-                this.p.tiempo = 0;
-            }
+        	if(this.p.movimiento){
+	            if (this.p.tiempo >= 5) {
+	                if(this.p.izquierda) {
+	                	this.play("run_right");
+	                	this.p.izquierda = false;
+	                }
+	                else {
+	                	this.play("run_left");
+	                	this.p.izquierda = true;
+	                }
+	                this.p.tiempo = 0;
+	            }
+        	}
+        	else {
+        		this.p.gravity  = 0;
+        		if(!this.p.izquierda) this.play("run_left");
+        		else this.play("run_right");
+        	}
         }
     });
 }

@@ -3,7 +3,14 @@
     "sx": 0,
     "sy": 0,
     "tileW": 40,
-    "tileH": 51,
+    "tileH": 46,
+    "frames": 2
+  },
+  "planta2": {
+    "sx": 0,
+    "sy": 58,
+    "tileW": 47,
+    "tileH": 40,
     "frames": 2
   }
 }

@@ -40,5 +40,19 @@
     "tileW": 43,
     "tileH": 42,
     "frames": 4
+  },
+  "enemy10": {
+    "sx": 7,
+    "sy": 320,
+    "tileW": 41,
+    "tileH": 28,
+    "frames": 4
+  },
+  "enemy11": {
+    "sx": 3,
+    "sy": 356,
+    "tileW": 41,
+    "tileH": 25,
+    "frames": 2
   }
 }
