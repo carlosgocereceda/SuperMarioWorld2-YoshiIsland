@@ -1,5 +1,5 @@
 var game = function () {
-    var nivel = -1;
+    var nivel = 1;
     var huevos;
     var numeroMonedas = [0, 0, 0];
     //Función a la que se llamará cuando se cargue el juego
@@ -9,6 +9,8 @@ var game = function () {
         // Maximize this game to whatever the size of the browser is
         .setup({
             maximize: true,
+            width: 1100, // Set the default width to 320 pixels
+            height: 650, // Set the default height to 480 pixels
             upsampleWidth: 420, // Double the pixel density of the
             upsampleHeight: 320, // game if the w or h is 420x320
             // or smaller (useful for retina phones)

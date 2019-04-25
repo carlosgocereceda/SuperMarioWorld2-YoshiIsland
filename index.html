@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>SuperMario</title>
+  <link rel="stylesheet" type="text/css" href="css.css" media="screen" />
   <script src='lib/quintus.js'></script>
   <script src='lib/quintus_sprites.js'></script>
   <script src='lib/quintus_scenes.js'></script>
@@ -15,14 +16,31 @@
   <script src='lib/quintus_tmx.js'></script>
   <script src='lib/quintus_audio.js'></script>
   <script src='game.js'></script>
-  <style>
-    canvas {
-      background-color: black;
-    }
-  </style>
 </head>
 
 <body>
+  <div class="header">
+    <div class="juego">
+      <a href="#">
+        JUGAR
+      </a>
+    </div>
+    <div class="Creditos">
+      <a href="#">
+        CREDITOS
+      </a>
+    </div>
+    <div class="GitHub">
+      <a href="https://github.com/carlosgocereceda/SuperMarioWorld2-YoshiIsland">
+        GitHub
+      </a>
+    </div>
+  </div>
+  <style>
+      canvas {
+        background-color: black;
+      }
+    </style>
   <script type="text/javascript">
     window.onload = game;
   </script>
