@@ -1,5 +1,5 @@
 var game = function () {
-    var nivel = 1;
+    var nivel = -1;
     var huevos;
     var numeroMonedas = [0, 0, 0];
     //Función a la que se llamará cuando se cargue el juego
@@ -233,8 +233,9 @@ var game = function () {
 
 
         // No se que hace esto
-        Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx", function () {
+        Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx, menu.tmx", function () {
             console.log("Se metio en el load con nivel: "+nivel);
+            if(nivel == -1) Q.stageScene("mainMenu");
         	if (nivel == 0) Q.stageScene("levelTutorial");
             else if (nivel == 1) {
                 console.log("HOLA 1");
@@ -301,7 +302,38 @@ var game = function () {
             });
             box.fit(20);
         });
+        //Menu inicial
+        Q.scene('mainMenu', function(stage){
+            console.log("fasfasf");
+            Q.stageTMX("menu.tmx", stage);
+            var container = stage.insert(new Q.UI.Container({
+                //fill: "gray",
+                y: 50,
+                x: Q.width/2 
+              }));
+              stage.insert(new Q.UI.Text({ 
+                label: "Super Mario World 2 - Yoshi Island",
+                color: "white",
+                x: 0,
+                y: 0
+              }),container);
+              stage.insert(new Q.UI.Button({
+                label: "TUTORIAL",
+                fill: "#90EC38",
+                shadowColor: "rgba(255,255,255,1.0)",
+                y: 200,
+                x: 0
+              }), container);
+              stage.insert(new Q.UI.Button({
+                label: "PLAY",
+                fill: "#90EC38",
+                y: 300,
+                x: 0
+              }), container);
+              stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 2000, vx: 30, vy: 10, y: 450, x_reaparicion: 200, y_reaparicion: 200, y_caida: 800, }));
 
+              
+        });
         //Ventana de fin del juego
         Q.scene('endGame', function (stage) {
             var box = stage.insert(new Q.UI.Container({
