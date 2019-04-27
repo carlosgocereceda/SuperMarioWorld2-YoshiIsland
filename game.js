@@ -24,7 +24,7 @@ var game = function () {
     "level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json," +
     "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json, "+
     "ascensor.png, ascensor.json, moneda.png, moneda.json, YoshiTransformations.png, placa_helicoptero.json," +
-    " vida.png, vidas.json"+
+    " vida.png, vidas.json,"+
     "plantaPirana.png, plantaPirana.json, chomp.png, chomp.json", function () {
 
         // Enemigos nivel 1 terrestres
