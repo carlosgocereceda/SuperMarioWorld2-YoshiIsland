@@ -1,0 +1,23 @@
+{
+  "chomp1": {
+    "sx": 0,
+    "sy": 0,
+    "tileW": 134,
+    "tileH": 131,
+    "frames": 3
+  },
+  "chomp2": {
+    "sx": 400,
+    "sy": 0,
+    "tileW": 134,
+    "tileH": 131,
+    "frames": 3
+  },
+  "chomp3": {
+    "sx": 804,
+    "sy": 0,
+    "tileW": 134,
+    "tileH": 131,
+    "frames": 3
+  }
+}
