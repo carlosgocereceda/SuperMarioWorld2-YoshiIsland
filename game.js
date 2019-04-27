@@ -1,5 +1,5 @@
 var game = function () {
-    var nivel = 1;
+    var nivel = -1;
     var huevos;
     var numeroMonedas = [0, 0, 0];
     //Función a la que se llamará cuando se cargue el juego
@@ -318,7 +318,6 @@ var game = function () {
         });
         //Menu inicial
         Q.scene('mainMenu', function(stage){
-            console.log("fasfasf");
             Q.stageTMX("menu.tmx", stage);
             var container = stage.insert(new Q.UI.Container({
                 //fill: "gray",
@@ -327,25 +326,42 @@ var game = function () {
               }));
               stage.insert(new Q.UI.Text({ 
                 label: "Super Mario World 2 - Yoshi Island",
-                color: "white",
+                color: "purple",
                 x: 0,
                 y: 0
               }),container);
-              stage.insert(new Q.UI.Button({
+              var buttonTutorial = stage.insert(new Q.UI.Button({
                 label: "TUTORIAL",
                 fill: "#90EC38",
                 shadowColor: "rgba(255,255,255,1.0)",
                 y: 200,
                 x: 0
               }), container);
-              stage.insert(new Q.UI.Button({
+              var buttonPlay = stage.insert(new Q.UI.Button({
                 label: "PLAY",
                 fill: "#90EC38",
                 y: 300,
                 x: 0
               }), container);
-              stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 2000, vx: 30, vy: 10, y: 450, x_reaparicion: 200, y_reaparicion: 200, y_caida: 800, }));
+              //stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 200, vx: 30, vy: 10, y: 450, x_reaparicion: 200, y_reaparicion: 200, y_caida: 800, }));
+              stage.insert(new Q.EnemyVolador({ sheet: "enemy9", x: 200, y: 300, velocidad: 50, vx: 50, minX: 0, maxX: 500, x_reaparicion: 1100, y_reaparicion: 390 }));
+              stage.insert(new Q.EnemyVolador({ sheet: "enemy9", x: 700, y: 300, velocidad: 50, vx: 50, minX: 700, maxX: 1200, x_reaparicion: 1100, y_reaparicion: 390 }));
+              stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", reaparecer: true, x_reaparicion: 0, y_reaparicion: 450, y_caida: 800, x: 0, vy: 450, vx: 50, y: 450 }));
+              stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", reaparecer: true, x_reaparicion: 200, y_reaparicion: 450, y_caida: 800, x: 200, vy: 450, vx: 50, y: 450 }));
+              stage.insert(new Q.EnemyTerrestre({ sheet: "enemy3", reaparecer: true, x_reaparicion: 400, y_reaparicion: 450, y_caida: 800, x: 400, vy: 450, vx: 50, y: 450 }));
 
+              buttonTutorial.on("click", function () {
+                Q.clearStages();
+                nivel = 0;
+                Q.stageScene("levelTutorial");
+            });
+            buttonPlay.on("click", function () {
+                Q.clearStages();
+                nivel = 1;
+                Q.stageScene("level1");
+                // Crea el cartel
+                Q.stageScene("sumaMonedas", 1);
+            });
               
         });
         //Ventana de fin del juego
