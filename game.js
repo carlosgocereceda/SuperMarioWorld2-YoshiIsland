@@ -166,7 +166,7 @@ var game = function () {
             stage.insert(new Q.Planta ({x: 2510, y:710}));
             stage.insert(new Q.Planta ({sheet:"planta2" ,x: 2540, y:660, movimiento: false}));
             //Enemigos terrestres
-            stage.insert(new Q.Chomp({ x: 2600, vx: 50, velocidad: 50, y: 550, x_vueltaMin: 2599, x_vueltaMax: 2700, darVuelta: true, x_reaparicion: 650, y_reaparicion: 550, y_caida: 800 }));
+            stage.insert(new Q.Chomp({ x: 2600, vx: 50, velocidad: 50, y: 550, x_reaparicion: 2600, y_reaparicion: 550, y_caida: 800 }));
 
 
             //Enemigos terrestres
@@ -177,6 +177,7 @@ var game = function () {
             stage.insert(new Q.EnemyVolador({ sheet: "enemy9", x: 1100, y: 390, velocidad: 50, vx: 50, minX: 1070, maxX: 1500, x_reaparicion: 1100, y_reaparicion: 390 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy9", horizontal: false, x: 800, y: 400, velocidad: 70, vy: 70, minY: 390, maxY: 550, x_reaparicion: 800, y_reaparicion: 400 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy9", horizontal: false, x: 1600, y: 400, velocidad: 90, vy: 90, minY: 390, maxY: 450, x_reaparicion: 1600, y_reaparicion: 400 }));
+            stage.insert(new Q.EnemyVolador({ sheet: "enemy12", sprite: "planta_animations", horizontal: false, x: 3060, y: 420, velocidad: 120, vy: 120, minY: 419, maxY: 550, x_reaparicion: 3060, y_reaparicion: 420 }));
            
             // Piedras que suben y bajan
             stage.insert(new Q.PiedraCae({ x: 1090, y: 435, y_origen: 435, maxY: 550, tCaida: 3 }));
@@ -194,7 +195,7 @@ var game = function () {
             // Monedas
             stage.insert(new Q.Moneda({x: 700, y: 500}));
             stage.insert(new Q.Moneda({x: 1309, y: 340}));
-            stage.insert(new Q.Moneda({x: 3050, y: 450}));
+            stage.insert(new Q.Moneda({x: 2985, y: 550}));
             
 
         });
@@ -258,7 +259,7 @@ var game = function () {
             if(nivel == -1) Q.stageScene("mainMenu");
         	if (nivel == 0) Q.stageScene("levelTutorial");
             else if (nivel == 1) {
-                Q.stageScene("level1");
+                Q.stageScene("level2");
                 Q.state.reset({totalVidas: 0});
                 Q.stageScene("sumaVidas", 1);
                 var i = 0, contador = vidas;
@@ -1119,6 +1120,7 @@ var game = function () {
                 sprite: "chomp_animations",
                 sheet: "chomp1", //Obligatorio
                 vx: 0, //Obligatorio
+                vy:0,
                 reaparecer: true, //Obligatorio
                 x_reaparicion: 0, //Obligatorio si reaparicion = true
                 y_reaparicion: 0, //Obligatorio si reaparicion = true
@@ -1147,10 +1149,10 @@ var game = function () {
                     }
                     else if(this.p.golpes == 3) {
 	                    if (this.p.reaparecer) {
-	                        var nuevo = new Q.EnemyTerrestre({
-	                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
-	                            y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion, vy: this.p.vy,
-	                            vx: this.p.vx, y: this.p.y_reaparicion, darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
+	                        var nuevo = new Q.Chomp({
+	                            sprite: this.p.sprite, sheet: "chomp1", reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+	                            y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion,
+	                            vx: this.p.velocidad, y: this.p.y_reaparicion, darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
 	                            x_vueltaMax: this.p.x_vueltaMax, x_vueltaMin: this.p.x_vueltaMin
 	                        });
 	                        var stag = this.stage;
@@ -1170,17 +1172,17 @@ var game = function () {
                     collision.obj.p.vy = -500;
                     this.p.golpes++;
                     if(this.p.golpes == 1) {
-                    	this.p.sheet = "";
+                    	this.p.sheet = "chomp2";
                     }
                     else if (this.p.golpes == 2) {
-                    	this.p.sheet = "";
+                    	this.p.sheet = "chomp3";
                     }
                     else if(this.p.golpes == 3) {
 	                    if (this.p.reaparecer) {
-	                        var nuevo = new Q.EnemyTerrestre({
-	                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
-	                            y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion, vy: this.p.vy,
-	                            vx: this.p.vx, y: this.p.y_reaparicion, darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
+	                        var nuevo = new Q.Chomp({
+	                            sprite: this.p.sprite, sheet: "chomp1", reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+	                            y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion,
+	                            vx: this.p.velocidad, y: this.p.y_reaparicion, darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
 	                            x_vueltaMax: this.p.x_vueltaMax, x_vueltaMin: this.p.x_vueltaMin
 	                        });
 	                        var stag = this.stage;
@@ -1196,17 +1198,17 @@ var game = function () {
                     huevos = 0;
                     this.p.golpes++;
                     if(this.p.golpes == 1) {
-                    	this.p.sheet = "";
+                    	this.p.sheet = "chomp2";
                     }
                     else if (this.p.golpes == 2) {
-                    	this.p.sheet = "";
+                    	this.p.sheet = "chomp3";
                     }
                     else if(this.p.golpes == 3) {
 	                    if (this.p.reaparecer) {
-	                        var nuevo = new Q.EnemyTerrestre({
-	                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
-	                            y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion, vy: this.p.vy,
-	                            vx: this.p.vx, y: this.p.y_reaparicion, darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
+	                        var nuevo = new Q.Chomp({
+	                            sprite: this.p.sprite, sheet: "chomp1", reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+	                            y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion,
+	                            vx: this.p.velocidad, y: this.p.y_reaparicion, darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
 	                            x_vueltaMax: this.p.x_vueltaMax, x_vueltaMin: this.p.x_vueltaMin
 	                        });
 	                        var stag = this.stage;

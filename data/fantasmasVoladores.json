@@ -54,5 +54,12 @@
     "tileW": 41,
     "tileH": 25,
     "frames": 2
+  },
+  "enemy12": {
+    "sx": 6,
+    "sy": 395,
+    "tileW": 38,
+    "tileH": 37,
+    "frames": 2
   }
 }
