@@ -24,8 +24,9 @@ var game = function () {
     "level_end.png, level_end.json, huevos.png, egg.json, koopaVolador.json," +
     "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json, "+
     "ascensor.png, ascensor.json, moneda.png, moneda.json, YoshiTransformations.png, placa_helicoptero.json," +
-    " vida.png, vidas.json,"+
-    "plantaPirana.png, plantaPirana.json, chomp.png, chomp.json", function () {
+    " vida.png, vidas.json, plantaPirana.png, plantaPirana.json, chomp.png, chomp.json," +
+    "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json"
+    , function () {
 
         // Enemigos nivel 1 terrestres
         Q.compileSheets("enemigos.png", "enemyTerrestres.json");
@@ -59,6 +60,12 @@ var game = function () {
 
         // Cargo la vida
         Q.compileSheets("vida.png", "vidas.json");
+
+        // Cargo letras
+        Q.compileSheets("cargando.png", "cargando.json");
+
+        // Cargo bebe
+        Q.compileSheets("babyMario.png", "bebe.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -103,6 +110,16 @@ var game = function () {
         Q.animations('chomp_animations', {
             run_right: { frames: [0, 1, 2], flip: "", rate: 1 / 5 },
             run_left: { frames: [0, 1, 2], flip: "x", rate: 1 / 5 }
+        })
+
+        //Animacion carga
+        Q.animations('carga_animations', {
+            run_right: { frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], flip: "", rate: 1 / 5 }
+        })
+
+        //Animacion Bebe Mario
+        Q.animations('mario_animations', {
+            run_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 10 }
         })
 
 
@@ -254,30 +271,9 @@ var game = function () {
 
 
         // No se que hace esto
-        Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx, menu.tmx", function () {
+        Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx, menu.tmx, carga.tmx", function () {
             console.log("Se metio en el load con nivel: "+nivel);
-            if(nivel == -1) Q.stageScene("mainMenu");
-        	if (nivel == 0) Q.stageScene("levelTutorial");
-            else if (nivel == 1) {
-                Q.stageScene("level2");
-                Q.state.reset({totalVidas: 0});
-                Q.stageScene("sumaVidas", 1);
-                var i = 0, contador = vidas;
-               
-                while(i < contador){
-                    Q.state.inc("totalVidas", 1);
-                    i++;
-                }
-                vidas = contador;
-                console.log("Puso las vidas");
-               //Q.stageScene("sumaMonedas",1);
-                
-            } 
-            else if (nivel == 2) {
-                Q.stageScene("level2");
-            	Q.stageScene("sumaMonedas", 1);
-            } 
-            
+            Q.stageScene("mainMenu");
         });
 
         // Cartel de pasar al siguiente nivel
@@ -297,7 +293,8 @@ var game = function () {
             nivel += 1;
             button.on("click", function () {
                 Q.clearStages();
-                
+                 Q.stageScene("carga");
+                /*
                 if (nivel == 1) {
                     Q.stageScene("level1");
                     Q.stageScene("sumaMonedas", 1);
@@ -325,7 +322,7 @@ var game = function () {
                     numeroMonedas[nivel] = monedas;
                     console.log("Numero de monedas: "+numeroMonedas[nivel]);
                     
-                }
+                }*/
             });
             box.fit(20);
         });
@@ -371,12 +368,18 @@ var game = function () {
             buttonPlay.on("click", function () {
                 Q.clearStages();
                 nivel = 1;
-                Q.stageScene("level1");
-                // Crea el cartel
-                Q.stageScene("sumaMonedas", 1);
+                Q.stageScene("carga");
             });
               
         });
+
+        //Menu inicial
+        Q.scene('carga', function(stage){
+            Q.stageTMX("carga.tmx", stage);
+              stage.insert(new Q.Carga({x: 550, y: 200}));
+              stage.insert(new Q.BebeMario({x: -50, y: 450}));
+        });
+
         //Ventana de fin del juego
         Q.scene('endGame', function (stage) {
             var box = stage.insert(new Q.UI.Container({
@@ -1241,6 +1244,59 @@ var game = function () {
                 else if (this.p.x <= this.p.x_vueltaMin) {
                     this.p.vx = this.p.velocidad;
                 }
+            }
+        }
+    });
+
+	// Legras Cargando
+    Q.Sprite.extend("Carga", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "cargando",
+                sprite: "carga_animations"
+            });
+            this.p.gravityY = 0;
+            this.add('2d, tween, animation');
+        },
+        step: function (dt) {
+            this.play("run_right");
+        }
+    });
+
+    // Legras Cargando
+    Q.Sprite.extend("BebeMario", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "mario",
+                sprite: "mario_animations",
+                vy: 0,
+                vx: 200
+            });
+            this.p.gravityY = 0;
+            this.add('2d, tween, animation');
+        },
+        step: function (dt) {
+            this.play("run_right");
+            console.log(this.p.x);
+            console.log(this.p.y);
+            if(this.p.x > 1150) {
+            	if(nivel == 1) {
+	                Q.stageScene("level1");
+	                Q.state.reset({totalVidas: 0});
+	                Q.stageScene("sumaVidas", 1);
+	                var i = 0, contador = vidas;              
+	                while(i < contador){
+	                    Q.state.inc("totalVidas", 1);
+	                    i++;
+	                }
+	                vidas = contador;
+	                console.log("Puso las vidas");
+	               //Q.stageScene("sumaMonedas",1);      
+	            } 
+	            else if (nivel == 2) {
+	                Q.stageScene("level2");
+	            	Q.stageScene("sumaMonedas", 1);
+	            } 
             }
         }
     });

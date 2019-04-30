@@ -4,7 +4,7 @@
   <image source="../images/tilesOficial.png" width="1368" height="1337"/>
  </tileset>
  <imagelayer id="2" name="fondo">
-  <image source="../images/fondoMenu2.png" width="1100" height="650"/>
+  <image source="../images/fondoCarga.png" width="1100" height="650"/>
  </imagelayer>
  <layer id="9" name="Capa de Patrones 1" width="69" height="41">
   <properties>
@@ -2150,75 +2150,75 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2212"/>
-   <tile gid="2213"/>
-   <tile gid="2214"/>
-   <tile gid="2213"/>
-   <tile gid="2214"/>
-   <tile gid="2213"/>
-   <tile gid="2214"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2214"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2214"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2213"/>
-   <tile gid="2214"/>
+   <tile gid="426"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="2041"/>
+   <tile gid="426"/>
    <tile/>
    <tile/>
    <tile/>

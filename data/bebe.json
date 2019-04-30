@@ -1,0 +1,9 @@
+{
+  "mario": {
+    "sx": 44,
+    "sy": 532,
+    "tileW": 45,
+    "tileH": 56,
+    "frames": 4
+  }
+}
