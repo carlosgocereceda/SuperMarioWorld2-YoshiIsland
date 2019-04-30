@@ -25,7 +25,7 @@ var game = function () {
     "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json, "+
     "ascensor.png, ascensor.json, moneda.png, moneda.json, YoshiTransformations.png, placa_helicoptero.json," +
     " vida.png, vidas.json, plantaPirana.png, plantaPirana.json, chomp.png, chomp.json," +
-    "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json"
+    "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json, titulo.json, titulo.png"
     , function () {
 
         // Enemigos nivel 1 terrestres
@@ -66,6 +66,9 @@ var game = function () {
 
         // Cargo bebe
         Q.compileSheets("babyMario.png", "bebe.json");
+
+        // Cargo bebe
+        Q.compileSheets("titulo.png", "titulo.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -120,6 +123,13 @@ var game = function () {
         //Animacion Bebe Mario
         Q.animations('mario_animations', {
             run_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 10 }
+        })
+
+        //Animacion titulo
+        Q.animations('titulo_animations', {
+            run_right: { frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], flip: "", rate: 1 / 6 },
+            stop: { frames: [0], flip: "", rate: 1 / 6 },
+            
         })
 
 
@@ -334,12 +344,13 @@ var game = function () {
                 y: 50,
                 x: Q.width/2 
               }));
-              stage.insert(new Q.UI.Text({ 
+            stage.insert(new Q.Titulo({x: 550, y: 200}));
+              /*stage.insert(new Q.UI.Text({ 
                 label: "Super Mario World 2 - Yoshi Island",
                 color: "purple",
                 x: 0,
                 y: 0
-              }),container);
+              }),container);*/
               var buttonTutorial = stage.insert(new Q.UI.Button({
                 label: "TUTORIAL",
                 fill: "#90EC38",
@@ -1248,7 +1259,7 @@ var game = function () {
         }
     });
 
-	// Legras Cargando
+	// Letras Cargando
     Q.Sprite.extend("Carga", {
         init: function (p) {
             this._super(p, {
@@ -1260,6 +1271,33 @@ var game = function () {
         },
         step: function (dt) {
             this.play("run_right");
+        }
+    });
+
+    // Titulo
+    Q.Sprite.extend("Titulo", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "titulo",
+                sprite: "titulo_animations",
+                tiempo: 0,
+                animacion: false
+            });
+            this.p.gravityY = 0;
+            this.add('2d, tween, animation');
+        },
+        step: function (dt) {
+        	this.p.tiempo += dt;
+        	if(this.p.tiempo > 3 && !this.p.animacion) {
+        		this.p.animacion = true;
+            	this.play("run_right");
+            	this.p.tiempo = 0;
+        	}
+        	else if (this.p.tiempo > 2.5 && this.p.animacion) {
+        		this.play("stop");
+        		this.p.tiempo = 0;
+        		this.p.animacion = false;
+        	}
         }
     });
 
