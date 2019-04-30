@@ -47,9 +47,9 @@ var game = function () {
         Q.compileSheets("enemigos.png", "koopaVolador.json");
         Q.compileSheets("fantasmasVoladores.png", "fantasmasVoladores.json");
 
-        //Piedra que cae (nivel 2)
+        //Piedra que cae (nivel 3)
         Q.compileSheets("piedraCae.png", "piedraCae.json");
-        //Ascensor nivel 2
+        //Ascensor nivel 3
         Q.compileSheets("ascensor.png", "ascensor.json");
 
         Q.compileSheets("plantaPirana.png", "plantaPirana.json");
@@ -180,9 +180,9 @@ var game = function () {
 
         });
 
-        Q.scene("level2", function (stage) {
-            nivel = 2;
-            Q.stageTMX("yoshi2.tmx", stage);
+        Q.scene("level3", function (stage) {
+            nivel = 3;
+            Q.stageTMX("yoshi3.tmx", stage);
             var player = stage.insert(new Q.Player({ y: 650 }));
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
@@ -228,7 +228,6 @@ var game = function () {
         });
 
         Q.scene("levelTutorial", function (stage) {
-            nivel = 2;
             Q.stageTMX("tutorial.tmx", stage);
             var player = stage.insert(new Q.Player({x:Q.width/2 -300, y: 500 }));
             stage.add("viewport").follow(player);
@@ -281,7 +280,7 @@ var game = function () {
 
 
         // No se que hace esto
-        Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx, menu.tmx, carga.tmx", function () {
+        Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx, menu.tmx, carga.tmx, yoshi3.tmx", function () {
             console.log("Se metio en el load con nivel: "+nivel);
             Q.stageScene("mainMenu");
         });
@@ -345,12 +344,6 @@ var game = function () {
                 x: Q.width/2 
               }));
             stage.insert(new Q.Titulo({x: 550, y: 200}));
-              /*stage.insert(new Q.UI.Text({ 
-                label: "Super Mario World 2 - Yoshi Island",
-                color: "purple",
-                x: 0,
-                y: 0
-              }),container);*/
               var buttonTutorial = stage.insert(new Q.UI.Button({
                 label: "TUTORIAL",
                 fill: "#90EC38",
@@ -893,7 +886,7 @@ var game = function () {
                     this.p.x = 430;
                     this.p.y = 700;
                 }
-                else if (nivel == 2) {
+                else if (nivel == 3) {
                     this.p.x = 350;
                     this.p.y = 650;
                 }
