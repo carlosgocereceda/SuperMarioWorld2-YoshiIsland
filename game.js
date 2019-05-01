@@ -8,7 +8,7 @@ var game = function () {
     var Q = window.Q = Quintus()
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX")
         // Maximize this game to whatever the size of the browser is
-        .setup({
+        .setup("myGame",{
             maximize: true,
             width: 1100, // Set the default width to 320 pixels
             height: 650, // Set the default height to 480 pixels
@@ -25,7 +25,7 @@ var game = function () {
     "piedraCae.png, piedraCae.json, fantasmasVoladores.png, fantasmasVoladores.json, "+
     "ascensor.png, ascensor.json, moneda.png, moneda.json, YoshiTransformations.png, placa_helicoptero.json," +
     " vida.png, vidas.json, plantaPirana.png, plantaPirana.json, chomp.png, chomp.json," +
-    "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json"
+    "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json, titulo.json, titulo.png"
     , function () {
 
         // Enemigos nivel 1 terrestres
@@ -47,9 +47,9 @@ var game = function () {
         Q.compileSheets("enemigos.png", "koopaVolador.json");
         Q.compileSheets("fantasmasVoladores.png", "fantasmasVoladores.json");
 
-        //Piedra que cae (nivel 2)
+        //Piedra que cae (nivel 3)
         Q.compileSheets("piedraCae.png", "piedraCae.json");
-        //Ascensor nivel 2
+        //Ascensor nivel 3
         Q.compileSheets("ascensor.png", "ascensor.json");
 
         Q.compileSheets("plantaPirana.png", "plantaPirana.json");
@@ -66,6 +66,9 @@ var game = function () {
 
         // Cargo bebe
         Q.compileSheets("babyMario.png", "bebe.json");
+
+        // Cargo bebe
+        Q.compileSheets("titulo.png", "titulo.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -122,6 +125,13 @@ var game = function () {
             run_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 10 }
         })
 
+        //Animacion titulo
+        Q.animations('titulo_animations', {
+            run_right: { frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], flip: "", rate: 1 / 6 },
+            stop: { frames: [0], flip: "", rate: 1 / 6 },
+            
+        })
+
 
 
         Q.scene("level1", function (stage) {
@@ -170,9 +180,9 @@ var game = function () {
 
         });
 
-        Q.scene("level2", function (stage) {
-            nivel = 2;
-            Q.stageTMX("yoshi2.tmx", stage);
+        Q.scene("level3", function (stage) {
+            nivel = 3;
+            Q.stageTMX("yoshi3.tmx", stage);
             var player = stage.insert(new Q.Player({ y: 650 }));
             stage.add("viewport").follow(player);
             stage.viewport.scale = 2;
@@ -218,7 +228,6 @@ var game = function () {
         });
 
         Q.scene("levelTutorial", function (stage) {
-            nivel = 2;
             Q.stageTMX("tutorial.tmx", stage);
             var player = stage.insert(new Q.Player({x:Q.width/2 -300, y: 500 }));
             stage.add("viewport").follow(player);
@@ -271,7 +280,7 @@ var game = function () {
 
 
         // No se que hace esto
-        Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx, menu.tmx, carga.tmx", function () {
+        Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx, menu.tmx, carga.tmx, yoshi3.tmx", function () {
             console.log("Se metio en el load con nivel: "+nivel);
             Q.stageScene("mainMenu");
         });
@@ -334,12 +343,7 @@ var game = function () {
                 y: 50,
                 x: Q.width/2 
               }));
-              stage.insert(new Q.UI.Text({ 
-                label: "Super Mario World 2 - Yoshi Island",
-                color: "purple",
-                x: 0,
-                y: 0
-              }),container);
+            stage.insert(new Q.Titulo({x: 550, y: 200}));
               var buttonTutorial = stage.insert(new Q.UI.Button({
                 label: "TUTORIAL",
                 fill: "#90EC38",
@@ -903,7 +907,7 @@ var game = function () {
                     this.p.x = 430;
                     this.p.y = 700;
                 }
-                else if (nivel == 2) {
+                else if (nivel == 3) {
                     this.p.x = 350;
                     this.p.y = 650;
                 }
@@ -1262,7 +1266,7 @@ var game = function () {
         }
     });
 
-	// Legras Cargando
+	// Letras Cargando
     Q.Sprite.extend("Carga", {
         init: function (p) {
             this._super(p, {
@@ -1274,6 +1278,33 @@ var game = function () {
         },
         step: function (dt) {
             this.play("run_right");
+        }
+    });
+
+    // Titulo
+    Q.Sprite.extend("Titulo", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "titulo",
+                sprite: "titulo_animations",
+                tiempo: 0,
+                animacion: false
+            });
+            this.p.gravityY = 0;
+            this.add('2d, tween, animation');
+        },
+        step: function (dt) {
+        	this.p.tiempo += dt;
+        	if(this.p.tiempo > 3 && !this.p.animacion) {
+        		this.p.animacion = true;
+            	this.play("run_right");
+            	this.p.tiempo = 0;
+        	}
+        	else if (this.p.tiempo > 2.5 && this.p.animacion) {
+        		this.play("stop");
+        		this.p.tiempo = 0;
+        		this.p.animacion = false;
+        	}
         }
     });
 
