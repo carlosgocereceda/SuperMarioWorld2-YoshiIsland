@@ -1,7 +1,8 @@
 body{
     background: url("fondo.png");
     background-repeat: no-repeat;
-    background-size:cover;
+    background-size:cover;    
+    font-family: 'Wendy One', sans-serif;
 }
 .header{
     display:flex;
@@ -24,4 +25,22 @@ a:hover{
 }
 canvas{
     margin-top: 20px;
+    background-color: black;
+}
+.instrucciones{
+    width: 1000px;
+    display: grid;
+    grid-template-rows: 1fr 2fr; /* Dos filas */
+}
+table{
+    width: 900px;
+    margin:auto;
+    border-collapse:separate; 
+    border-spacing: 0 3em;
+    font-size: 30px;
+}
+p{
+    margin-top: 60px;
+    margin-left: 50px;
+    font-size: 30px; 
 }

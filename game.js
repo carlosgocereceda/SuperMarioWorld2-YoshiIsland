@@ -8,7 +8,7 @@ var game = function () {
     var Q = window.Q = Quintus()
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX")
         // Maximize this game to whatever the size of the browser is
-        .setup({
+        .setup("myGame",{
             maximize: true,
             width: 1100, // Set the default width to 320 pixels
             height: 650, // Set the default height to 480 pixels
@@ -176,7 +176,7 @@ var game = function () {
            // stage.insert(new Q.Flower({ x: 500, y: 660 }));
            
             // Monedas
-            Q.state.reset({totalMonedas: 0});
+            //Q.state.reset({totalMonedas: 0, totalVidas: 0});
            
             stage.insert(new Q.Moneda({x: 700, y: 600}));
             stage.insert(new Q.Moneda({x: 2630, y: 600}));
@@ -442,19 +442,40 @@ var game = function () {
             button.on("click", function () {
                 Q.clearStages();
                 
+
                 if (nivel == 1){
                     Q.stageScene("level1");
-                    // Crea el cartel
-                    Q.stageScene("sumaMonedas", 1);  
+                    Q.state.reset({totalMonedas: 0, totalVidas: 0});
+                     // Resto una vida
+                    Q.stageScene("sumaVidas", 1); 
+                    var i = 0, contador = vidas; 
+                    --contador;             
+                    while(i < contador){
+                        Q.state.inc("totalVidas", 1);
+                        i++;
+                    }
+                    vidas = contador;
+                   
+
+                    // Inicializo el label de monedas
+                    Q.stageScene("sumaMonedas", 2);  
                                       
                 } 
                 else if (nivel == 2){
                     // Si muere en el nivel 2, pierde las monedas del nivel 1
                     Q.stageScene("level2");
-                    // Crea el cartel
-                    // Esto resetea a 0, las monedas
-                    Q.state.reset({totalMonedas: 0});
-                    Q.stageScene("sumaMonedas", 1);
+                    Q.state.reset({totalMonedas: 0, totalVidas: 0});
+                    // Resto una vida
+                    Q.stageScene("sumaVidas", 1); 
+                    var i = 0, contador = vidas; 
+                    --contador;             
+                    while(i < contador){
+                        Q.state.inc("totalVidas", 1);
+                        i++;
+                    }
+                    vidas = contador;
+                    // Inicializo las monedas
+                    Q.stageScene("sumaMonedas", 2);
                     var i = 1, monedas = 0;
                     // Miro las monedas de los anteriores niveles
                     while(i < nivel){
@@ -1049,51 +1070,44 @@ var game = function () {
 
     // Suma monedas al contador
     Q.scene("sumaMonedas", function(stage) {
+        console.log("Entro en sumaMonedas");
+        //var label2 = stage.insert(new Q.UI.Text({ x: Q.width/2 - 440, y: 35, scale:1.5, label2: "0" , color: "rgba(255,164,032,1)"}));
+        // Esto es el contador que ira cambiando
+        var label2 = stage.insert(new Q.UI.Text({ x: Q.width/2 - 205, y: 15, scale:1.5, label: "0" , color: "rgba(255,164,032,1)"}));
         
-        var label2 = stage.insert(new Q.UI.Text({ x: Q.width/2 - 440, y: 35, scale:1.5, label2: "0" , color: "rgba(255,164,032,1)"}));
         Q.state.on("change.totalMonedas", this, function( coin ) {
             label2.p.label = "" + coin;
             numeroMonedas[nivel]++;
         });	
+        // La imagen 
         stage.insert(new Q.UI.Button({
             asset: 'moneda.png',
-            x: Q.width/2 - 500,
+            x: Q.width/2 - 280,
             scale: 1.5,
-            y: 50
+            y: 35
           }, function() {
             this.p.angle += 90;
           }));
     });
      // Sumador de vidas
      Q.scene("sumaVidas", function(stage) {
-        
-        var label = stage.insert(new Q.UI.Text({ x: Q.width/2 - 440, y: 35, scale:1.5, label: "0" , color: "rgba(255,164,032,1)"}));
-        Q.state.on("change.totalVidas", this, function( coin1 ) {
-            label.p.label = "" + coin1;
+         console.log("Entro en sumaVidas");
+       // Contador de numero de vidas
+        var label1 = stage.insert(new Q.UI.Text({ x: Q.width/2 - 440, y: 15, scale:1.5, label: "0" , color: "rgba(255,164,032,1)"}));
+        Q.state.on("change.totalVidas", this, function(vida) {
+            label1.p.label = "" + vida;
             vidas++;
         });	
+        // Imagen
         stage.insert(new Q.UI.Button({
             asset: 'vida.png',
             x: Q.width/2 - 500,
             scale: 1.5,
-            y: 50
+            y: 35
           }, function() {
             this.p.angle += 90;
           }));
-          var label2 = stage.insert(new Q.UI.Text({ x: Q.width/2 - 440, y: 380, scale:1.5, label2: "0" , color: "rgba(255,164,032,1)"}));
-        Q.state.on("change.totalMonedas", this, function( coin ) {
-            label2.p.label2 = "" + coin;
-            numeroMonedas[nivel]++;
-        });	
-        stage.insert(new Q.UI.Button({
-            asset: 'moneda.png',
-            x: Q.width/2 - 500,
-            scale: 1.5,
-            y: 100
-          }, function() {
-            this.p.angle += 90;
-          }));
-    });
+     });
 
     // Moneda
     Q.Sprite.extend("Moneda", {
@@ -1361,7 +1375,7 @@ var game = function () {
                 sheet: "mario",
                 sprite: "mario_animations",
                 vy: 0,
-                vx: 200
+                vx: 1000
             });
             this.p.gravityY = 0;
             this.add('2d, tween, animation');
@@ -1371,22 +1385,54 @@ var game = function () {
             console.log(this.p.x);
             console.log(this.p.y);
             if(this.p.x > 1150) {
+                
             	if(nivel == 1) {
-	                Q.stageScene("level1");
-	                Q.state.reset({totalVidas: 0});
-	                Q.stageScene("sumaVidas", 1);
+                    console.log("PASOOOOOOOOOOO");
+                    // Inicializamos los labels de los contadores que se mostraran por pantalla
+                    Q.state.reset({totalVidas: 0, totalMonedas: 0});
+                   // console.log("Numero de totalVidas: "+totalVidas);
+                    Q.stageScene("level1");                    
+                    Q.stageScene("sumaVidas", 1);
 	                var i = 0, contador = vidas;              
 	                while(i < contador){
 	                    Q.state.inc("totalVidas", 1);
 	                    i++;
 	                }
 	                vidas = contador;
-	                console.log("Puso las vidas");
-	               //Q.stageScene("sumaMonedas",1);      
+                    Q.stageScene("sumaMonedas", 2);
 	            } 
 	            else if (nivel == 2) {
 	                Q.stageScene("level2");
-	            	Q.stageScene("sumaMonedas", 1);
+                    // Inicializamos los labels de los contadores que se mostraran por pantalla
+                    Q.state.reset({totalVidas: 0, totalMonedas: 0});
+                    console.log("Cambio de nivel 2");
+                    // Inicializo las vidas
+                    Q.stageScene("sumaVidas", 1);
+	                var i = 0, contador = vidas;              
+	                while(i < contador){
+	                    Q.state.inc("totalVidas", 1);
+	                    i++;
+	                }
+	                vidas = contador;
+
+                    // Inicializo las monedas
+                    Q.stageScene("sumaMonedas", 2);
+                    console.log("Numero de monedas: "+numeroMonedas[nivel]);
+
+                    var i = 1, monedas = 0;
+                    // Miro las monedas de los anteriores niveles
+                    while(i < nivel){
+                        monedas += numeroMonedas[i];
+                        i++;
+                    }
+                    i = 0;
+                    while(i != monedas){
+                        Q.state.inc("totalMonedas", 1);
+                        console.log("Veces");
+                        i++;
+                    }
+                    numeroMonedas[nivel] = monedas;
+                    console.log("Numero de monedas: "+numeroMonedas[nivel]);
 	            } 
             }
         }
