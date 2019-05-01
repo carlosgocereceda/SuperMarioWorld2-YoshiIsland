@@ -8,7 +8,7 @@ var game = function () {
     var Q = window.Q = Quintus()
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX")
         // Maximize this game to whatever the size of the browser is
-        .setup({
+        .setup("myGame",{
             maximize: true,
             width: 1100, // Set the default width to 320 pixels
             height: 650, // Set the default height to 480 pixels

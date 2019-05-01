@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>SuperMario</title>
+  <link href="https://fonts.googleapis.com/css?family=Wendy+One" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="css.css" media="screen" />
   <script src='lib/quintus.js'></script>
   <script src='lib/quintus_sprites.js'></script>
@@ -36,14 +37,37 @@
       </a>
     </div>
   </div>
-  <style>
-      canvas {
-        background-color: black;
-      }
-    </style>
+  <canvas id='myGame'>
+
+  </canvas>
   <script type="text/javascript">
     window.onload = game;
   </script>
+  <p>
+    Estas son algunas instrucciones básicas para jugar
+  </p>
+  <table>
+    <tr>
+      <td>Andar hacia delante</td>
+      <td><img src="./images/web/arrow-right-icon.png"></td>
+      <td><img src="./images/web/gifAndandoDerecha.gif"></td>
+    </tr>
+    <tr>
+      <td>Andar hacia atrás</td>
+      <td><img src="./images/web/arrow-left-icon.png"></td>
+      <td><img src="./images/web/gifAndandoizquierda.gif"></td>
+    </tr>
+    <tr>
+      <td>Comer</td>
+      <td><img src="./images/web/arrow-down-icon.png"></td>
+      <td><img src="./images/web/comiendo.gif"></td>
+    </tr>
+    <tr>
+      <td>Saltar y planear</td>
+      <td><img src="./images/web/arrow-up-icon.png"></td>
+      <td><img src="./images/web/saltando.gif"></td>
+    </tr>
+  </table>
 </body>
 
 </html>
