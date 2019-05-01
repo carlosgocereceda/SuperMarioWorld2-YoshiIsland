@@ -1,0 +1,30 @@
+{
+  "lanzador1": {
+    "sx": 3,
+    "sy": 49,
+    "tileW": 18,
+    "tileH": 26,
+    "frames": 0
+  },
+  "proyectil1": {
+    "sx": 21,
+    "sy": 49,
+    "tileW": 38,
+    "tileH": 26,
+    "frames": 2
+  },
+  "lanzador2": {
+    "sx": 7,
+    "sy": 88,
+    "tileW": 32,
+    "tileH": 43,
+    "frames": 0
+  },
+   "proyectil2": {
+    "sx": 2,
+    "sy": 2,
+    "tileW": 31,
+    "tileH": 31,
+    "frames": 0
+  }
+}

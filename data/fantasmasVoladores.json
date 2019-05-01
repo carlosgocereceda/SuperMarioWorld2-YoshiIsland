@@ -1,6 +1,6 @@
 {
   "enemy4": {
-    "sx": 0,
+    "sx": 1,
     "sy": 0,
     "tileW": 30,
     "tileH": 56,
@@ -28,9 +28,9 @@
     "frames": 4
   },
   "enemy8": {
-    "sx": 0,
+    "sx": 2.99,
     "sy": 217,
-    "tileW": 31,
+    "tileW": 30,
     "tileH": 56,
     "frames": 4
   },
