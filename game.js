@@ -1375,7 +1375,7 @@ var game = function () {
                 sheet: "mario",
                 sprite: "mario_animations",
                 vy: 0,
-                vx: 1000
+                vx: 500
             });
             this.p.gravityY = 0;
             this.add('2d, tween, animation');
