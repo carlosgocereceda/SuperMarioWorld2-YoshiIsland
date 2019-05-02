@@ -26,7 +26,7 @@ var game = function () {
     "ascensor.png, ascensor.json, moneda.png, moneda.json, YoshiTransformations.png, placa_helicoptero.json," +
     " vida.png, vidas.json, plantaPirana.png, plantaPirana.json, chomp.png, chomp.json," +
     "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json, titulo.json, titulo.png," +
-    "proyectiles.png, proyectiles.json"
+    "proyectiles.png, proyectiles.json, barrera.png, barrera.json"
     , function () {
 
         // Enemigos nivel 1 terrestres
@@ -73,6 +73,9 @@ var game = function () {
 
         // Cargo proyectiles
         Q.compileSheets("proyectiles.png", "proyectiles.json");
+
+        // Cargo barrera
+        Q.compileSheets("barrera.png", "barrera.json");
 
         //Animaciones de yoshi
         Q.animations('yoshi_animations', {
@@ -197,23 +200,28 @@ var game = function () {
             //Barrera
             stage.insert(new Q.EnemyVolador({ sheet: "enemy6", horizontal:false, x: 500, y: 910, velocidadY: 0, vy: 0, x_reaparicion: 500, y_reaparicion: 910 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy5", horizontal: false, x: 500, y: 975, velocidadY: 0, vy: 0, x_reaparicion: 500, y_reaparicion: 975 }));
-            stage.insert(new Q.EnemyVolador({ sheet: "enemy7", horizontal: false, x: 500, y: 1050, velocidadY: 0, vy: 0, x_reaparicion: 500, y_reaparicion: 1100 }));
-            stage.insert(new Q.EnemyVolador({ sheet: "enemy8", horizontal: false, x: 500, y: 1100, velocidadY: 0, vy: 0, x_reaparicion: 500, y_reaparicion: 1150 }));
-            stage.insert(new Q.EnemyVolador({ sheet: "enemy4", horizontal: false, x: 500, y: 1170, velocidadY: 0, vy: 0, x_reaparicion: 500, y_reaparicion: 1200 }));
+            stage.insert(new Q.EnemyVolador({ sheet: "enemy7", horizontal: false, x: 500, y: 1050, velocidadY: 0, vy: 0, x_reaparicion: 500, y_reaparicion: 1050 }));
+            stage.insert(new Q.EnemyVolador({ sheet: "enemy8", horizontal: false, x: 500, y: 1100, velocidadY: 0, vy: 0, x_reaparicion: 500, y_reaparicion: 1100 }));
+            stage.insert(new Q.EnemyVolador({ sheet: "enemy4", horizontal: false, x: 500, y: 1170, velocidadY: 0, vy: 0, x_reaparicion: 500, y_reaparicion: 1170 }));
             //Enemigos despues de barrera
-            stage.insert(new Q.EnemyVolador({ sheet: "enemy5", horizontal: false, x: 700, y: 950, velocidadY: 100, vy: 100, minY: 929, maxY: 1100, x_reaparicion: 700, y_reaparicion: 910 }));
+            stage.insert(new Q.EnemyVolador({ sheet: "enemy5", horizontal: false, x: 700, y: 950, velocidadY: 50, vy: 50, minY: 910, maxY: 950, x_reaparicion: 700, y_reaparicion: 950 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy6", x: 750, y: 1160, velocidadX: 85, vx: 85, minX: 700, maxX: 800, x_reaparicion: 750, y_reaparicion: 1160 }));
-            stage.insert(new Q.EnemyVolador({ sheet: "enemy7", horizontal: false, x: 900, y: 1140, velocidadY: 150, vy: 150, minY: 1000, maxY: 1140, x_reaparicion: 900, y_reaparicion: 1140 }));
+            stage.insert(new Q.EnemyVolador({ sheet: "enemy7", horizontal: false, x: 900, y: 1050, velocidadY: 20, vy: 20, minY: 1045, maxY: 1055, x_reaparicion: 900, y_reaparicion: 1050 }));
             //Lanzadores
             stage.insert(new Q.Lanzadores({sheet: "lanzador1", sheetP: "proyectil1", spriteP: "planta_animations", x: 1000, y: 1000, horizontal: true, lanzar: 3}))
             stage.insert(new Q.Lanzadores({sheet: "lanzador1", sheetP: "proyectil1", spriteP: "planta_animations", x: 1200, y: 1100, horizontal: true, lanzar: 2.5}))
             stage.insert(new Q.Lanzadores({sheet: "lanzador1", sheetP: "proyectil1", spriteP: "planta_animations", x: 900, y: 1200, horizontal: true, lanzar: 4}))
-            stage.insert(new Q.Lanzadores({sheet: "lanzador2", sheetP: "proyectil2", x: 1250, y: 910, horizontal: false, lanzar: 1}))
+            stage.insert(new Q.Lanzadores({sheet: "lanzador2", sheetP: "proyectil2", x: 1250, y: 910, horizontal: false, lanzar: 2}))
             stage.insert(new Q.Lanzadores({sheet: "lanzador2", sheetP: "proyectil2", x: 1450, y: 910, horizontal: false, lanzar: 1.5}))
             //Enemigos despues de lanzadores
             stage.insert(new Q.EnemyVolador({ sheet: "enemy9", horizontal: false, x: 1550, y: 950, velocidadY: 70, vy: 70, minY: 929, maxY: 1080, x_reaparicion: 1550, y_reaparicion: 950 }));
             stage.insert(new Q.EnemyVolador({ sheet: "koopaV", sprite: "koopa_animations", x: 1650, y: 1050, velocidadX: 85, vx: 85, minX: 1500, maxX: 1700, x_reaparicion: 1650, y_reaparicion: 1050 }));
             stage.insert(new Q.EnemyVolador({ sheet: "enemy12", sprite: "planta_animations", horizontal: false, x: 1800, y: 1140, velocidadY: 90, vy: 90, minY: 1000, maxY: 1140, x_reaparicion: 1800, y_reaparicion: 1140 }));
+            stage.insert(new Q.Barrera({ x: 1900, y: 1100, vy: 100, velocidad:100}));
+            stage.insert(new Q.Barrera({ x: 2100, y: 1100, vy: 200, velocidad:200}));
+            stage.insert(new Q.Barrera({ x: 2250, y: 1100, vy: 150, velocidad:150}));
+            stage.insert(new Q.Flower({ x: 2600, y: 1050 }));
+
             //Monedas
             stage.insert(new Q.Moneda({x: 800, y: 920}));
             stage.insert(new Q.Moneda({x: 1200, y: 1150}));
@@ -342,7 +350,7 @@ var game = function () {
             nivel += 1;
             button.on("click", function () {
                 Q.clearStages();
-                 Q.stageScene("carga");
+                Q.stageScene("carga");
                 /*
                 if (nivel == 1) {
                     Q.stageScene("level1");
@@ -422,7 +430,6 @@ var game = function () {
             Q.stageTMX("carga.tmx", stage);
             stage.insert(new Q.Carga({x: 550, y: 200}));
             stage.insert(new Q.BebeMario({x: -50, y: 450}));
-            //Q.stageScene("level2");
         });
 
         //Ventana de fin del juego
@@ -489,7 +496,40 @@ var game = function () {
                         i++;
                     }
                     numeroMonedas[nivel] = monedas;
-                } 
+                }
+                else if (nivel == 3) {
+	                Q.stageScene("level3");
+                    // Inicializamos los labels de los contadores que se mostraran por pantalla
+                    Q.state.reset({totalVidas: 0, totalMonedas: 0});
+                    console.log("Cambio de nivel 2");
+                    // Inicializo las vidas
+                    Q.stageScene("sumaVidas", 1);
+	                var i = 0, contador = vidas;              
+	                while(i < contador){
+	                    Q.state.inc("totalVidas", 1);
+	                    i++;
+	                }
+	                vidas = contador;
+
+                    // Inicializo las monedas
+                    Q.stageScene("sumaMonedas", 2);
+                    console.log("Numero de monedas: "+numeroMonedas[nivel]);
+
+                    var i = 1, monedas = 0;
+                    // Miro las monedas de los anteriores niveles
+                    while(i < nivel){
+                        monedas += numeroMonedas[i];
+                        i++;
+                    }
+                    i = 0;
+                    while(i != monedas){
+                        Q.state.inc("totalMonedas", 1);
+                        console.log("Veces");
+                        i++;
+                    }
+                    numeroMonedas[nivel] = monedas;
+                    console.log("Numero de monedas: "+numeroMonedas[nivel]);
+	            }  
             });
             box.fit(20);
         });
@@ -673,7 +713,7 @@ var game = function () {
             });
             //Si le salta encima el player lo mata
             this.on("bump.top", function (collision) {
-                if (collision.obj.isA("Player") && !collision.obj.helicoptero) {
+                if (collision.obj.isA("Player") && !collision.obj.p.helicoptero) {
                     console.log("die");
                     collision.obj.p.vy = -500;
                     if (this.p.reaparecer) {
@@ -691,7 +731,7 @@ var game = function () {
                     }
                     else this.destroy();
                 }
-                else if (collision.obj.isA("Player") && collision.obj.helicoptero) {
+                else if (collision.obj.isA("Player") && collision.obj.p.helicoptero) {
                 	Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -1433,6 +1473,39 @@ var game = function () {
                     }
                     numeroMonedas[nivel] = monedas;
                     console.log("Numero de monedas: "+numeroMonedas[nivel]);
+	            }
+	            else if (nivel == 3) {
+	                Q.stageScene("level3");
+                    // Inicializamos los labels de los contadores que se mostraran por pantalla
+                    Q.state.reset({totalVidas: 0, totalMonedas: 0});
+                    console.log("Cambio de nivel 3");
+                    // Inicializo las vidas
+                    Q.stageScene("sumaVidas", 1);
+	                var i = 0, contador = vidas;              
+	                while(i < contador){
+	                    Q.state.inc("totalVidas", 1);
+	                    i++;
+	                }
+	                vidas = contador;
+
+                    // Inicializo las monedas
+                    Q.stageScene("sumaMonedas", 2);
+                    console.log("Numero de monedas: "+numeroMonedas[nivel]);
+
+                    var i = 1, monedas = 0;
+                    // Miro las monedas de los anteriores niveles
+                    while(i < nivel){
+                        monedas += numeroMonedas[i];
+                        i++;
+                    }
+                    i = 0;
+                    while(i != monedas){
+                        Q.state.inc("totalMonedas", 1);
+                        console.log("Veces");
+                        i++;
+                    }
+                    numeroMonedas[nivel] = monedas;
+                    console.log("Numero de monedas: "+numeroMonedas[nivel]);
 	            } 
             }
         }
@@ -1497,6 +1570,43 @@ var game = function () {
         step: function (dt) {
         	if(this.p.vx < 0) this.play("run_left");
         	else if(this.p.vx> 0) this.play("run_right");
+        }
+    });
+
+    // Barrera
+    Q.Sprite.extend("Barrera", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "barrera",
+                sprite: "",
+                angle:0,
+                velocidad: 0
+            });
+            this.p.gravityY = 0;
+            this.add('2d, aiBounce, animation');
+            this.on("bump.left,bump.right", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    Q.stageScene("endGame", 1, { label: "You Died" });
+                    collision.obj.destroy();
+                }
+            });
+            this.on("bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    Q.stageScene("endGame", 1, { label: "You Died" });
+                    collision.obj.destroy();
+                }
+                else this.p.vy = this.p.velocidad;
+            });
+            this.on("bump.bottom", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    Q.stageScene("endGame", 1, { label: "You Died" });
+                    collision.obj.destroy();
+                }
+                else this.p.vy = -this.p.velocidad;
+            });
+        },
+        step: function (dt) {
+        	this.p.angle +=1;
         }
     });
 }
