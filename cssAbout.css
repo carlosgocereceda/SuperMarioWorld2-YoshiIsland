@@ -1,11 +1,8 @@
-html{
-    height:100%;
-    width:100%;
-}
+
 body{
     background: url("fondo.png");
     background-repeat: no-repeat;
-    background-size:100% 100%;
+    background-size:cover;    
     font-family: 'Wendy One', sans-serif;
 }
 .header{
@@ -34,4 +31,19 @@ h1{
     width: 400px;
     margin: auto;
     margin-top: 75px;
+}
+h2{
+    width: 400px;
+    margin:auto;
+    margin-bottom:40px;
+}
+.fotos_herramientas{
+    width:1200px;
+    margin:auto;
+    margin-bottom: 40px;
+}
+h5{
+    font-size: 30px; 
+    width:1000px;
+    margin:auto;
 }
