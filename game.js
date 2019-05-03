@@ -468,6 +468,7 @@ var game = function () {
                        
     
                         // Inicializo el label de monedas
+                        numeroMonedas[nivel] = 0;
                         Q.stageScene("sumaMonedas", 2);  
     
                         // Inicializo el label de enemigosMuertos
@@ -478,7 +479,7 @@ var game = function () {
                     else if (nivel == 2){
                         // Si muere en el nivel 2, pierde las monedas del nivel 1
                         Q.stageScene("level2");
-                        Q.state.reset({totalMonedas: 0, totalVidas: 0});
+                        Q.state.reset({totalMonedas: 0, totalVidas: 0, totalEnemigosMuertos: 0});
                         // Resto una vida
                         Q.stageScene("sumaVidas", 1); 
                         var i = 0, contador = vidas; 
@@ -503,15 +504,19 @@ var game = function () {
                             i++;
                         }
                         numeroMonedas[nivel] = monedas;
+                        // Inicializo el label de enemigosMuertos
+                        enemigosMuertos = 0;
+                        Q.stageScene("sumaEnemigosMuertos", 3);
                     }
                     else if (nivel == 3) {
                         Q.stageScene("level3");
                         // Inicializamos los labels de los contadores que se mostraran por pantalla
-                        Q.state.reset({totalVidas: 0, totalMonedas: 0});
+                        Q.state.reset({totalVidas: 0, totalMonedas: 0, totalEnemigosMuertos: 0});
                         console.log("Cambio de nivel 2");
                         // Inicializo las vidas
                         Q.stageScene("sumaVidas", 1);
-                        var i = 0, contador = vidas;              
+                        var i = 0, contador = vidas; 
+                        --contador;             
                         while(i < contador){
                             Q.state.inc("totalVidas", 1);
                             i++;
@@ -536,9 +541,14 @@ var game = function () {
                         }
                         numeroMonedas[nivel] = monedas;
                         console.log("Numero de monedas: "+numeroMonedas[nivel]);
+
+                        // Inicializo el label de enemigosMuertos
+                        enemigosMuertos = 0;
+                        Q.stageScene("sumaEnemigosMuertos", 3);
                     }  
                 }
                 else{
+                    vidas = 5;
                     Q.stageScene("mainMenu");
                 }
                 
@@ -704,6 +714,7 @@ var game = function () {
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.EnemyVolador({
@@ -730,6 +741,7 @@ var game = function () {
             this.on("bump.top", function (collision) {
                 if (collision.obj.isA("Player") && !collision.obj.p.helicoptero) {
                     console.log("die");
+                    sumaEnemigo();
                     collision.obj.p.vy = -500;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.EnemyVolador({
@@ -746,11 +758,13 @@ var game = function () {
                     }
                     else this.destroy();
                 }
+                // Esto de aqui no se si funciona
                 else if (collision.obj.isA("Player") && collision.obj.p.helicoptero) {
                 	Q.stageScene("endGame", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.EnemyVolador({
@@ -953,13 +967,14 @@ var game = function () {
                                     stag.insert(nuevo);
                                 }, 10000);
                             }
-                            else if (items[i].isA("EnemyVolador") && items[i].reaparecer) {
+                            else if (items[i].isA("EnemyVolador") && items[i]["p"]["reaparecer"] /*items[i].reaparecer*/) {
+                                sumaEnemigo();
                                 var nuevo = new Q.EnemyVolador({
                                     sprite: items[i]["p"]["sprite"], sheet: items[i]["p"]["sheet"],
                                     reaparecer: items[i]["p"]["reaparecer"], x_reaparicion: items[i]["p"]["x_reaparicion"],
                                     y_reaparicion: items[i]["p"]["y_reaparicion"], x: items[i]["p"]["x_reaparicion"], vy: items[i]["p"]["vy"], vx: items[i]["p"]["vx"],
                                     y: items[i]["p"]["y_reaparicion"], velocidad: items[i]["p"]["velocidad"], horizontal: items[i]["p"]["horizontal"],
-                                    maxX: items[i]["p"]["maxX"], maxY: iitems[i]["p"]["maxY"], minX: items[i]["p"]["minX"], minY: items[i]["p"]["minY"]
+                                    maxX: items[i]["p"]["maxX"], maxY: items[i]["p"]["maxY"], minX: items[i]["p"]["minX"], minY: items[i]["p"]["minY"]
                                 });
                                 var stag = this.stage;
                                 items[i].destroy();
@@ -967,7 +982,8 @@ var game = function () {
                                     stag.insert(nuevo);
                                 }, 10000);
                             }
-                            else if (items[i].isA("Planta") && items[i].reaparecer) {
+                            else if (items[i].isA("Planta") && items[i]["p"]["reaparecer"]) {
+                                sumaEnemigo();
                                 var nuevo = new Q.Planta({
                                     sprite: items[i]["p"]["sprite"], sheet: items[i]["p"]["sheet"],
                                     reaparecer: items[i]["p"]["reaparecer"], x: items[i]["p"]["x"],
@@ -1231,6 +1247,7 @@ var game = function () {
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.Planta({
@@ -1305,6 +1322,7 @@ var game = function () {
                     	this.p.sheet = "chomp3";
                     }
                     else if(this.p.golpes == 3) {
+                        sumaEnemigo();
 	                    if (this.p.reaparecer) {
 	                        var nuevo = new Q.Chomp({
 	                            sprite: this.p.sprite, sheet: "chomp1", reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
@@ -1335,6 +1353,7 @@ var game = function () {
                     	this.p.sheet = "chomp3";
                     }
                     else if(this.p.golpes == 3) {
+                        sumaEnemigo();
 	                    if (this.p.reaparecer) {
 	                        var nuevo = new Q.Chomp({
 	                            sprite: this.p.sprite, sheet: "chomp1", reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
@@ -1361,6 +1380,7 @@ var game = function () {
                     	this.p.sheet = "chomp3";
                     }
                     else if(this.p.golpes == 3) {
+                        sumaEnemigo();
 	                    if (this.p.reaparecer) {
 	                        var nuevo = new Q.Chomp({
 	                            sprite: this.p.sprite, sheet: "chomp1", reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
@@ -1460,6 +1480,7 @@ var game = function () {
             this.play("run_right");
             console.log(this.p.x);
             console.log(this.p.y);
+            
             if(this.p.x > 1150) {
                 
             	if(nivel == 1) {
@@ -1487,7 +1508,7 @@ var game = function () {
 	            else if (nivel == 2) {
 	                Q.stageScene("level2");
                     // Inicializamos los labels de los contadores que se mostraran por pantalla
-                    Q.state.reset({totalVidas: 0, totalMonedas: 0});
+                    Q.state.reset({totalVidas: 0, totalMonedas: 0, totalEnemigosMuertos: 0});
                     console.log("Cambio de nivel 2");
                     // Inicializo las vidas
                     Q.stageScene("sumaVidas", 1);
@@ -1516,11 +1537,13 @@ var game = function () {
                     }
                     numeroMonedas[nivel] = monedas;
                     console.log("Numero de monedas: "+numeroMonedas[nivel]);
+                    // Creacion del contador de enemigosMuertos
+                    Q.stageScene("sumaEnemigosMuertos", 3);
 	            }
 	            else if (nivel == 3) {
 	                Q.stageScene("level3");
                     // Inicializamos los labels de los contadores que se mostraran por pantalla
-                    Q.state.reset({totalVidas: 0, totalMonedas: 0});
+                    Q.state.reset({totalVidas: 0, totalMonedas: 0, totalEnemigosMuertos: 0});
                     console.log("Cambio de nivel 3");
                     // Inicializo las vidas
                     Q.stageScene("sumaVidas", 1);
@@ -1549,6 +1572,8 @@ var game = function () {
                     }
                     numeroMonedas[nivel] = monedas;
                     console.log("Numero de monedas: "+numeroMonedas[nivel]);
+                    // Creacion del contador de enemigosMuertos
+                    Q.stageScene("sumaEnemigosMuertos", 3);
 	            } 
             }
         }
@@ -1663,9 +1688,7 @@ var game = function () {
         else{
             // Reinicio los contadores
             Q.state.dec("totalEnemigosMuertos", enemigosMuertos);
-            enemigosMuertos = 0;
-            //Q.state.set({totalEnemigosMuertos: 0});
-           
+            enemigosMuertos = 0;      
 
             // Para que el jugador no se infle a vidas
             if(vidas < maxVida){
