@@ -1,0 +1,44 @@
+html{
+    height:100%;
+    width:100%;
+}
+body{
+    background: url("fondo.png");
+    background-repeat: no-repeat;
+    background-size:100% 100%;
+    font-family: 'Wendy One', sans-serif;
+}
+.header{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #06192C;
+}
+a{
+	text-decoration-line: unset;
+    color:#9362BD;
+    font-size: 20px;
+}
+.header{
+    padding: 10px;
+}
+p{
+    margin-left: 50px;
+    font-size: 30px; 
+    width: 500px;
+    margin:auto;
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+img{
+    width: 30px;   
+    margin-left: 20px;
+    margin-right: 10px; 
+}
+.guille, .victor, .carlos{
+    
+    font-size: 30px; 
+    width: 600px;
+    margin:auto;
+    margin-top: 40px;
+}
