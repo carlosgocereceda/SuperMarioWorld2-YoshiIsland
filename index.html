@@ -43,12 +43,24 @@
       </a>
     </div>
   </div>
+
   <canvas id='myGame'>
 
   </canvas>
   <script type="text/javascript">
     window.onload = game;
   </script>
+
+  <script>
+    function myFunction() {
+      if (document.body.style.background == "black") {
+        document.body.style.background = "url(fondo.png)";
+        console.log("holi")
+      }
+      else document.body.style.background = "black"
+    }
+  </script>
+  <img src="images/web/bombilla.png" alt="Oscurecer" id="demo" onclick="myFunction()" />
   <p>
     Estas son algunas instrucciones básicas para jugar
   </p>
