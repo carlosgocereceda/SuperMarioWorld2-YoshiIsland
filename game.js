@@ -27,9 +27,11 @@ var game = function () {
     "ascensor.png, ascensor.json, moneda.png, moneda.json, YoshiTransformations.png, placa_helicoptero.json," +
     " vida.png, vidas.json, plantaPirana.png, plantaPirana.json, chomp.png, chomp.json," +
     "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json, titulo.json, titulo.png," +
-    "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json, GOAL.png, GOAL.json"
+    "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json, "+
+     "GOAL.png, GOAL.json, yoshiGOAL.png, goalYoshi.json"
     , function () {
 
+        Q.compileSheets("yoshiGOAL.png", "goalYoshi.json");
         Q.compileSheets("GOAL.png", "GOAL.json");
 
         // Enemigos nivel 1 terrestres
@@ -365,7 +367,7 @@ var container = stage.insert(new Q.UI.Container({
   }));
   // Hacer una clase especifica, para la imagen
 stage.insert(new Q.fotoSimple({x: 550, y: 200, sheet: "goal"}));
-stage.insert(new Q.fotoSimple({x: 550, y: 200, sheet: "goalYoshi"}));
+stage.insert(new Q.fotoSimple({x: 600, y: 200, sheet: "goal_Yoshi"}));
 
 // Button para continuar
   var boton = stage.insert(new Q.UI.Button({
