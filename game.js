@@ -27,8 +27,12 @@ var game = function () {
     "ascensor.png, ascensor.json, moneda.png, moneda.json, YoshiTransformations.png, placa_helicoptero.json," +
     " vida.png, vidas.json, plantaPirana.png, plantaPirana.json, chomp.png, chomp.json," +
     "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json, titulo.json, titulo.png," +
-    "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json"
+    "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json, "+
+     "GOAL.png, GOAL.json, yoshiGOAL.png, goalYoshi.json"
     , function () {
+
+        Q.compileSheets("yoshiGOAL.png", "goalYoshi.json");
+        Q.compileSheets("GOAL.png", "GOAL.json");
 
         // Enemigos nivel 1 terrestres
         Q.compileSheets("enemigos.png", "enemyTerrestres.json");
@@ -180,7 +184,7 @@ var game = function () {
            //Final
             stage.insert(new Q.Flower({ x: 4362, y: 550 }));
             // NO BORRAR ES PARA PROBAR QUE PASA ENTRE NIVELES
-           // stage.insert(new Q.Flower({ x: 500, y: 660 }));
+            stage.insert(new Q.Flower({ x: 500, y: 660 }));
            
             // Monedas           
             stage.insert(new Q.Moneda({x: 700, y: 600}));
@@ -337,53 +341,51 @@ var game = function () {
 
         // Cartel de pasar al siguiente nivel
         Q.scene('winGame', function (stage) {
-            var box = stage.insert(new Q.UI.Container({
+            /*var box = stage.insert(new Q.UI.Container({
                 x: Q.width / 2, y: Q.height / 2, fill: "rgba(255,255,255,0.5)"
+                // Nuevo imagen
+               // ,asset: 'moneda.png'
             }));
 
             var button = box.insert(new Q.UI.Button({
                 x: 0, y: 0, fill: "#CCCCCC",
                 label: "Play Next Level"
-            }))
+            }));
             var label = box.insert(new Q.UI.Text({
                 x: 10, y: -10 - button.p.h,
                 label: "You win Level " + nivel
-            }));
-            nivel += 1;
-            button.on("click", function () {
+                ,asset: 'moneda.png'
+            }));*/
+
+/*
+Esto es lo k hay que hacer 
+*/
+var container = stage.insert(new Q.UI.Container({
+    //fill: "gray",
+    y: 50,
+    x: Q.width/2 
+  }));
+  // Hacer una clase especifica, para la imagen
+stage.insert(new Q.fotoSimple({x: 550, y: 200, sheet: "goal"}));
+stage.insert(new Q.fotoSimple({x: 600, y: 200, sheet: "goal_Yoshi"}));
+
+// Button para continuar
+  var boton = stage.insert(new Q.UI.Button({
+    label: "Continuar",
+    fill: "#90EC38",
+    shadowColor: "rgba(255,255,255,1.0)",
+    y: 200,
+    x: 0
+  }), container); 
+            boton.on("click", function () {
+                nivel += 1;
                 Q.clearStages();
                 Q.stageScene("carga");
-                /*
-                if (nivel == 1) {
-                    Q.stageScene("level1");
-                    Q.stageScene("sumaMonedas", 1);
-                }
-                    
-                else if (nivel == 2){
-                    Q.stageScene("level2");
-                    console.log("Cambio de nivel 2");
-                    Q.state.reset({totalMonedas: 0});
-                    Q.stageScene("sumaMonedas", 1);
-                    console.log("Numero de monedas: "+numeroMonedas[nivel]);
-
-                    var i = 1, monedas = 0;
-                    // Miro las monedas de los anteriores niveles
-                    while(i < nivel){
-                        monedas += numeroMonedas[i];
-                        i++;
-                    }
-                    i = 0;
-                    while(i != monedas){
-                        Q.state.inc("totalMonedas", 1);
-                        console.log("Veces");
-                        i++;
-                    }
-                    numeroMonedas[nivel] = monedas;
-                    console.log("Numero de monedas: "+numeroMonedas[nivel]);
-                    
-                }*/
             });
-            box.fit(20);
+});
+
+            
+            //box.fit(20);
         });
         //Menu inicial
         Q.scene('mainMenu', function(stage){
@@ -555,7 +557,7 @@ var game = function () {
             });
             box.fit(20);
         });
-    });
+    //});
     //Enemy(fantasmas de colores terrestres)
     Q.Sprite.extend("EnemyTerrestre", {
         init: function (p) {
@@ -1699,4 +1701,13 @@ var game = function () {
             
         }
     }
+    Q.Sprite.extend("fotoSimple", {
+        init: function (p) {
+            this._super(p, {
+                sheet: ""
+            });
+            this.p.gravityY = 0;
+            this.add('2d, tween');
+        }
+    });
 }
