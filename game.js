@@ -699,7 +699,9 @@ var game = function () {
                     this.destroy();
                     Q.stageScene("winGame", 1);
                     collision.obj.destroy();
+                    Q.audio.stop(musica);
                     Q.audio.play("MusicaWin.mp3");
+                    musica = "MusicaWin.mp3";
                 }
             });
         }
