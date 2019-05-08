@@ -343,22 +343,6 @@ var game = function () {
 
             // Cartel de pasar al siguiente nivel
             Q.scene('winGame', function (stage) {
-                /*var box = stage.insert(new Q.UI.Container({
-                    x: Q.width / 2, y: Q.height / 2, fill: "rgba(255,255,255,0.5)"
-                    // Nuevo imagen
-                   // ,asset: 'moneda.png'
-                }));
-    
-                var button = box.insert(new Q.UI.Button({
-                    x: 0, y: 0, fill: "#CCCCCC",
-                    label: "Play Next Level"
-                }));
-                var label = box.insert(new Q.UI.Text({
-                    x: 10, y: -10 - button.p.h,
-                    label: "You win Level " + nivel
-                    ,asset: 'moneda.png'
-                }));*/
-
                 /*
                 Esto es lo k hay que hacer 
                 */
@@ -384,9 +368,6 @@ var game = function () {
                     Q.stageScene("carga");
                 });
             });
-
-
-            //box.fit(20);
         });
     //Menu inicial
     Q.scene('mainMenu', function (stage) {
@@ -1145,29 +1126,8 @@ var game = function () {
         }
     });
 
-    // Suma monedas al contador
-    Q.scene("sumaMonedas", function (stage) {
-        console.log("Entro en sumaMonedas");
-        //var label2 = stage.insert(new Q.UI.Text({ x: Q.width/2 - 440, y: 35, scale:1.5, label2: "0" , color: "rgba(255,164,032,1)"}));
-        // Esto es el contador que ira cambiando
-        var label2 = stage.insert(new Q.UI.Text({ x: Q.width / 2 - 205, y: 15, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
-
-        Q.state.on("change.totalMonedas", this, function (coin) {
-            label2.p.label = "" + coin;
-            numeroMonedas[nivel]++;
-        });
-        // La imagen 
-        stage.insert(new Q.UI.Button({
-            asset: 'moneda.png',
-            x: Q.width / 2 - 280,
-            scale: 1.5,
-            y: 35
-        }, function () {
-            this.p.angle += 90;
-        }));
-    });
-    // Sumador de vidas
-    Q.scene("sumaVidas", function (stage) {
+     // Sumador de vidas
+     Q.scene("sumaVidas", function (stage) {
         console.log("Entro en sumaVidas");
         // Contador de numero de vidas
         var label1 = stage.insert(new Q.UI.Text({ x: Q.width / 2 - 440, y: 15, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
@@ -1185,11 +1145,32 @@ var game = function () {
             this.p.angle += 90;
         }));
     });
+    // Suma monedas al contador
+    Q.scene("sumaMonedas", function (stage) {
+        console.log("Entro en sumaMonedas");
+        // Esto es el contador que ira cambiando
+        var label2 = stage.insert(new Q.UI.Text({ x: 220, y: 15, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
+
+        Q.state.on("change.totalMonedas", this, function (coin) {
+            label2.p.label = "" + coin;
+            numeroMonedas[nivel]++;
+        });
+        // La imagen 
+        stage.insert(new Q.UI.Button({
+            asset: 'moneda.png',
+            x: 180,
+            scale: 1.5,
+            y: 35
+        }, function () {
+            this.p.angle += 90;
+        }));
+    });
+   
     // Sumador de enemigosMuertos
     Q.scene("sumaEnemigosMuertos", function (stage) {
         console.log("Entro en sumaEnemigos");
         // Contador de numero de enemigosMuertos
-        var label1 = stage.insert(new Q.UI.Text({ x: Q.width / 2 - 440, y: 100, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
+        var label1 = stage.insert(new Q.UI.Text({ x: 360, y: 20, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
         Q.state.on("change.totalEnemigosMuertos", this, function (die) {
             label1.p.label = "" + die;
             enemigosMuertos++;
@@ -1197,9 +1178,9 @@ var game = function () {
         // Imagen
         stage.insert(new Q.UI.Button({
             asset: 'logoEnemigosVencidos.png',
-            x: Q.width / 2 - 500,
+            x: 300,
             scale: 1.5,
-            y: 120
+            y: 40
         }, function () {
             this.p.angle += 90;
         }));
@@ -1703,6 +1684,8 @@ var game = function () {
 
         }
     }
+
+    // Clase que pinta una foto pasada por sheet
     Q.Sprite.extend("fotoSimple", {
         init: function (p) {
             this._super(p, {
