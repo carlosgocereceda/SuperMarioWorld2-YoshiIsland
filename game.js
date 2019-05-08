@@ -29,8 +29,8 @@ var game = function () {
         " vida.png, vidas.json, plantaPirana.png, plantaPirana.json, chomp.png, chomp.json," +
         "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json, titulo.json, titulo.png," +
         "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json, " +
-        "GOAL.png, GOAL.json, yoshiGOAL.png, goalYoshi.json, Musica - Castillo (nivel 5).mp3, Musica - Jardin (Nivel 4).mp3, " +
-        "Musica - Menu Inicio.mp3, Musica - Moneda.mp3, Musica - Nivel ganado.mp3, Musica- No quedan vidas.mp3"
+        "GOAL.png, GOAL.json, yoshiGOAL.png, goalYoshi.json, MusicaCastillo.mp3, MusicaJardin.mp3, " +
+        "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3"
         , function () {
 
             Q.compileSheets("yoshiGOAL.png", "goalYoshi.json");
@@ -428,7 +428,7 @@ var game = function () {
             nivel = 1;
             Q.stageScene("carga");
         });
-        Q.audio.play("Musica - Menu Inicio.mp3");
+        Q.audio.play("MusicaMenu.mp3");
 
     });
 
