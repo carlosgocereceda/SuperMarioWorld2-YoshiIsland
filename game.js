@@ -32,7 +32,7 @@ var game = function () {
         "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json, " +
         "GOAL.png, GOAL.json, yoshiGOAL.png, goalYoshi.json, MusicaCastillo.mp3, MusicaJardin.mp3, " +
         "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, "+
-        "MusicaNivel3.mp3"
+        "MusicaNivel3.mp3, yoshi-tongue.mp3"
         , function () {
 
             Q.compileSheets("yoshiGOAL.png", "goalYoshi.json");
@@ -956,6 +956,7 @@ var game = function () {
         },
         attack: function () {
             if (!this.p.helicoptero) {
+                Q.audio.play("yoshi-tongue.mp3");
                 this.p.atancando = true;
                 console.log("atacando");
                 console.log(this.stage.items);
