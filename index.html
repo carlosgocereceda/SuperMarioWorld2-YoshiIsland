@@ -55,9 +55,12 @@
     function myFunction() {
       if (document.body.style.background == "black") {
         document.body.style.background = "url(fondo.png)";
-        console.log("holi")
+        document.body.style.color = "black";
       }
-      else document.body.style.background = "black"
+      else{
+        document.body.style.background = "black";
+        document.body.style.color = "white";
+      } 
     }
   </script>
   <img src="images/web/bombilla.png" alt="Oscurecer" id="demo" onclick="myFunction()" />
