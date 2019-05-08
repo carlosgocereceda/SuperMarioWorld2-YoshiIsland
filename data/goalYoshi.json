@@ -2,8 +2,8 @@
     "goal_Yoshi":{
         "sx": 0,
         "sy": 0,
-        "tileW":26,
-        "tileH":39,
+        "tileW":121,
+        "tileH":181,
         "frames": 0
     }
 }

@@ -2,8 +2,8 @@
     "goal":{
         "sx": 0,
         "sy": 0,
-        "tileW":175,
-        "tileH":63,
+        "tileW":642,
+        "tileH":231,
         "frames": 0
     }
 }
