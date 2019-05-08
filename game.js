@@ -3,10 +3,11 @@ var game = function () {
         huevos,
         numeroMonedas = [0, 0, 0],
         vidas = 5, maxVida = 10,
-        enemigosMuertos = 0, enemigosParaVida = 2;
+        enemigosMuertos = 0, enemigosParaVida = 2,
+        musica = "";
     //Función a la que se llamará cuando se cargue el juego
     //Objeto Quinus con los modulos que necesitamos
-    var Q = window.Q = Quintus()
+    var Q = window.Q = Quintus({ audioSupported: ['mp3'] })
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
         // Maximize this game to whatever the size of the browser is
         .setup("myGame", {
@@ -30,7 +31,8 @@ var game = function () {
         "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json, titulo.json, titulo.png," +
         "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json, " +
         "GOAL.png, GOAL.json, yoshiGOAL.png, goalYoshi.json, MusicaCastillo.mp3, MusicaJardin.mp3, " +
-        "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3"
+        "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, "+
+        "MusicaNivel3.mp3, yoshi-tongue.mp3"
         , function () {
 
             Q.compileSheets("yoshiGOAL.png", "goalYoshi.json");
@@ -162,14 +164,14 @@ var game = function () {
 
                 stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));
                 //Enemigos terrestres
-                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1000, vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800, }));
-                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 500, vx: 50, vy: 450, y: 660, x_reaparicion: 500, y_reaparicion: 660, y_caida: 800, }));
-                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 600, vy: 450, vx: -50, y: 660, x_reaparicion: 600, y_reaparicion: 660, y_caida: 800, }));
+                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1000, vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800, velocidad: 50 }));
+                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 500, vx: 50, vy: 450, y: 660, x_reaparicion: 500, y_reaparicion: 660, y_caida: 800, velocidad: 50}));
+                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 600, vy: 450, vx: -50, y: 660, x_reaparicion: 600, y_reaparicion: 660, y_caida: 800, velocidad: -50}));
                 stage.insert(new Q.EnemyTerrestre({ sheet: "enemy3", x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true, x_reaparicion: 1100, y_reaparicion: 600, y_caida: 800, }));
                 //Enemigos de las tuberias
-                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600 }));
-                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600 }));
-                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy3", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600 }));
+                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600, velocidad: 50}));
+                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600, velocidad: 50}));
+                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy3", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600, velocidad: 50}));
                 //Enemigos antes de las nubes
                 stage.insert(new Q.EnemyVolador({ sheet: "enemy4", x: 1100, y: 470, velocidadX: 50, vx: 50, minX: 1070, maxX: 1400, x_reaparicion: 1100, y_reaparicion: 470 }));
                 stage.insert(new Q.EnemyVolador({ sheet: "enemy5", horizontal: false, x: 1490, y: 500, velocidadY: 70, vy: 70, minY: 350, maxY: 550, x_reaparicion: 1490, y_reaparicion: 500 }));
@@ -192,7 +194,9 @@ var game = function () {
                 stage.insert(new Q.Moneda({ x: 700, y: 600 }));
                 stage.insert(new Q.Moneda({ x: 2630, y: 600 }));
                 stage.insert(new Q.Moneda({ x: 3950, y: 610 }));
-
+                Q.audio.stop(musica);
+                Q.audio.play("MusicaNivel1.mp3");
+                musica = "MusicaNivel1.mp3";
             });
 
             Q.scene("level2", function (stage) {
@@ -234,6 +238,9 @@ var game = function () {
                 stage.insert(new Q.Moneda({ x: 800, y: 920 }));
                 stage.insert(new Q.Moneda({ x: 1200, y: 1150 }));
                 stage.insert(new Q.Moneda({ x: 1300, y: 920 }));
+                Q.audio.stop(musica);
+                Q.audio.play("MusicaNivel2.mp3");
+                musica = "MusicaNivel2.mp3";
             });
 
             Q.scene("level3", function (stage) {
@@ -280,6 +287,9 @@ var game = function () {
                 stage.insert(new Q.Moneda({ x: 1309, y: 340 }));
                 stage.insert(new Q.Moneda({ x: 2985, y: 550 }));
 
+                Q.audio.stop(musica);
+                Q.audio.play("MusicaNivel3.mp3");
+                musica = "MusicaNivel3.mp3";
 
             });
 
@@ -332,6 +342,9 @@ var game = function () {
                     y: 200
                 }));
                 stage.insert(new Q.Placa_helicoptero({ x: 4000, y: 240 }));
+                Q.audio.stop(musica);
+                Q.audio.play("MusicaMenu.mp3");
+                musica = "MusicaMenu.mp3";
             });
 
 
@@ -408,7 +421,9 @@ var game = function () {
             nivel = 1;
             Q.stageScene("carga");
         });
+        Q.audio.stop(musica);
         Q.audio.play("MusicaMenu.mp3");
+        musica = "MusicaMenu.mp3";
 
     });
 
@@ -627,6 +642,7 @@ var game = function () {
             });
         },
         step: function (dt) {
+        	console.log(this.p.vx);
             if (this.p.vx > 0)
                 this.play("run_right");
             else
@@ -664,6 +680,9 @@ var game = function () {
                     this.destroy();
                     Q.stageScene("winGame", 1);
                     collision.obj.destroy();
+                    Q.audio.stop(musica);
+                    Q.audio.play("MusicaWin.mp3");
+                    musica = "MusicaWin.mp3";
                 }
             });
         }
@@ -920,6 +939,7 @@ var game = function () {
         },
         attack: function () {
             if (!this.p.helicoptero) {
+                Q.audio.play("yoshi-tongue.mp3");
                 this.p.atancando = true;
                 console.log("atacando");
                 console.log(this.stage.items);
@@ -942,7 +962,7 @@ var game = function () {
                                     sprite: items[i]["p"]["sprite"], sheet: items[i]["p"]["sheet"],
                                     reaparecer: items[i]["p"]["reaparecer"], x_reaparicion: items[i]["p"]["x_reaparicion"],
                                     y_reaparicion: items[i]["p"]["y_reaparicion"], y_caida: items[i]["p"]["y_caida"],
-                                    x: items[i]["p"]["x_reaparicion"], vy: items[i]["p"]["vy"], vx: items[i]["p"]["vx"],
+                                    x: items[i]["p"]["x_reaparicion"], vx: items[i]["p"]["velocidad"], vy: items[i]["p"]["vy"],
                                     y: items[i]["p"]["y_reaparicion"], darVuelta: items[i]["p"]["darVuelta"], velocidad: items[i]["p"]["velocidad"],
                                     x_vueltaMax: items[i]["p"]["x_vueltaMax"], x_vueltaMin: items[i]["p"]["x_vueltaMin"]
                                 });
@@ -952,13 +972,13 @@ var game = function () {
                                     stag.insert(nuevo);
                                 }, 10000);
                             }
-                            else if (items[i].isA("EnemyVolador") && items[i]["p"]["reaparecer"] /*items[i].reaparecer*/) {
+                            else if (items[i].isA("EnemyVolador") && items[i]["p"]["reaparecer"]) {
                                 sumaEnemigo();
                                 var nuevo = new Q.EnemyVolador({
                                     sprite: items[i]["p"]["sprite"], sheet: items[i]["p"]["sheet"],
                                     reaparecer: items[i]["p"]["reaparecer"], x_reaparicion: items[i]["p"]["x_reaparicion"],
-                                    y_reaparicion: items[i]["p"]["y_reaparicion"], x: items[i]["p"]["x_reaparicion"], vy: items[i]["p"]["vy"], vx: items[i]["p"]["vx"],
-                                    y: items[i]["p"]["y_reaparicion"], velocidad: items[i]["p"]["velocidad"], horizontal: items[i]["p"]["horizontal"],
+                                    y_reaparicion: items[i]["p"]["y_reaparicion"], x: items[i]["p"]["x_reaparicion"], vy: items[i]["p"]["velocidadY"], vx: items[i]["p"]["velocidadX"],
+                                    y: items[i]["p"]["y_reaparicion"], velocidadX: items[i]["p"]["velocidadX"], velocidadY: items[i]["p"]["velocidadY"], horizontal: items[i]["p"]["horizontal"],
                                     maxX: items[i]["p"]["maxX"], maxY: items[i]["p"]["maxY"], minX: items[i]["p"]["minX"], minY: items[i]["p"]["minY"]
                                 });
                                 var stag = this.stage;
@@ -1199,11 +1219,13 @@ var game = function () {
             this.add('2d, tween');
             this.on("bump.left,bump.right,bump.bottom, bump.top", function (collision) {
                 if (collision.obj.isA("Player") && !this.p.tocada) {
+                    Q.audio.play("MusicaMoneda.mp3");
                     Q.state.inc("totalMonedas", 1);
                     this.p.tocada = true;
                     this.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("MusicaMoneda.mp3");
                     collision.obj.destroy();
                 }
             });
