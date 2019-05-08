@@ -363,20 +363,19 @@ var game = function () {
                 Esto es lo k hay que hacer 
                 */
                 var container = stage.insert(new Q.UI.Container({
-                    //fill: "gray",
                     y: 50,
                     x: Q.width / 2
                 }));
                 // Hacer una clase especifica, para la imagen
-                stage.insert(new Q.fotoSimple({ x: 550, y: 200, sheet: "goal" }));
-                stage.insert(new Q.fotoSimple({ x: 600, y: 200, sheet: "goal_Yoshi" }));
+                stage.insert(new Q.fotoSimple({ x: 500, y: 200, sheet: "goal" }));
+                stage.insert(new Q.fotoSimple({ x: 900, y: 330, sheet: "goal_Yoshi" }));
 
                 // Button para continuar
                 var boton = stage.insert(new Q.UI.Button({
                     label: "Continuar",
                     fill: "#90EC38",
                     shadowColor: "rgba(255,255,255,1.0)",
-                    y: 200,
+                    y: 300,
                     x: 0
                 }), container);
                 boton.on("click", function () {
