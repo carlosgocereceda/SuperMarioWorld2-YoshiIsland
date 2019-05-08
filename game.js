@@ -979,7 +979,7 @@ var game = function () {
                                     sprite: items[i]["p"]["sprite"], sheet: items[i]["p"]["sheet"],
                                     reaparecer: items[i]["p"]["reaparecer"], x_reaparicion: items[i]["p"]["x_reaparicion"],
                                     y_reaparicion: items[i]["p"]["y_reaparicion"], y_caida: items[i]["p"]["y_caida"],
-                                    x: items[i]["p"]["x_reaparicion"], vx: items[i]["p"]["vvelocidad"],
+                                    x: items[i]["p"]["x_reaparicion"], vx: items[i]["p"]["velocidad"], vy: items[i]["p"]["vy"],
                                     y: items[i]["p"]["y_reaparicion"], darVuelta: items[i]["p"]["darVuelta"], velocidad: items[i]["p"]["velocidad"],
                                     x_vueltaMax: items[i]["p"]["x_vueltaMax"], x_vueltaMin: items[i]["p"]["x_vueltaMin"]
                                 });
