@@ -32,8 +32,10 @@ var game = function () {
         "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json, titulo.json, titulo.png," +
         "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json, " +
         "GOAL.png, GOAL.json, yoshiGOAL.png, goalYoshi.json, MusicaCastillo.mp3, MusicaJardin.mp3, " +
-        "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, " +
-        "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json, timer.png, timer.json"
+        "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, "+
+        "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json, timer.png, timer.json, " + 
+        "YoshiFlotar.mp3, YoshiSalto.mp3, SonidoPonerHuevo.mp3, SonidoDispararHuevo.mp3, SonidoAlMatarEnemigosConHuevo.mp3, " +
+        "MusicaCaidaOMuerte.mp3"
         , function () {
             // Pantalla de tiempo
             Q.compileSheets("timer.png", "timer.json");
@@ -143,7 +145,7 @@ var game = function () {
 
             //Animacion carga
             Q.animations('carga_animations', {
-                run_right: { frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], flip: "", rate: 1 / 5 }
+                run_right: { frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], flip: "", rate: 1 / 10 }
             })
 
             //Animacion Bebe Mario
@@ -443,35 +445,38 @@ var game = function () {
         stage.insert(new Q.BebeMario({ x: -50, y: 450 }));
     });
 
-    //Ventana de fin del juego
+    //Ventana de caida o muerte
     Q.scene('endLevel', function (stage) {
-        Q.stageTMX("carga.tmx", stage);
-        var container = stage.insert(new Q.UI.Container({
-            y: 50,
-            x: Q.width / 2
-        }));
-        stage.insert(new Q.UI.Text({
-            label: "Te quedan " + (vidas - 1) + " vidas",
-            color: "white",
-            scale: 3,
-            x: 0,
-            y: 80
-        }), container);
-        // Hacer una clase especifica, para la imagen
-        stage.insert(new Q.fotoSimple({ x: 350, y: 400, sheet: "marioLlorando", sprite: "chomp_animations", animacion: true }));
+    	if(vidas - 1 > 0) {
+    		console.log("ENTROOOOOOOOOOOOOOOOOOOOOOOO");
+    		Q.audio.stop(musica);
+            Q.audio.play("MusicaCaidaOMuerte.mp3");
+	    	Q.stageTMX("carga.tmx", stage);
+	    	var container = stage.insert(new Q.UI.Container({
+	                    y: 50,
+	                    x: Q.width / 2
+	                }));
+	    	stage.insert(new Q.UI.Text({ 
+	                label: "Te quedan " + (vidas - 1) + " vidas",
+	                color: "white",
+	                scale: 3,
+	                x: 0,
+	                y: 80
+	         }),container);
+	        // Hacer una clase especifica, para la imagen
+	        stage.insert(new Q.fotoSimple({ x: 350, y: 400, sheet: "marioLlorando", sprite: "chomp_animations", animacion: true}));
 
-        // Button para continuar
-        var boton = stage.insert(new Q.UI.Button({
-            label: "Jugar otra vez",
-            fill: "#90EC38",
-            shadowColor: "rgba(255,255,255,1.0)",
-            y: 300,
-            x: 20
-        }), container);
+	        // Button para continuar
+	        var boton = stage.insert(new Q.UI.Button({
+	            label: "Jugar otra vez",
+	            fill: "#90EC38",
+	            shadowColor: "rgba(255,255,255,1.0)",
+	            y: 300,
+	            x: 20
+	        }), container);
 
-        boton.on("click", function () {
-            Q.clearStages();
-            if (vidas > 0) {
+	        boton.on("click", function () {
+	        	Q.clearStages();	            
                 if (nivel == 1) {
                     Q.stageScene("level1");
                     Q.state.reset({ totalMonedas: 0, totalVidas: 0, totalEnemigosMuertos: 0 });
@@ -568,12 +573,43 @@ var game = function () {
                     enemigosMuertos = 0;
                     Q.stageScene("sumaEnemigosMuertos", 3);
                 }
-            }
-            else {
-                vidas = 5;
-                Q.stageScene("mainMenu");
-            }
+	        });
 
+        }
+        else {
+            vidas = 5;
+            Q.stageScene("endGame");
+        }    
+    });
+
+//Ventana de fin del juego
+    Q.scene('endGame', function (stage) {
+    	Q.stageTMX("carga.tmx", stage);
+    	var container = stage.insert(new Q.UI.Container({
+                    y: 50,
+                    x: Q.width / 2
+                }));
+    	stage.insert(new Q.UI.Text({ 
+                label: "GAME OVER!",
+                color: "white",
+                scale: 3,
+                x: 0,
+                y: 80
+         }),container);
+        // Hacer una clase especifica, para la imagen
+        stage.insert(new Q.fotoSimple({ x: 350, y: 400, sheet: "marioLlorando", sprite: "chomp_animations", animacion: true}));
+
+        // Button para continuar
+        var boton = stage.insert(new Q.UI.Button({
+            label: "Salir",
+            fill: "#90EC38",
+            shadowColor: "rgba(255,255,255,1.0)",
+            y: 300,
+            x: 20
+        }), container);
+
+        boton.on("click", function () {
+            Q.stageScene("mainMenu");
         });
     });
     //});
@@ -597,10 +633,12 @@ var game = function () {
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
@@ -642,6 +680,7 @@ var game = function () {
                     else this.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
@@ -735,10 +774,12 @@ var game = function () {
             //Si le tocan por la izquierda, derecha o por debajo y es el player, pierde
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
@@ -785,10 +826,12 @@ var game = function () {
                 }
                 // Esto de aqui no se si funciona
                 else if (collision.obj.isA("Player") && collision.obj.p.helicoptero) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
@@ -914,15 +957,19 @@ var game = function () {
                     this.play("impulso_right");
                     this.p.gravity = 1;
                     this.p.boost = true;
+                    Q.audio.play("YoshiSalto.mp3");
                 }
                 else if (this.p.boost && this.p.vy != 0) {
+                    Q.audio.play("YoshiFlotar.mp3");
                     console.log(this.p.vy);
                     this.p.sheet = "yoshi_volando";
                     this.play("volando_" + this.p.direction);
                     this.p.vy = -200;
                     this.p.gravity = 0.3;
                     this.p.boost = false;
-
+                }
+                else{
+                    Q.audio.play("YoshiSalto.mp3");
                 }
             }
             else {
@@ -940,6 +987,7 @@ var game = function () {
                 huevos += 1;
             }
             if (huevos > 0) {
+                Q.audio.play("SonidoDispararHuevo.mp3");
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
                     if (items[i].isA("Egg")) {
@@ -1023,6 +1071,7 @@ var game = function () {
                             }
                             else items[i].destroy();
                             if (huevos == 0) {
+                                Q.audio.play("SonidoPonerHuevo.mp3");
                                 this.stage.insert(new Q.Egg({ x: this.p.x - 20, y: this.p.y }));
                                 //this.p.huevos += 1;
                                 huevos = 1;
@@ -1055,6 +1104,7 @@ var game = function () {
                 }
             }
             if (this.p.y > 900 && (nivel == 1 || nivel == 3)) {
+            	Q.clearStages();
                 Q.stageScene("endLevel", 1, { label: "You Died" });
                 if (nivel == 1) {
                     this.p.x = 430;
@@ -1067,6 +1117,7 @@ var game = function () {
                 this.destroy();
             }
             else if (this.p.x > 300 && nivel == 2 && !this.p.helicoptero) {
+            	Q.clearStages();
                 Q.stageScene("endLevel", 1, { label: "You Died" });
                 this.destroy();
             }
@@ -1291,10 +1342,12 @@ var game = function () {
             //Si le tocan por la izquierda, derecha o por debajo y es el player, pierde
             this.on("bump.left,bump.right,bump.bottom,bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
@@ -1357,10 +1410,12 @@ var game = function () {
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     huevos = 0;
                     this.p.golpes++;
                     if (this.p.golpes == 1) {
@@ -1419,6 +1474,7 @@ var game = function () {
                     }
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     huevos = 0;
                     this.p.golpes++;
                     if (this.p.golpes == 1) {
@@ -1519,7 +1575,7 @@ var game = function () {
                 sheet: "mario",
                 sprite: "mario_animations",
                 vy: 0,
-                vx: 1000
+                vx: 350
             });
             this.p.gravityY = 0;
             this.add('2d, tween, animation');
@@ -1677,11 +1733,13 @@ var game = function () {
             this.add('2d, tween, animation');
             this.on("bump.left,bump.right,bump.bottom,bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                     this.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     this.p.vx = this.p.velocidadX;
                     this.p.vy = this.p.velocidadY;
                 }
@@ -1707,12 +1765,14 @@ var game = function () {
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
             });
             this.on("bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -1720,6 +1780,7 @@ var game = function () {
             });
             this.on("bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
