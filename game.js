@@ -4,7 +4,8 @@ var game = function () {
         numeroMonedas = [0, 0, 0],
         vidas = 5, maxVida = 10,
         enemigosMuertos = 0, enemigosParaVida = 2,
-        musica = "";
+        musica = "",
+        tiempo = 0;
     //Función a la que se llamará cuando se cargue el juego
     //Objeto Quinus con los modulos que necesitamos
     var Q = window.Q = Quintus({ audioSupported: ['mp3'] })
@@ -31,7 +32,7 @@ var game = function () {
         "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json, titulo.json, titulo.png," +
         "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json, " +
         "GOAL.png, GOAL.json, yoshiGOAL.png, goalYoshi.json, MusicaCastillo.mp3, MusicaJardin.mp3, " +
-        "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, "+
+        "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, " +
         "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json, timer.png, timer.json"
         , function () {
             // Pantalla de tiempo
@@ -93,7 +94,7 @@ var game = function () {
             Q.compileSheets("barrera.png", "barrera.json");
 
             Q.compileSheets("bebeMarioLlorando.png", "bebeLlorando.json");
-            
+
 
             //Animaciones de yoshi
             Q.animations('yoshi_animations', {
@@ -167,17 +168,19 @@ var game = function () {
                 stage.viewport.scale = 2;
                 huevos = 0;
                 nivel = 1;
+                tiempo = 5;
+                stage.insert(new Q.tiempo());
 
                 stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));
                 //Enemigos terrestres
                 stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1000, vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800, velocidad: 50 }));
-                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 500, vx: 50, vy: 450, y: 660, x_reaparicion: 500, y_reaparicion: 660, y_caida: 800, velocidad: 50}));
-                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 600, vy: 450, vx: -50, y: 660, x_reaparicion: 600, y_reaparicion: 660, y_caida: 800, velocidad: -50}));
+                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 500, vx: 50, vy: 450, y: 660, x_reaparicion: 500, y_reaparicion: 660, y_caida: 800, velocidad: 50 }));
+                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 600, vy: 450, vx: -50, y: 660, x_reaparicion: 600, y_reaparicion: 660, y_caida: 800, velocidad: -50 }));
                 stage.insert(new Q.EnemyTerrestre({ sheet: "enemy3", x: 1100, vx: 50, velocidad: 50, y: 600, x_vueltaMin: 1099, x_vueltaMax: 1185, darVuelta: true, x_reaparicion: 1100, y_reaparicion: 600, y_caida: 800, }));
                 //Enemigos de las tuberias
-                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600, velocidad: 50}));
-                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600, velocidad: 50}));
-                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy3", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600, velocidad: 50}));
+                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2635, vy: 450, vx: 50, y: 600, velocidad: 50 }));
+                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 3000, vy: 450, vx: 50, y: 600, velocidad: 50 }));
+                stage.insert(new Q.EnemyTerrestre({ sheet: "enemy3", reaparecer: true, x_reaparicion: 2635, y_reaparicion: 600, y_caida: 800, x: 2820, vy: 450, vx: 50, y: 600, velocidad: 50 }));
                 //Enemigos antes de las nubes
                 stage.insert(new Q.EnemyVolador({ sheet: "enemy4", x: 1100, y: 470, velocidadX: 50, vx: 50, minX: 1070, maxX: 1400, x_reaparicion: 1100, y_reaparicion: 470 }));
                 stage.insert(new Q.EnemyVolador({ sheet: "enemy5", horizontal: false, x: 1490, y: 500, velocidadY: 70, vy: 70, minY: 350, maxY: 550, x_reaparicion: 1490, y_reaparicion: 500 }));
@@ -442,20 +445,20 @@ var game = function () {
 
     //Ventana de fin del juego
     Q.scene('endLevel', function (stage) {
-    	Q.stageTMX("carga.tmx", stage);
-    	var container = stage.insert(new Q.UI.Container({
-                    y: 50,
-                    x: Q.width / 2
-                }));
-    	stage.insert(new Q.UI.Text({ 
-                label: "Te quedan " + (vidas - 1) + " vidas",
-                color: "white",
-                scale: 3,
-                x: 0,
-                y: 80
-         }),container);
+        Q.stageTMX("carga.tmx", stage);
+        var container = stage.insert(new Q.UI.Container({
+            y: 50,
+            x: Q.width / 2
+        }));
+        stage.insert(new Q.UI.Text({
+            label: "Te quedan " + (vidas - 1) + " vidas",
+            color: "white",
+            scale: 3,
+            x: 0,
+            y: 80
+        }), container);
         // Hacer una clase especifica, para la imagen
-        stage.insert(new Q.fotoSimple({ x: 350, y: 400, sheet: "marioLlorando", sprite: "chomp_animations", animacion: true}));
+        stage.insert(new Q.fotoSimple({ x: 350, y: 400, sheet: "marioLlorando", sprite: "chomp_animations", animacion: true }));
 
         // Button para continuar
         var boton = stage.insert(new Q.UI.Button({
@@ -545,7 +548,8 @@ var game = function () {
                     Q.stageScene("sumaMonedas", 2);
                     console.log("Numero de monedas: " + numeroMonedas[nivel]);
 
-                    var i = 1, monedas = 0;
+                    var i = nivel, monedas = 0;
+                    --i;
                     // Miro las monedas de los anteriores niveles
                     while (i < nivel) {
                         monedas += numeroMonedas[i];
@@ -567,7 +571,7 @@ var game = function () {
             }
             else {
                 vidas = 5;
-                Q.stageScene("endGame");
+                Q.stageScene("mainMenu");
             }
 
         });
@@ -659,7 +663,7 @@ var game = function () {
             });
         },
         step: function (dt) {
-        	console.log(this.p.vx);
+            console.log(this.p.vx);
             if (this.p.vx > 0)
                 this.play("run_right");
             else
@@ -1163,8 +1167,8 @@ var game = function () {
         }
     });
 
-     // Sumador de vidas
-     Q.scene("sumaVidas", function (stage) {
+    // Sumador de vidas
+    Q.scene("sumaVidas", function (stage) {
         console.log("Entro en sumaVidas");
         // Contador de numero de vidas
         var label1 = stage.insert(new Q.UI.Text({ x: Q.width / 2 - 440, y: 15, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
@@ -1202,7 +1206,7 @@ var game = function () {
             this.p.angle += 90;
         }));
     });
-   
+
     // Sumador de enemigosMuertos
     Q.scene("sumaEnemigosMuertos", function (stage) {
         console.log("Entro en sumaEnemigos");
@@ -1227,15 +1231,15 @@ var game = function () {
     Q.scene("pintaTiempo", function (stage) {
         console.log("pintaTiempo");
         // Contador de numero de enemigosMuertos
-        var label1 = stage.insert(new Q.UI.Text({ x: 360, y: 20, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
+        var label1 = stage.insert(new Q.UI.Text({ x: 600, y: 20, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
         Q.state.on("change.totalTiempo", this, function (die) {
             label1.p.label = "" + die;
-           // enemigosMuertos++;
+
         });
         // Imagen
         stage.insert(new Q.UI.Button({
             asset: 'timer.png',
-            x: 300,
+            x: 400,
             scale: 1.5,
             y: 40
         }, function () {
@@ -1530,7 +1534,7 @@ var game = function () {
                 if (nivel == 1) {
                     console.log("Paso por el nivel 1");
                     // Inicializamos los labels de los contadores que se mostraran por pantalla
-                    Q.state.reset({ totalVidas: 0, totalMonedas: 0, totalEnemigosMuertos: 0 });
+                    Q.state.reset({ totalVidas: 0, totalMonedas: 0, totalEnemigosMuertos: 0, totalTiempo: 0 });
 
                     Q.stageScene("level1");
 
@@ -1548,6 +1552,10 @@ var game = function () {
 
                     // Creacion del contador de enemigosMuertos
                     Q.stageScene("sumaEnemigosMuertos", 3);
+
+
+                    // Creacion del tiempo
+                    Q.stageScene("pintaTiempo", 4);
                 }
                 else if (nivel == 2) {
                     Q.stageScene("level2");
@@ -1567,7 +1575,8 @@ var game = function () {
                     Q.stageScene("sumaMonedas", 2);
                     console.log("Numero de monedas: " + numeroMonedas[nivel]);
 
-                    var i = 1, monedas = 0;
+                    var i = nivel, monedas = 0;
+                    --i;
                     // Miro las monedas de los anteriores niveles
                     while (i < nivel) {
                         monedas += numeroMonedas[i];
@@ -1576,7 +1585,6 @@ var game = function () {
                     i = 0;
                     while (i != monedas) {
                         Q.state.inc("totalMonedas", 1);
-                        console.log("Veces");
                         i++;
                     }
                     numeroMonedas[nivel] = monedas;
@@ -1602,12 +1610,13 @@ var game = function () {
                     Q.stageScene("sumaMonedas", 2);
                     console.log("Numero de monedas: " + numeroMonedas[nivel]);
 
-                    var i = 1, monedas = 0;
+                    var i = nivel, monedas = 0;
+                    --i;
                     // Miro las monedas de los anteriores niveles
-                    while (i < nivel) {
-                        monedas += numeroMonedas[i];
-                        i++;
-                    }
+                    //while (i < nivel) {
+                    monedas += numeroMonedas[i];
+                    i++;
+                    // }
                     i = 0;
                     while (i != monedas) {
                         Q.state.inc("totalMonedas", 1);
@@ -1755,7 +1764,30 @@ var game = function () {
             this.add('2d, tween, animation');
         },
         step: function (dt) {
-            if(this.p.animacion) this.play("run_right");
+            if (this.p.animacion) this.play("run_right");
         }
     });
+
+    // Clase de tiempo
+    Q.Sprite.extend("tiempo", {
+        init: function (p) {
+            this._super(p, {});
+            this.p.gravityY = 0;
+            this.add('2d, tween, animation');
+        },
+        step: function (dt) {
+            tiempo -= dt;
+            if (tiempo > 0) {
+                Q.state.set("totalTiempo", Math.round(tiempo));
+            }
+
+            else {
+                Q.clearStages();
+                Q.stageScene("endLevel");
+            }
+            console.log(Math.round(tiempo));
+            // Q.stageScene("pintaTiempo", 4);
+        }
+    });
+
 }
