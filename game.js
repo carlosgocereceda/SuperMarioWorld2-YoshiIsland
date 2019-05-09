@@ -139,7 +139,7 @@ var game = function () {
 
             //Animacion carga
             Q.animations('carga_animations', {
-                run_right: { frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], flip: "", rate: 1 / 5 }
+                run_right: { frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], flip: "", rate: 1 / 10 }
             })
 
             //Animacion Bebe Mario
@@ -1492,7 +1492,7 @@ var game = function () {
                 sheet: "mario",
                 sprite: "mario_animations",
                 vy: 0,
-                vx: 1000
+                vx: 350
             });
             this.p.gravityY = 0;
             this.add('2d, tween, animation');
