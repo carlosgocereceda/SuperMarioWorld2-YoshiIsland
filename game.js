@@ -440,35 +440,37 @@ var game = function () {
         stage.insert(new Q.BebeMario({ x: -50, y: 450 }));
     });
 
-    //Ventana de fin del juego
+    //Ventana de caida o muerte
     Q.scene('endLevel', function (stage) {
-    	Q.stageTMX("carga.tmx", stage);
-    	var container = stage.insert(new Q.UI.Container({
-                    y: 50,
-                    x: Q.width / 2
-                }));
-    	stage.insert(new Q.UI.Text({ 
-                label: "Te quedan " + (vidas - 1) + " vidas",
-                color: "white",
-                scale: 3,
-                x: 0,
-                y: 80
-         }),container);
-        // Hacer una clase especifica, para la imagen
-        stage.insert(new Q.fotoSimple({ x: 350, y: 400, sheet: "marioLlorando", sprite: "chomp_animations", animacion: true}));
+    	if(vidas - 1 > 0) {
+    		console.log("ENTROOOOOOOOOOOOOOOOOOOOOOOO");
+    		
+	    	Q.stageTMX("carga.tmx", stage);
+	    	var container = stage.insert(new Q.UI.Container({
+	                    y: 50,
+	                    x: Q.width / 2
+	                }));
+	    	stage.insert(new Q.UI.Text({ 
+	                label: "Te quedan " + (vidas - 1) + " vidas",
+	                color: "white",
+	                scale: 3,
+	                x: 0,
+	                y: 80
+	         }),container);
+	        // Hacer una clase especifica, para la imagen
+	        stage.insert(new Q.fotoSimple({ x: 350, y: 400, sheet: "marioLlorando", sprite: "chomp_animations", animacion: true}));
 
-        // Button para continuar
-        var boton = stage.insert(new Q.UI.Button({
-            label: "Jugar otra vez",
-            fill: "#90EC38",
-            shadowColor: "rgba(255,255,255,1.0)",
-            y: 300,
-            x: 20
-        }), container);
+	        // Button para continuar
+	        var boton = stage.insert(new Q.UI.Button({
+	            label: "Jugar otra vez",
+	            fill: "#90EC38",
+	            shadowColor: "rgba(255,255,255,1.0)",
+	            y: 300,
+	            x: 20
+	        }), container);
 
-        boton.on("click", function () {
-            Q.clearStages();
-            if (vidas > 0) {
+	        boton.on("click", function () {
+	        	Q.clearStages();	            
                 if (nivel == 1) {
                     Q.stageScene("level1");
                     Q.state.reset({ totalMonedas: 0, totalVidas: 0, totalEnemigosMuertos: 0 });
@@ -564,12 +566,43 @@ var game = function () {
                     enemigosMuertos = 0;
                     Q.stageScene("sumaEnemigosMuertos", 3);
                 }
-            }
-            else {
-                vidas = 5;
-                Q.stageScene("endGame");
-            }
+	        });
 
+        }
+        else {
+            vidas = 5;
+            Q.stageScene("endGame");
+        }    
+    });
+
+//Ventana de fin del juego
+    Q.scene('endGame', function (stage) {
+    	Q.stageTMX("carga.tmx", stage);
+    	var container = stage.insert(new Q.UI.Container({
+                    y: 50,
+                    x: Q.width / 2
+                }));
+    	stage.insert(new Q.UI.Text({ 
+                label: "GAME OVER!",
+                color: "white",
+                scale: 3,
+                x: 0,
+                y: 80
+         }),container);
+        // Hacer una clase especifica, para la imagen
+        stage.insert(new Q.fotoSimple({ x: 350, y: 400, sheet: "marioLlorando", sprite: "chomp_animations", animacion: true}));
+
+        // Button para continuar
+        var boton = stage.insert(new Q.UI.Button({
+            label: "Salir",
+            fill: "#90EC38",
+            shadowColor: "rgba(255,255,255,1.0)",
+            y: 300,
+            x: 20
+        }), container);
+
+        boton.on("click", function () {
+            Q.stageScene("mainMenu");
         });
     });
     //});
@@ -593,6 +626,7 @@ var game = function () {
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -731,6 +765,7 @@ var game = function () {
             //Si le tocan por la izquierda, derecha o por debajo y es el player, pierde
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -781,6 +816,7 @@ var game = function () {
                 }
                 // Esto de aqui no se si funciona
                 else if (collision.obj.isA("Player") && collision.obj.p.helicoptero) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -1051,6 +1087,7 @@ var game = function () {
                 }
             }
             if (this.p.y > 900 && (nivel == 1 || nivel == 3)) {
+            	Q.clearStages();
                 Q.stageScene("endLevel", 1, { label: "You Died" });
                 if (nivel == 1) {
                     this.p.x = 430;
@@ -1063,6 +1100,7 @@ var game = function () {
                 this.destroy();
             }
             else if (this.p.x > 300 && nivel == 2 && !this.p.helicoptero) {
+            	Q.clearStages();
                 Q.stageScene("endLevel", 1, { label: "You Died" });
                 this.destroy();
             }
@@ -1287,6 +1325,7 @@ var game = function () {
             //Si le tocan por la izquierda, derecha o por debajo y es el player, pierde
             this.on("bump.left,bump.right,bump.bottom,bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -1353,6 +1392,7 @@ var game = function () {
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -1668,6 +1708,7 @@ var game = function () {
             this.add('2d, tween, animation');
             this.on("bump.left,bump.right,bump.bottom,bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                     this.destroy();
@@ -1698,12 +1739,14 @@ var game = function () {
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
             });
             this.on("bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -1711,6 +1754,7 @@ var game = function () {
             });
             this.on("bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
+                	Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
