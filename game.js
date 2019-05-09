@@ -5,7 +5,7 @@ var game = function () {
         vidas = 5, maxVida = 10,
         enemigosMuertos = 0, enemigosParaVida = 2,
         musica = "",
-        tiempo = 0;
+        tiempo
     //Función a la que se llamará cuando se cargue el juego
     //Objeto Quinus con los modulos que necesitamos
     var Q = window.Q = Quintus({ audioSupported: ['mp3'] })
@@ -35,7 +35,7 @@ var game = function () {
         "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, "+
         "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json, timer.png, timer.json, " + 
         "YoshiFlotar.mp3, YoshiSalto.mp3, SonidoPonerHuevo.mp3, SonidoDispararHuevo.mp3, SonidoAlMatarEnemigosConHuevo.mp3, " +
-        "MusicaCaidaOMuerte.mp3"
+        "MusicaCaidaOMuerte.mp3, GAMEOVER.json, bowserGAMEOVER.png"
         , function () {
             // Pantalla de tiempo
             Q.compileSheets("timer.png", "timer.json");
@@ -97,6 +97,7 @@ var game = function () {
 
             Q.compileSheets("bebeMarioLlorando.png", "bebeLlorando.json");
 
+            Q.compileSheets("bowserGAMEOVER.png", "GAMEOVER.json");
 
             //Animaciones de yoshi
             Q.animations('yoshi_animations', {
@@ -170,7 +171,7 @@ var game = function () {
                 stage.viewport.scale = 2;
                 huevos = 0;
                 nivel = 1;
-                tiempo = 5;
+                tiempo = 120;
                 stage.insert(new Q.tiempo());
 
                 stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));
@@ -451,6 +452,7 @@ var game = function () {
     		console.log("ENTROOOOOOOOOOOOOOOOOOOOOOOO");
     		Q.audio.stop(musica);
             Q.audio.play("MusicaCaidaOMuerte.mp3");
+            musica = "MusicaCaidaOMuerte.mp3";
 	    	Q.stageTMX("carga.tmx", stage);
 	    	var container = stage.insert(new Q.UI.Container({
 	                    y: 50,
@@ -584,6 +586,9 @@ var game = function () {
 
 //Ventana de fin del juego
     Q.scene('endGame', function (stage) {
+    	Q.audio.stop(musica);
+        Q.audio.play("MusicaNoVidas.mp3");
+        musica = "MusicaNoVidas.mp3";
     	Q.stageTMX("carga.tmx", stage);
     	var container = stage.insert(new Q.UI.Container({
                     y: 50,
@@ -592,20 +597,21 @@ var game = function () {
     	stage.insert(new Q.UI.Text({ 
                 label: "GAME OVER!",
                 color: "white",
-                scale: 3,
+                scale: 4,
                 x: 0,
-                y: 80
+                y: 10
          }),container);
         // Hacer una clase especifica, para la imagen
-        stage.insert(new Q.fotoSimple({ x: 350, y: 400, sheet: "marioLlorando", sprite: "chomp_animations", animacion: true}));
+        stage.insert(new Q.fotoSimple({ x: 330, y: 500, sheet: "bowser", sprite: "mario_animations", animacion: true}));
 
         // Button para continuar
         var boton = stage.insert(new Q.UI.Button({
             label: "Salir",
             fill: "#90EC38",
             shadowColor: "rgba(255,255,255,1.0)",
+            scale: 2,
             y: 300,
-            x: 20
+            x: 200
         }), container);
 
         boton.on("click", function () {
