@@ -1,0 +1,9 @@
+{
+  "marioLlorando": {
+    "sx": 0,
+    "sy": 0,
+    "tileW": 165,
+    "tileH": 310,
+    "frames": 3
+  }
+}
