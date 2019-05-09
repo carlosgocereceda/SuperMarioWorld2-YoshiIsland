@@ -32,9 +32,12 @@ var game = function () {
         "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json, " +
         "GOAL.png, GOAL.json, yoshiGOAL.png, goalYoshi.json, MusicaCastillo.mp3, MusicaJardin.mp3, " +
         "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, "+
-        "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json"
+        "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json, timer.png, timer.json"
         , function () {
+            // Pantalla de tiempo
+            Q.compileSheets("timer.png", "timer.json");
 
+            // Pantalla de pasar de nivel las 2 lineas
             Q.compileSheets("yoshiGOAL.png", "goalYoshi.json");
             Q.compileSheets("GOAL.png", "GOAL.json");
 
@@ -564,7 +567,7 @@ var game = function () {
             }
             else {
                 vidas = 5;
-                Q.stageScene("mainMenu");
+                Q.stageScene("endGame");
             }
 
         });
@@ -1212,6 +1215,26 @@ var game = function () {
         // Imagen
         stage.insert(new Q.UI.Button({
             asset: 'logoEnemigosVencidos.png',
+            x: 300,
+            scale: 1.5,
+            y: 40
+        }, function () {
+            this.p.angle += 90;
+        }));
+    });
+
+    // Pinta tiempo
+    Q.scene("pintaTiempo", function (stage) {
+        console.log("pintaTiempo");
+        // Contador de numero de enemigosMuertos
+        var label1 = stage.insert(new Q.UI.Text({ x: 360, y: 20, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
+        Q.state.on("change.totalTiempo", this, function (die) {
+            label1.p.label = "" + die;
+           // enemigosMuertos++;
+        });
+        // Imagen
+        stage.insert(new Q.UI.Button({
+            asset: 'timer.png',
             x: 300,
             scale: 1.5,
             y: 40
