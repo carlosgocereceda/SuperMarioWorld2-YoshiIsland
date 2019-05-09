@@ -564,7 +564,7 @@ var game = function () {
             }
             else {
                 vidas = 5;
-                Q.stageScene("mainMenu");
+                Q.stageScene("endGame");
             }
 
         });
