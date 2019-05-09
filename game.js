@@ -32,7 +32,9 @@ var game = function () {
         "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json, " +
         "GOAL.png, GOAL.json, yoshiGOAL.png, goalYoshi.json, MusicaCastillo.mp3, MusicaJardin.mp3, " +
         "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, "+
-        "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json, timer.png, timer.json"
+        "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json, timer.png, timer.json, " + 
+        "YoshiFlotar.mp3, YoshiSalto.mp3, SonidoPonerHuevo.mp3, SonidoDispararHuevo.mp3, SonidoAlMatarEnemigosConHuevo.mp3, " +
+        "MusicaCaidaOMuerte.mp3"
         , function () {
             // Pantalla de tiempo
             Q.compileSheets("timer.png", "timer.json");
@@ -442,6 +444,8 @@ var game = function () {
 
     //Ventana de fin del juego
     Q.scene('endLevel', function (stage) {
+        Q.audio.stop(musica);
+        Q.audio.play("MusicaCaidaOMuerte.mp3");
     	Q.stageTMX("carga.tmx", stage);
     	var container = stage.insert(new Q.UI.Container({
                     y: 50,
@@ -597,6 +601,7 @@ var game = function () {
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
@@ -638,6 +643,7 @@ var game = function () {
                     else this.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
@@ -735,6 +741,7 @@ var game = function () {
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
@@ -785,6 +792,7 @@ var game = function () {
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
@@ -910,15 +918,19 @@ var game = function () {
                     this.play("impulso_right");
                     this.p.gravity = 1;
                     this.p.boost = true;
+                    Q.audio.play("YoshiSalto.mp3");
                 }
                 else if (this.p.boost && this.p.vy != 0) {
+                    Q.audio.play("YoshiFlotar.mp3");
                     console.log(this.p.vy);
                     this.p.sheet = "yoshi_volando";
                     this.play("volando_" + this.p.direction);
                     this.p.vy = -200;
                     this.p.gravity = 0.3;
                     this.p.boost = false;
-
+                }
+                else{
+                    Q.audio.play("YoshiSalto.mp3");
                 }
             }
             else {
@@ -936,6 +948,7 @@ var game = function () {
                 huevos += 1;
             }
             if (huevos > 0) {
+                Q.audio.play("SonidoDispararHuevo.mp3");
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
                     if (items[i].isA("Egg")) {
@@ -1019,6 +1032,7 @@ var game = function () {
                             }
                             else items[i].destroy();
                             if (huevos == 0) {
+                                Q.audio.play("SonidoPonerHuevo.mp3");
                                 this.stage.insert(new Q.Egg({ x: this.p.x - 20, y: this.p.y }));
                                 //this.p.huevos += 1;
                                 huevos = 1;
@@ -1291,6 +1305,7 @@ var game = function () {
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
                     if (this.p.reaparecer) {
@@ -1357,6 +1372,7 @@ var game = function () {
                     collision.obj.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     huevos = 0;
                     this.p.golpes++;
                     if (this.p.golpes == 1) {
@@ -1415,6 +1431,7 @@ var game = function () {
                     }
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     huevos = 0;
                     this.p.golpes++;
                     if (this.p.golpes == 1) {
@@ -1673,6 +1690,7 @@ var game = function () {
                     this.destroy();
                 }
                 else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     this.p.vx = this.p.velocidadX;
                     this.p.vy = this.p.velocidadY;
                 }
