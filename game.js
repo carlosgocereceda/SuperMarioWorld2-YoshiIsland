@@ -465,7 +465,6 @@ var game = function () {
     //Ventana de caida o muerte
     Q.scene('endLevel', function (stage) {
     	if(vidas - 1 > 0) {
-    		console.log("ENTROOOOOOOOOOOOOOOOOOOOOOOO");
     		Q.audio.stop(musica);
             Q.audio.play("MusicaCaidaOMuerte.mp3");
             musica = "MusicaCaidaOMuerte.mp3";
@@ -734,7 +733,6 @@ var game = function () {
             });
         },
         step: function (dt) {
-            console.log(this.p.vx);
             if (this.p.vx > 0)
                 this.play("run_right");
             else
@@ -984,7 +982,6 @@ var game = function () {
         boost: function () {
             if (!this.p.helicoptero) {
                 if (!this.p.boost && this.p.vy == 0) {
-                    console.log("cargando");
                     this.p.sheet = "yoshi_impulso";
                     this.play("impulso_right");
                     this.p.gravity = 1;
@@ -993,7 +990,6 @@ var game = function () {
                 }
                 else if (this.p.boost && this.p.vy != 0) {
                     Q.audio.play("YoshiFlotar.mp3");
-                    console.log(this.p.vy);
                     this.p.sheet = "yoshi_volando";
                     this.play("volando_" + this.p.direction);
                     this.p.vy = -200;
@@ -1024,7 +1020,6 @@ var game = function () {
                 for (let i = 0; i < items.length; i++) {
                     if (items[i].isA("Egg")) {
                         items[i]["p"]["disparado"] = true;
-                        console.log(items[i]["p"]["vy"]);
                         if (this.p.direction == "right") {
                             items[i]["p"]["x"] = this.p.x + 20;
                             items[i]["p"]["vx"] = 300;
@@ -1042,8 +1037,6 @@ var game = function () {
             if (!this.p.helicoptero) {
                 Q.audio.play("yoshi-tongue.mp3");
                 this.p.atancando = true;
-                console.log("atacando");
-                console.log(this.stage.items);
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
                     if (items[i].isA("EnemyTerrestre") || items[i].isA("EnemyVolador")
@@ -1052,11 +1045,7 @@ var game = function () {
                         let medidas = items[i]["p"];
                         let x_ = Number(medidas["x"]);
                         let y_ = Number(medidas["y"]);
-                        console.log(x_ + " " + y_);
-                        console.log(this.p.x + " " + this.p.y);
-                        if (Math.abs(Number(this.p.x) - x_) < 75 && Math.abs(Number(this.p.y) - y_ < 3)) {
-                            console.log("lo mato");
-                            //console.log(Number(this.p.x - x_) + " " + Number(this.p.y - y_));
+                        if (Math.abs(Number(this.p.x) -  Number(x_)) < 75 && Math.abs(Number(this.p.y) -  Number(y_)) < 20) {
                             if (items[i].isA("EnemyTerrestre") && items[i]["p"]["reaparecer"]) {
                                 sumaEnemigo();
                                 var nuevo = new Q.EnemyTerrestre({
@@ -1614,9 +1603,6 @@ var game = function () {
         },
         step: function (dt) {
             this.play("run_right");
-            console.log(this.p.x);
-            console.log(this.p.y);
-
             if (this.p.x > 1150) {
 
                 if (nivel == 1) {
@@ -1878,7 +1864,6 @@ var game = function () {
             this.add('2d, tween, animation');
         },
         step: function (dt) {
-            console.log("Booleano " + !this.p.parar);
             if(!this.p.parar){
                 tiempo -= dt;
                 if (tiempo > 0) {
