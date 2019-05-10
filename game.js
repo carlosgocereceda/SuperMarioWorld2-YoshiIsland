@@ -5,7 +5,8 @@ var game = function () {
         vidas = 5, maxVida = 10,
         enemigosMuertos = 0, enemigosParaVida = 2,
         musica = "",
-        tiempo
+        tiempo;
+        var objetoTiempo;
     //Función a la que se llamará cuando se cargue el juego
     //Objeto Quinus con los modulos que necesitamos
     var Q = window.Q = Quintus({ audioSupported: ['mp3'] })
@@ -171,8 +172,11 @@ var game = function () {
                 stage.viewport.scale = 2;
                 huevos = 0;
                 nivel = 1;
+                
+                // Inicializacion del tiempo
                 tiempo = 120;
-                stage.insert(new Q.tiempo());
+                objetoTiempo = new Q.tiempo();
+                stage.insert(objetoTiempo);
 
                 stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));
                 //Enemigos terrestres
@@ -220,6 +224,11 @@ var game = function () {
                 huevos = 0;
                 nivel = 2;
 
+                // Inicializacion del tiempo
+                tiempo = 120;
+                objetoTiempo = new Q.tiempo();
+                stage.insert(objetoTiempo);
+
                 stage.insert(new Q.Placa_helicoptero({ x: 200, y: 1000 }));
                 //Barrera
                 stage.insert(new Q.EnemyVolador({ sheet: "enemy6", horizontal: false, x: 500, y: 910, velocidadY: 0, vy: 0, x_reaparicion: 500, y_reaparicion: 910 }));
@@ -262,6 +271,12 @@ var game = function () {
                 stage.add("viewport").follow(player);
                 stage.viewport.scale = 2;
                 huevos = 0;
+
+                // Inicializacion del tiempo
+                tiempo = 120;
+                objetoTiempo = new Q.tiempo();
+                stage.insert(objetoTiempo);
+
                 // Planta carnivora
                 stage.insert(new Q.Planta({ x: 2140, y: 710 }));
                 stage.insert(new Q.Planta({ x: 2380, y: 710 }));
@@ -378,6 +393,7 @@ var game = function () {
                 // Hacer una clase especifica, para la imagen
                 stage.insert(new Q.fotoSimple({ x: 500, y: 200, sheet: "goal" }));
                 stage.insert(new Q.fotoSimple({ x: 900, y: 330, sheet: "goal_Yoshi" }));
+                objetoTiempo.p.parar = true;
 
                 // Button para continuar
                 var boton = stage.insert(new Q.UI.Button({
@@ -449,7 +465,6 @@ var game = function () {
     //Ventana de caida o muerte
     Q.scene('endLevel', function (stage) {
     	if(vidas - 1 > 0) {
-    		console.log("ENTROOOOOOOOOOOOOOOOOOOOOOOO");
     		Q.audio.stop(musica);
             Q.audio.play("MusicaCaidaOMuerte.mp3");
             musica = "MusicaCaidaOMuerte.mp3";
@@ -718,7 +733,6 @@ var game = function () {
             });
         },
         step: function (dt) {
-            console.log(this.p.vx);
             if (this.p.vx > 0)
                 this.play("run_right");
             else
@@ -968,7 +982,6 @@ var game = function () {
         boost: function () {
             if (!this.p.helicoptero) {
                 if (!this.p.boost && this.p.vy == 0) {
-                    console.log("cargando");
                     this.p.sheet = "yoshi_impulso";
                     this.play("impulso_right");
                     this.p.gravity = 1;
@@ -977,7 +990,6 @@ var game = function () {
                 }
                 else if (this.p.boost && this.p.vy != 0) {
                     Q.audio.play("YoshiFlotar.mp3");
-                    console.log(this.p.vy);
                     this.p.sheet = "yoshi_volando";
                     this.play("volando_" + this.p.direction);
                     this.p.vy = -200;
@@ -1008,7 +1020,6 @@ var game = function () {
                 for (let i = 0; i < items.length; i++) {
                     if (items[i].isA("Egg")) {
                         items[i]["p"]["disparado"] = true;
-                        console.log(items[i]["p"]["vy"]);
                         if (this.p.direction == "right") {
                             items[i]["p"]["x"] = this.p.x + 20;
                             items[i]["p"]["vx"] = 300;
@@ -1026,8 +1037,6 @@ var game = function () {
             if (!this.p.helicoptero) {
                 Q.audio.play("yoshi-tongue.mp3");
                 this.p.atancando = true;
-                console.log("atacando");
-                console.log(this.stage.items);
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
                     if (items[i].isA("EnemyTerrestre") || items[i].isA("EnemyVolador")
@@ -1036,11 +1045,7 @@ var game = function () {
                         let medidas = items[i]["p"];
                         let x_ = Number(medidas["x"]);
                         let y_ = Number(medidas["y"]);
-                        console.log(x_ + " " + y_);
-                        console.log(this.p.x + " " + this.p.y);
-                        if (Math.abs(Number(this.p.x) - x_) < 75 && Math.abs(Number(this.p.y) - y_ < 3)) {
-                            console.log("lo mato");
-                            //console.log(Number(this.p.x - x_) + " " + Number(this.p.y - y_));
+                        if (Math.abs(Number(this.p.x) -  Number(x_)) < 75 && Math.abs(Number(this.p.y) -  Number(y_)) < 20) {
                             if (items[i].isA("EnemyTerrestre") && items[i]["p"]["reaparecer"]) {
                                 sumaEnemigo();
                                 var nuevo = new Q.EnemyTerrestre({
@@ -1298,7 +1303,7 @@ var game = function () {
     Q.scene("pintaTiempo", function (stage) {
         console.log("pintaTiempo");
         // Contador de numero de enemigosMuertos
-        var label1 = stage.insert(new Q.UI.Text({ x: 600, y: 20, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
+        var label1 = stage.insert(new Q.UI.Text({ x: 460, y: 20, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
         Q.state.on("change.totalTiempo", this, function (die) {
             label1.p.label = "" + die;
 
@@ -1598,9 +1603,6 @@ var game = function () {
         },
         step: function (dt) {
             this.play("run_right");
-            console.log(this.p.x);
-            console.log(this.p.y);
-
             if (this.p.x > 1150) {
 
                 if (nivel == 1) {
@@ -1855,22 +1857,24 @@ var game = function () {
     // Clase de tiempo
     Q.Sprite.extend("tiempo", {
         init: function (p) {
-            this._super(p, {});
+            this._super(p, {
+                parar: false
+            });
             this.p.gravityY = 0;
             this.add('2d, tween, animation');
         },
         step: function (dt) {
-            tiempo -= dt;
-            if (tiempo > 0) {
-                Q.state.set("totalTiempo", Math.round(tiempo));
+            if(!this.p.parar){
+                tiempo -= dt;
+                if (tiempo > 0) {
+                    Q.state.set("totalTiempo", Math.round(tiempo));
+                }
+    
+                else {
+                    Q.clearStages();
+                    Q.stageScene("endLevel");
+                }
             }
-
-            else {
-                Q.clearStages();
-                Q.stageScene("endLevel");
-            }
-            console.log(Math.round(tiempo));
-            // Q.stageScene("pintaTiempo", 4);
         }
     });
 
