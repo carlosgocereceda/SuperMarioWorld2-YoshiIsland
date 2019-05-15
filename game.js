@@ -3,7 +3,7 @@ var game = function () {
         huevos,
         numeroMonedas = [0, 0, 0],
         vidas = 5, maxVida = 10,
-        enemigosMuertos = 0, enemigosParaVida = 2,
+        enemigosMuertos = 0, enemigosParaVida = 5,
         musica = "",
         tiempo;
         var objetoTiempo;
@@ -1301,7 +1301,7 @@ var game = function () {
     Q.scene("pintaTiempo", function (stage) {
         console.log("pintaTiempo");
         // Contador de numero de enemigosMuertos
-        var label1 = stage.insert(new Q.UI.Text({ x: 460, y: 20, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
+        var label1 = stage.insert(new Q.UI.Text({ x: 480, y: 20, scale: 1.5, label: "0", color: "rgba(255,164,032,1)" }));
         Q.state.on("change.totalTiempo", this, function (die) {
             label1.p.label = "" + die;
 
@@ -1309,7 +1309,7 @@ var game = function () {
         // Imagen
         stage.insert(new Q.UI.Button({
             asset: 'timer.png',
-            x: 400,
+            x: 420,
             scale: 1.5,
             y: 40
         }, function () {
