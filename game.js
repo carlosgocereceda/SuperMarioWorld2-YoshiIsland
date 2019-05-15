@@ -697,7 +697,7 @@ var game = function () {
             this.on("bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
                     sumaEnemigo();
-                    collision.obj.p.vy = -100;
+                    collision.obj.p.vy = -200;
                     if (this.p.reaparecer) {
                         var nuevo = new Q.EnemyTerrestre({
                             sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
@@ -840,7 +840,7 @@ var game = function () {
             this.on("bump.top", function (collision) {
                 if (collision.obj.isA("Player") && !collision.obj.p.helicoptero) {
                     console.log("die");
-                    collision.obj.p.vy = -100;
+                    collision.obj.p.vy = -200;
                     sumaEnemigo();
                     if (this.p.reaparecer) {
                         var nuevo = new Q.EnemyVolador({
@@ -1471,7 +1471,7 @@ var game = function () {
             //Si le salta encima el player lo mata
             this.on("bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	collision.obj.p.vy = -100;
+                	collision.obj.p.vy = -200;
                     this.p.golpes++;
                     if (this.p.golpes == 1) {
                         this.p.sheet = "chomp2";
