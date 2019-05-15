@@ -178,7 +178,7 @@ var game = function () {
                 objetoTiempo = new Q.tiempo();
                 stage.insert(objetoTiempo);
 
-                stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));
+                //stage.insert(new Q.Placa_helicoptero({ x: 500, y: 650 }));
                 //Enemigos terrestres
                 stage.insert(new Q.EnemyTerrestre({ sheet: "enemy2", x: 1000, vx: 50, vy: 450, y: 660, x_reaparicion: 1000, y_reaparicion: 660, y_caida: 800, velocidad: 50 }));
                 stage.insert(new Q.EnemyTerrestre({ sheet: "enemy1", x: 500, vx: 50, vy: 450, y: 660, x_reaparicion: 500, y_reaparicion: 660, y_caida: 800, velocidad: 50 }));
