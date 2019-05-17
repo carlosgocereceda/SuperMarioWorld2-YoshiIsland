@@ -1,12 +1,13 @@
 var game = function () {
     var nivel = -1,
         huevos,
-        numeroMonedas = [0, 0, 0],
+        numeroMonedas = [0, 0, 0, 0],
+        numeroTiempo = [0, 0, 0, 0],
         vidas = 5, maxVida = 10,
         enemigosMuertos = 0, enemigosParaVida = 5,
         musica = "",
         tiempo;
-        var objetoTiempo;
+    var objetoTiempo;
     //Función a la que se llamará cuando se cargue el juego
     //Objeto Quinus con los modulos que necesitamos
     var Q = window.Q = Quintus({ audioSupported: ['mp3'] })
@@ -33,8 +34,8 @@ var game = function () {
         "cargando.png, cargando.json, carga.tmx, babyMario.png, bebe.json, titulo.json, titulo.png," +
         "proyectiles.png, proyectiles.json, barrera.png, barrera.json, logoEnemigosVencidos.png, enemigosVencidos.json, " +
         "GOAL.png, GOAL.json, yoshiGOAL.png, goalYoshi.json, MusicaCastillo.mp3, MusicaJardin.mp3, " +
-        "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, "+
-        "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json, timer.png, timer.json, " + 
+        "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, " +
+        "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json, timer.png, timer.json, " +
         "YoshiFlotar.mp3, YoshiSalto.mp3, SonidoPonerHuevo.mp3, SonidoDispararHuevo.mp3, SonidoAlMatarEnemigosConHuevo.mp3, " +
         "MusicaCaidaOMuerte.mp3, GAMEOVER.json, bowserGAMEOVER.png"
         , function () {
@@ -172,7 +173,7 @@ var game = function () {
                 stage.viewport.scale = 2;
                 huevos = 0;
                 nivel = 1;
-                
+
                 // Inicializacion del tiempo
                 tiempo = 120;
                 objetoTiempo = new Q.tiempo();
@@ -204,7 +205,7 @@ var game = function () {
                 //Final
                 stage.insert(new Q.Flower({ x: 4362, y: 550 }));
                 // NO BORRAR ES PARA PROBAR QUE PASA ENTRE NIVELES
-                stage.insert(new Q.Flower({ x: 500, y: 660 }));
+                //stage.insert(new Q.Flower({ x: 500, y: 660 }));
 
                 // Monedas           
                 stage.insert(new Q.Moneda({ x: 700, y: 600 }));
@@ -404,18 +405,18 @@ var game = function () {
                     x: 0
                 }), container);
                 boton.on("click", function () {
-                    //nivel += 1;
-                    nivel = 4;
+                    nivel += 1;
+                    //nivel = 4;
                     Q.clearStages();
-                    if(nivel < 4){
+                    if (nivel < 4) {
                         Q.stageScene("carga");
                     }
-                    else{
-                        console.log("ENTRO en cargarPuntos");
+                    else {
+                        --nivel;
                         Q.stageScene("cargaPuntos");
                     }
-                    
-                    
+
+
                 });
             });
         });
@@ -472,63 +473,160 @@ var game = function () {
     });
 
     // Pantalla de puntos
-    Q.scene('cargaPuntos',  function (stage) {
+    // Poner un label donde sea RESUMEN JUEGO:
+    // 4 labels contando los puntos y poniendo los puntos
+    // 1 label final con todos los puntos totales
+    Q.scene('cargaPuntos', function (stage) {
+       // nivel = 1;
         Q.stageTMX("carga.tmx", stage);
-        // Puntos VIDAS
-// Texto
-var puntosVidas = vidas*2;
-stage.insert(new Q.UI.Text({
-    x: 200,
-    scale: 1.5,
-    y: 15,
-    label: "Puntos por VIDAS "+puntosVidas,
-    color: "white"
-}));
+        // Texto principal
+        stage.insert(new Q.UI.Text({
+            x: 550,
+            scale: 2.5,
+            y: 15,
+            label: "RESUMEN DE LA PARTIDA",
+            color: "blue"
+        }));
+        var puntosVidas = "", puntosMonedas = "",
+        puntosEnemigosMuertos = "", puntosTiempo = "";
 
-// 
-//stage.insert(new Q.UI.Text({x: 300, y: 15, scale:1.5, label: puntosVidas }));
+        var mirar, aux, string = "";
+        for(var i = 0; i < 4; i++){
+            // Corazones
+           if(i == 0){
+                mirar = vidas * 5;
+           }
+           var cont = 3;
+           string = "";
+           aux = mirar;
+            while(mirar != 0){
+                mirar = Math.round(mirar/10);
+                cont--;
+            }
+            console.log("Valor de cont "+cont);
+            while(cont > 0){
+                string += "0";
+                cont--;
+            }
+            if( i == 0){
+                console.log("Monedas");
+                puntosVidas += string;
+                if(aux != 0){
+                    puntosVidas += aux;
+                }
+                mirar = numeroMonedas[nivel] * 2;
+            }
+            else if(i == 1){
+                console.log("Enemigos");
+                puntosMonedas += string;
+                if(aux != 0){
+                    puntosMonedas += aux;
+                }
+                mirar = enemigosMuertos;
+            }
+            else if(i == 2){
+                console.log("Tiempo");
+                puntosEnemigosMuertos += string;
+                if(aux != 0){
+                    puntosEnemigosMuertos += aux;
+                }
+                mirar = numeroTiempo[nivel]*3;
+            }
+        }
+        puntosTiempo += string
+        if(aux != 0){
+            puntosTiempo += aux;
+        }
 
-      //  Q.stageScene("puntosVidas", 2);
+        var texto = 
+        "Puntos por VIDAS.............................." + puntosVidas + "\n\n"+
+        "Puntos por MONEDAS......................." + puntosMonedas +"\n\n"+
+        "Puntos por ENEMIGOS MUERTOS...."+ puntosEnemigosMuertos+ "\n\n"+
+        "Puntos por TIEMPO..........................."+ puntosTiempo;
+
+        // Texto centro
+        stage.insert(new Q.UI.Text({
+            x: 560,
+            scale: 1.5,
+            y: 155,
+            label: texto,
+            //label: "Puntos por VIDAS..........................." + puntosVidas,
+            color: "white"
+        }));
+        // Texto total
+        var TOTAL = (vidas*5)+(numeroMonedas[nivel] * 2)+enemigosMuertos+(numeroTiempo[nivel]*3), puntosTOTAL ="";
+        var cont = 0, totalFalso = TOTAL;
+        while(totalFalso != 0){
+            totalFalso = Math.round(totalFalso/10);
+            cont++;
+        }
+        cont = 3-cont;
+        while(cont > 0){
+            puntosTOTAL += "0";
+            cont--;
+        }
+        puntosTOTAL += TOTAL;
+
+
+        stage.insert(new Q.UI.Text({
+            x: 540,
+            scale: 4.0,
+            y: 500,
+            label: "TOTAL........" + puntosTOTAL,
+            color: "green"
+        }));
+        var boton = stage.insert(new Q.UI.Button({
+            label: "Salir",
+            fill: "#90EC38",
+            shadowColor: "rgba(255,255,255,1.0)",
+            scale: 2,
+            y: 580,
+            x: 1020
+        }));
+        boton.on("click", function () {
+            Q.stageScene("mainMenu");
+            vidas = 5;
+        });
     });
 
-    
+
 
 
     //Ventana de caida o muerte
     Q.scene('endLevel', function (stage) {
-    	if(vidas - 1 > 0) {
-    		Q.audio.stop(musica);
+        if (vidas - 1 > 0) {
+            Q.audio.stop(musica);
             Q.audio.play("MusicaCaidaOMuerte.mp3");
             musica = "MusicaCaidaOMuerte.mp3";
-	    	Q.stageTMX("carga.tmx", stage);
-	    	var container = stage.insert(new Q.UI.Container({
-	                    y: 50,
-	                    x: Q.width / 2
-	                }));
-	    	stage.insert(new Q.UI.Text({ 
-	                label: "Te quedan " + (vidas - 1) + " vidas",
-	                color: "white",
-	                scale: 3,
-	                x: 0,
-	                y: 80
-	         }),container);
-	        // Hacer una clase especifica, para la imagen
-	        stage.insert(new Q.fotoSimple({ x: 350, y: 400, sheet: "marioLlorando", sprite: "chomp_animations", animacion: true}));
+            Q.stageTMX("carga.tmx", stage);
+            var container = stage.insert(new Q.UI.Container({
+                y: 50,
+                x: Q.width / 2
+            }));
+            stage.insert(new Q.UI.Text({
+                label: "Te quedan " + (vidas - 1) + " vidas",
+                color: "white",
+                scale: 3,
+                x: 0,
+                y: 80
+            }), container);
+            // Hacer una clase especifica, para la imagen
+            stage.insert(new Q.fotoSimple({ x: 350, y: 400, sheet: "marioLlorando", sprite: "chomp_animations", animacion: true }));
 
-	        // Button para continuar
-	        var boton = stage.insert(new Q.UI.Button({
-	            label: "Jugar otra vez",
-	            fill: "#90EC38",
-	            shadowColor: "rgba(255,255,255,1.0)",
-	            y: 300,
-	            x: 20
-	        }), container);
+            // Button para continuar
+            var boton = stage.insert(new Q.UI.Button({
+                label: "Jugar otra vez",
+                fill: "#90EC38",
+                shadowColor: "rgba(255,255,255,1.0)",
+                y: 300,
+                x: 20
+            }), container);
 
-	        boton.on("click", function () {
-	        	Q.clearStages();
-	        	if(nivel == 0) {
-            		Q.stageScene("levelTutorial");
-	        	}            
+            boton.on("click", function () {
+                Q.clearStages();
+                if (nivel == 0) {
+                    Q.stageScene("levelTutorial");
+                }
                 else if (nivel == 1) {
                     Q.stageScene("level1");
                     Q.state.reset({ totalMonedas: 0, totalVidas: 0, totalEnemigosMuertos: 0 });
@@ -614,10 +712,10 @@ stage.insert(new Q.UI.Text({
                     var i = nivel, monedas = 0;
                     --i;
                     // Miro las monedas de los anteriores niveles
-                    while (i < nivel) {
+                    //while (i < nivel) {
                         monedas += numeroMonedas[i];
-                        i++;
-                    }
+                       // i++;
+                   // }
                     i = 0;
                     while (i != monedas) {
                         Q.state.inc("totalMonedas", 1);
@@ -634,34 +732,34 @@ stage.insert(new Q.UI.Text({
                     // Inicio de la contador de tiempo
                     Q.stageScene("pintaTiempo", 4);
                 }
-	        });
+            });
 
         }
         else {
-            vidas = 5;
+            vidas = 0;
             Q.stageScene("endGame");
-        }    
+        }
     });
 
-//Ventana de fin del juego
+    //Ventana de fin del juego
     Q.scene('endGame', function (stage) {
-    	Q.audio.stop(musica);
+        Q.audio.stop(musica);
         Q.audio.play("MusicaNoVidas.mp3");
         musica = "MusicaNoVidas.mp3";
-    	Q.stageTMX("carga.tmx", stage);
-    	var container = stage.insert(new Q.UI.Container({
-                    y: 50,
-                    x: Q.width / 2
-                }));
-    	stage.insert(new Q.UI.Text({ 
-                label: "GAME OVER!",
-                color: "white",
-                scale: 4,
-                x: 0,
-                y: 10
-         }),container);
+        Q.stageTMX("carga.tmx", stage);
+        var container = stage.insert(new Q.UI.Container({
+            y: 50,
+            x: Q.width / 2
+        }));
+        stage.insert(new Q.UI.Text({
+            label: "GAME OVER!",
+            color: "white",
+            scale: 4,
+            x: 0,
+            y: 10
+        }), container);
         // Hacer una clase especifica, para la imagen
-        stage.insert(new Q.fotoSimple({ x: 330, y: 500, sheet: "bowser", sprite: "mario_animations", animacion: true}));
+        stage.insert(new Q.fotoSimple({ x: 330, y: 500, sheet: "bowser", sprite: "mario_animations", animacion: true }));
 
         // Button para continuar
         var boton = stage.insert(new Q.UI.Button({
@@ -675,7 +773,8 @@ stage.insert(new Q.UI.Text({
 
 
         boton.on("click", function () {
-            Q.stageScene("mainMenu");
+            Q.stageScene("cargaPuntos");
+            //Q.stageScene("mainMenu");
         });
     });
     //});
@@ -699,7 +798,7 @@ stage.insert(new Q.UI.Text({
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	Q.clearStages();
+                    Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -839,7 +938,7 @@ stage.insert(new Q.UI.Text({
             //Si le tocan por la izquierda, derecha o por debajo y es el player, pierde
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	Q.clearStages();
+                    Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -891,7 +990,7 @@ stage.insert(new Q.UI.Text({
                 }
                 // Esto de aqui no se si funciona
                 else if (collision.obj.isA("Player") && collision.obj.p.helicoptero) {
-                	Q.clearStages();
+                    Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -1031,7 +1130,7 @@ stage.insert(new Q.UI.Text({
                     this.p.gravity = 0.3;
                     this.p.boost = false;
                 }
-                else{
+                else {
                     Q.audio.play("YoshiSalto.mp3");
                 }
             }
@@ -1080,7 +1179,7 @@ stage.insert(new Q.UI.Text({
                         let medidas = items[i]["p"];
                         let x_ = Number(medidas["x"]);
                         let y_ = Number(medidas["y"]);
-                        if (Math.abs(Number(this.p.x) -  Number(x_)) < 75 && Math.abs(Number(this.p.y) -  Number(y_)) < 20) {
+                        if (Math.abs(Number(this.p.x) - Number(x_)) < 75 && Math.abs(Number(this.p.y) - Number(y_)) < 20) {
                             if (items[i].isA("EnemyTerrestre") && items[i]["p"]["reaparecer"]) {
                                 sumaEnemigo();
                                 var nuevo = new Q.EnemyTerrestre({
@@ -1160,7 +1259,7 @@ stage.insert(new Q.UI.Text({
                 }
             }
             if (this.p.y > 900 && (nivel == 1 || nivel == 3)) {
-            	Q.clearStages();
+                Q.clearStages();
                 Q.stageScene("endLevel", 1, { label: "You Died" });
                 if (nivel == 1) {
                     this.p.x = 430;
@@ -1173,7 +1272,7 @@ stage.insert(new Q.UI.Text({
                 this.destroy();
             }
             else if (this.p.x > 300 && nivel == 2 && !this.p.helicoptero) {
-            	Q.clearStages();
+                Q.clearStages();
                 Q.stageScene("endLevel", 1, { label: "You Died" });
                 this.destroy();
             }
@@ -1398,7 +1497,7 @@ stage.insert(new Q.UI.Text({
             //Si le tocan por la izquierda, derecha o por debajo y es el player, pierde
             this.on("bump.left,bump.right,bump.bottom,bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	Q.clearStages();
+                    Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -1466,7 +1565,7 @@ stage.insert(new Q.UI.Text({
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right,bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	Q.clearStages();
+                    Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -1503,7 +1602,7 @@ stage.insert(new Q.UI.Text({
             //Si le salta encima el player lo mata
             this.on("bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	collision.obj.p.vy = -200;
+                    collision.obj.p.vy = -200;
                     this.p.golpes++;
                     if (this.p.golpes == 1) {
                         this.p.sheet = "chomp2";
@@ -1631,7 +1730,7 @@ stage.insert(new Q.UI.Text({
                 sheet: "mario",
                 sprite: "mario_animations",
                 vy: 0,
-                vx: 350
+                vx: 350//1000
             });
             this.p.gravityY = 0;
             this.add('2d, tween, animation');
@@ -1701,8 +1800,8 @@ stage.insert(new Q.UI.Text({
                     // Creacion del contador de enemigosMuertos
                     enemigosMuertos = 0;
                     Q.stageScene("sumaEnemigosMuertos", 3);
-                     // Inicio de la contador de tiempo
-                     Q.stageScene("pintaTiempo", 4);
+                    // Inicio de la contador de tiempo
+                    Q.stageScene("pintaTiempo", 4);
 
                 }
                 else if (nivel == 3) {
@@ -1741,8 +1840,8 @@ stage.insert(new Q.UI.Text({
                     // Creacion del contador de enemigosMuertos
                     enemigosMuertos = 0;
                     Q.stageScene("sumaEnemigosMuertos", 3);
-                     // Inicio de la contador de tiempo
-                     Q.stageScene("pintaTiempo", 4);
+                    // Inicio de la contador de tiempo
+                    Q.stageScene("pintaTiempo", 4);
                 }
             }
         }
@@ -1793,7 +1892,7 @@ stage.insert(new Q.UI.Text({
             this.add('2d, tween, animation');
             this.on("bump.left,bump.right,bump.bottom,bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	Q.clearStages();
+                    Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                     this.destroy();
@@ -1825,14 +1924,14 @@ stage.insert(new Q.UI.Text({
             this.add('2d, aiBounce, animation');
             this.on("bump.left,bump.right", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	Q.clearStages();
+                    Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
             });
             this.on("bump.top", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	Q.clearStages();
+                    Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -1840,7 +1939,7 @@ stage.insert(new Q.UI.Text({
             });
             this.on("bump.bottom", function (collision) {
                 if (collision.obj.isA("Player")) {
-                	Q.clearStages();
+                    Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
                     collision.obj.destroy();
                 }
@@ -1899,30 +1998,23 @@ stage.insert(new Q.UI.Text({
             this.add('2d, tween, animation');
         },
         step: function (dt) {
-            if(!this.p.parar){
+            if (!this.p.parar) {
                 tiempo -= dt;
                 if (tiempo > 0) {
                     Q.state.set("totalTiempo", Math.round(tiempo));
                 }
-    
+
                 else {
                     Q.clearStages();
                     Q.stageScene("endLevel");
                 }
             }
+            // Me guardo el tiempo
+            else{
+                var cont = nivel;
+                numeroTiempo[nivel] = Math.round(tiempo)+numeroTiempo[--cont];
+                console.log("TIME "+numeroTiempo[nivel]+ "NIvel "+nivel);
+            }
         }
     });
-    Q.Sprite.extend("Puntos", {
-        init: function (p) {
-            this._super(p, {
-                sheet: ""
-            });
-            this.p.gravityY = 0;
-            this.add('2d, tween, animation');
-        },
-        // Poner un label donde sea RESUMEN JUEGO:
-        // 4 labels contando los puntos y poniendo los puntos
-        // 1 label final con todos los puntos totales
-    });
-
 }
