@@ -204,7 +204,7 @@ var game = function () {
                 //Final
                 stage.insert(new Q.Flower({ x: 4362, y: 550 }));
                 // NO BORRAR ES PARA PROBAR QUE PASA ENTRE NIVELES
-                //stage.insert(new Q.Flower({ x: 500, y: 660 }));
+                stage.insert(new Q.Flower({ x: 500, y: 660 }));
 
                 // Monedas           
                 stage.insert(new Q.Moneda({ x: 700, y: 600 }));
@@ -375,7 +375,7 @@ var game = function () {
             });
 
 
-            // No se que hace esto
+            // Carga todos los tmx
             Q.loadTMX("yoshi.tmx, yoshi2.tmx, tutorial.tmx, menu.tmx, carga.tmx, yoshi3.tmx", function () {
                 console.log("Se metio en el load con nivel: " + nivel);
                 Q.stageScene("mainMenu");
@@ -384,7 +384,7 @@ var game = function () {
             // Cartel de pasar al siguiente nivel
             Q.scene('winLevel', function (stage) {
                 /*
-                Esto es lo k hay que hacer 
+                Esto es lo que hay que hacer 
                 */
                 var container = stage.insert(new Q.UI.Container({
                     y: 50,
@@ -404,9 +404,18 @@ var game = function () {
                     x: 0
                 }), container);
                 boton.on("click", function () {
-                    nivel += 1;
+                    //nivel += 1;
+                    nivel = 4;
                     Q.clearStages();
-                    Q.stageScene("carga");
+                    if(nivel < 4){
+                        Q.stageScene("carga");
+                    }
+                    else{
+                        console.log("ENTRO en cargarPuntos");
+                        Q.stageScene("cargaPuntos");
+                    }
+                    
+                    
                 });
             });
         });
@@ -461,6 +470,29 @@ var game = function () {
         stage.insert(new Q.Carga({ x: 550, y: 200 }));
         stage.insert(new Q.BebeMario({ x: -50, y: 450 }));
     });
+
+    // Pantalla de puntos
+    Q.scene('cargaPuntos',  function (stage) {
+        Q.stageTMX("carga.tmx", stage);
+        // Puntos VIDAS
+// Texto
+var puntosVidas = vidas*2;
+stage.insert(new Q.UI.Text({
+    x: 200,
+    scale: 1.5,
+    y: 15,
+    label: "Puntos por VIDAS "+puntosVidas,
+    color: "white"
+}));
+
+// 
+//stage.insert(new Q.UI.Text({x: 300, y: 15, scale:1.5, label: puntosVidas }));
+
+      //  Q.stageScene("puntosVidas", 2);
+    });
+
+    
+
 
     //Ventana de caida o muerte
     Q.scene('endLevel', function (stage) {
@@ -1879,6 +1911,18 @@ var game = function () {
                 }
             }
         }
+    });
+    Q.Sprite.extend("Puntos", {
+        init: function (p) {
+            this._super(p, {
+                sheet: ""
+            });
+            this.p.gravityY = 0;
+            this.add('2d, tween, animation');
+        },
+        // Poner un label donde sea RESUMEN JUEGO:
+        // 4 labels contando los puntos y poniendo los puntos
+        // 1 label final con todos los puntos totales
     });
 
 }
