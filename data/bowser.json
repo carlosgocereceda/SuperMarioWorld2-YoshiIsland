@@ -1,0 +1,16 @@
+{
+  "bowserAsustado": {
+    "sx": 174,
+    "sy": 178,
+    "tileW": 41,
+    "tileH": 41,
+    "frames": 3
+  },
+  "bowserHuye": {
+    "sx": 0,
+    "sy": 223,
+    "tileW": 41,
+    "tileH": 41,
+    "frames": 5
+  }
+}

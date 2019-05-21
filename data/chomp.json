@@ -19,5 +19,26 @@
     "tileW": 134,
     "tileH": 131,
     "frames": 3
+  },
+  "chomp4": {
+    "sx": 804,
+    "sy": 519,
+    "tileW": 134,
+    "tileH": 131,
+    "frames": 3
+  },
+  "chomp5": {
+    "sx": 804,
+    "sy": 355,
+    "tileW": 134,
+    "tileH": 131,
+    "frames": 3
+  },
+  "chomp6": {
+    "sx": 804,
+    "sy": 170,
+    "tileW": 134,
+    "tileH": 131,
+    "frames": 3
   }
 }

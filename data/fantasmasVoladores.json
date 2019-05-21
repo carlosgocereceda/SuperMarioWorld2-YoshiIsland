@@ -61,5 +61,12 @@
     "tileW": 38,
     "tileH": 37,
     "frames": 2
+  },
+  "mariposa": {
+    "sx": 2,
+    "sy": 436,
+    "tileW": 38,
+    "tileH": 35,
+    "frames": 2
   }
 }

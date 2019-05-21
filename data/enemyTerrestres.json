@@ -19,5 +19,13 @@
     "tileW": 42,
     "tileH": 35,
     "frames": 4
+  },
+  "flor": {
+    "sx": 331,
+    "sy": 4,
+    "tileW": 29,
+    "tileH": 26,
+    "frames": 5
   }
+
 }

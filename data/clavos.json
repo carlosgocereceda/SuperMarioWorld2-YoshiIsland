@@ -1,0 +1,16 @@
+{
+  "rojoArriba": {
+    "sx": 0,
+    "sy": 0,
+    "tileW": 51,
+    "tileH": 14,
+    "frames": 0
+  },
+   "rojoAbajo": {
+    "sx": 52,
+    "sy": 17,
+    "tileW": 51,
+    "tileH": 14,
+    "frames": 0
+  }
+}

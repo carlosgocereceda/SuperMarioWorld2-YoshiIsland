@@ -12,5 +12,12 @@
     "tileW": 47,
     "tileH": 40,
     "frames": 2
+  },
+    "planta3": {
+    "sx": 3,
+    "sy": 108,
+    "tileW": 41,
+    "tileH": 37,
+    "frames": 2
   }
 }
