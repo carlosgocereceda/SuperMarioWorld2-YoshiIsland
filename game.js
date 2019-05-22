@@ -423,6 +423,18 @@ var game = function () {
                 stage.add("viewport").follow(player);
                 stage.viewport.scale = 1.5;
                 huevos = 0;
+                var boton = stage.insert(new Q.UI.Button({
+                            label: "Salir",
+                            fill: "#90EC38",
+                            shadowColor: "rgba(255,255,255,1.0)",
+                            scale: 1,
+                            y: 240,
+                            x: 4200
+                        }));
+                boton.on("click", function () {
+                    Q.stageScene("mainMenu");
+                    vidas = 5;
+                });                
                 stage.insert(new Q.UI.Text({
                     label: "← o → para moverte a izquierda o derecha",
                     color: "black",
