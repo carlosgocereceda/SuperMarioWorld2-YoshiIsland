@@ -1,0 +1,16 @@
+{
+  "koopa": {
+    "sx": 3,
+    "sy": 27,
+    "tileW": 30,
+    "tileH": 34,
+    "frames": 8
+  },
+  "caparazon": {
+    "sx": 4,
+    "sy": 8,
+    "tileW": 21,
+    "tileH": 19,
+    "frames": 4
+  }
+}

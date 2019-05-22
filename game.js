@@ -39,7 +39,8 @@ var game = function () {
         "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json, timer.png, timer.json, " +
         "YoshiFlotar.mp3, YoshiSalto.mp3, SonidoPonerHuevo.mp3, SonidoDispararHuevo.mp3, SonidoAlMatarEnemigosConHuevo.mp3, " +
         "MusicaCaidaOMuerte.mp3, GAMEOVER.json, bowserGAMEOVER.png, musicaJardin.mp3, yoshi4.tmx, bosque.png, plataforma.png, plataformaRoja.png, plataforma.json, " + 
-        " plataformaRoja.json, clavos.png, clavos.json, manzana.png, manzana.json, bowser.png, bowser.json, luigi.png, luigi.json"
+        " plataformaRoja.json, clavos.png, clavos.json, manzana.png, manzana.json, bowser.png, bowser.json, luigi.png, luigi.json, " +
+        "koopa.png, koopa.json, MusicaPuntos.mp3, bebeContento.png, bebeContento.json"
         , function () {
             // Pantalla de tiempo
             Q.compileSheets("timer.png", "timer.json");
@@ -119,6 +120,12 @@ var game = function () {
             //Luigi (nivel 4)
             Q.compileSheets("luigi.png", "luigi.json");
 
+            //Koopa(nivel 4)
+            Q.compileSheets("koopa.png", "koopa.json");
+
+            //Pantalla final
+            Q.compileSheets("bebeContento.png", "bebeContento.json");
+
             //Animaciones de yoshi
             Q.animations('yoshi_animations', {
                 run_right: { frames: [0, 1, 2, 3], rate: 1 / 10 },
@@ -155,7 +162,12 @@ var game = function () {
             // Animacion Koopa Volador
             Q.animations('koopa_animations', {
                 run_right: { frames: [0, 1, 2, 3, 4, 5], flip: "", rate: 1 / 5 },
-                run_left: { frames: [0, 1, 2, 3, 4, 5], flip: "x", rate: 1 / 5 }
+                run_left: { frames: [0, 1, 2, 3, 4, 5], flip: "x", rate: 1 / 5 },
+                run_right1: { frames: [0, 1, 2, 3, 4, 5, 6, 7], flip: "", rate: 1 / 5 },
+                run_left1: { frames: [0, 1, 2, 3, 4, 5, 6, 7], flip: "x", rate: 1 / 5 },
+                caparazon_right: { frames: [0, 1, 2, 3], flip: "", rate: 1 / 5 },
+                caparazon_left: { frames: [0, 1, 2, 3], flip: "x", rate: 1 / 5 },
+                stop: { frames: [0], flip: "", rate: 1 / 5 }
             })
 
             //Animaciones de chomp
@@ -228,7 +240,7 @@ var game = function () {
                 //Final
                 stage.insert(new Q.Flower({ x: 4362, y: 550 }));
                 // NO BORRAR ES PARA PROBAR QUE PASA ENTRE NIVELES
-                stage.insert(new Q.Flower({ x: 500, y: 660 }));
+                //stage.insert(new Q.Flower({ x: 500, y: 660 }));
 
                 // Monedas           
                 stage.insert(new Q.Moneda({ x: 700, y: 600 }));
@@ -252,8 +264,7 @@ var game = function () {
                 tiempo = 120;
                 objetoTiempo = new Q.tiempo();
                 stage.insert(objetoTiempo);
-                stage.insert(new Q.Flower({ x: 200, y: 1000 }));
-                //stage.insert(new Q.Placa_helicoptero({ x: 200, y: 1000 }));
+                stage.insert(new Q.Placa_helicoptero({ x: 200, y: 1000 }));
                 //Barrera
                 stage.insert(new Q.EnemyVolador({ sheet: "enemy6", horizontal: false, x: 500, y: 910, velocidadY: 0, vy: 0, x_reaparicion: 500, y_reaparicion: 910 }));
                 stage.insert(new Q.EnemyVolador({ sheet: "enemy5", horizontal: false, x: 500, y: 975, velocidadY: 0, vy: 0, x_reaparicion: 500, y_reaparicion: 975 }));
@@ -298,7 +309,7 @@ var game = function () {
                 huevos = 0;
 
                 // Inicializacion del tiempo
-                tiempo = 180;
+                tiempo = 120;
                 objetoTiempo = new Q.tiempo();
                 stage.insert(objetoTiempo);
 
@@ -310,7 +321,6 @@ var game = function () {
                 //Enemigos terrestres
                 stage.insert(new Q.Chomp({ x: 2600, vx: 50, velocidad: 50, y: 550, x_reaparicion: 2600, y_reaparicion: 550, y_caida: 800 }));
 
-                stage.insert(new Q.Flower({ x: 500, y: 650 }));
                 //Enemigos terrestres
                 stage.insert(new Q.EnemyTerrestre({ sheet: "enemy10", x: 650, vx: 50, velocidad: 50, y: 550, x_vueltaMin: 649, x_vueltaMax: 730, darVuelta: true, x_reaparicion: 650, y_reaparicion: 550, y_caida: 800 }));
                 stage.insert(new Q.EnemyTerrestre({ sprite: "planta_animations", sheet: "enemy11", x: 1750, vx: 50, velocidad: 50, y: 420, x_vueltaMin: 1700, x_vueltaMax: 1795, darVuelta: true, x_reaparicion: 1750, y_reaparicion: 420, y_caida: 800 }));
@@ -348,7 +358,7 @@ var game = function () {
             Q.scene("level4", function (stage) {
                 nivel = 4;
                 Q.stageTMX("yoshi4.tmx", stage);
-                var player = stage.insert(new Q.Player({y: 750 }));
+                var player = stage.insert(new Q.Player({x: 500, y: 750 }));
                 stage.add("viewport").follow(player);
                 stage.viewport.scale = 2;
                 huevos = 0;
@@ -357,9 +367,9 @@ var game = function () {
                 tiempo = 180;
                 objetoTiempo = new Q.tiempo();
                 stage.insert(objetoTiempo);
-                stage.insert(new Q.Luigi({ x: 1000, y: 750 }));
                 stage.insert(new Q.EnemyTerrestre({ sprite: "flor_animations", sheet: "flor", x: 700, vx: -50, velocidad: -50, y: 800, x_reaparicion: 700, y_reaparicion:800, y_caida: 900 }));
-                stage.insert(new Q.Planta({ sheet: "planta3", x: 900, y: 800 }));
+                stage.insert(new Q.Koopa({ vy: 200, x: 900, vx: -50, velocidad: -50, y: 750, x_reaparicion: 900, y_reaparicion:800, y_caida: 900 }));
+                stage.insert(new Q.Planta({ sheet: "planta3", x: 1500, y: 800 }));
                 stage.insert(new Q.EnemyVolador({ sheet: "mariposa", sprite: "planta_animations", x: 1650, y: 700, horizontal: false, velocidadY: 120, vy: 60, minY: 690, maxY: 800, x_reaparicion: 1650, y_reaparicion: 700 }));
                 stage.insert(new Q.Lanzadores({ sheet: "lanzador2", sheetP: "proyectil2", x: 1800, y: 330, horizontal: false, lanzar: 3 }))
                 stage.insert(new Q.EnemyVolador({ sheet: "mariposa", sprite: "planta_animations", x: 1910, y: 542, horizontal: false, velocidadY: 120, vy: 60, minY: 510, maxY: 700, x_reaparicion: 1910, y_reaparicion: 542 }));
@@ -554,7 +564,9 @@ var game = function () {
     // 4 labels contando los puntos y poniendo los puntos
     // 1 label final con todos los puntos totales
     Q.scene('cargaPuntos', function (stage) {
-       // nivel = 1;
+        Q.audio.stop(musica);
+        Q.audio.play("MusicaPuntos.mp3");
+        musica = "MusicaPuntos.mp3";
         Q.stageTMX("carga.tmx", stage);
         // Texto principal
         stage.insert(new Q.UI.Text({
@@ -914,8 +926,8 @@ var game = function () {
     Q.scene('winGame', function (stage) {
         objetoTiempo.p.parar = true;
         Q.audio.stop(musica);
-        Q.audio.play("MusicaNoVidas.mp3");
-        musica = "MusicaNoVidas.mp3";
+        Q.audio.play("MusicaWin.mp3");
+        musica = "MusicaWin.mp3";
         Q.stageTMX("carga.tmx", stage);
         var container = stage.insert(new Q.UI.Container({
             y: 50,
@@ -929,7 +941,7 @@ var game = function () {
             y: 10
         }), container);
         // Hacer una clase especifica, para la imagen
-        stage.insert(new Q.fotoSimple({ x: 330, y: 500, sheet: "bowser", sprite: "mario_animations", animacion: true }));
+        stage.insert(new Q.fotoSimple({ x: 300, y: 300, sheet: "bebeContento" }));
 
 
         var boton1 = stage.insert(new Q.UI.Button({
@@ -1007,6 +1019,25 @@ var game = function () {
 
                     collision.obj.destroy();
                 }
+                else if (collision.obj.isA("Caparazon") && collision.obj.p.movimiento) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
+                    sumaEnemigo();
+                    if (this.p.reaparecer) {
+                        var nuevo = new Q.EnemyTerrestre({
+                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+                            y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion, vy: this.p.vy,
+                            vx: this.p.velocidad, y: this.p.y_reaparicion, darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
+                            x_vueltaMax: this.p.x_vueltaMax, x_vueltaMin: this.p.x_vueltaMin
+                        });
+                        var stag = this.stage;
+                        this.destroy();
+                        window.setTimeout(function () {
+                            stag.insert(nuevo);
+                        }, 10000);
+                    }
+                    else this.destroy();
+                    collision.obj.destroy();
+                }
             });
             //Si le salta encima el player lo mata
             this.on("bump.top", function (collision) {
@@ -1032,6 +1063,25 @@ var game = function () {
                     Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
+                    if (this.p.reaparecer) {
+                        var nuevo = new Q.EnemyTerrestre({
+                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+                            y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion, vy: this.p.vy,
+                            vx: this.p.velocidad, y: this.p.y_reaparicion, darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
+                            x_vueltaMax: this.p.x_vueltaMax, x_vueltaMin: this.p.x_vueltaMin
+                        });
+                        var stag = this.stage;
+                        this.destroy();
+                        window.setTimeout(function () {
+                            stag.insert(nuevo);
+                        }, 10000);
+                    }
+                    else this.destroy();
+                    collision.obj.destroy();
+                }
+                else if (collision.obj.isA("Caparazon") && collision.obj.p.movimiento) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
+                    sumaEnemigo();
                     if (this.p.reaparecer) {
                         var nuevo = new Q.EnemyTerrestre({
                             sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
@@ -1146,6 +1196,25 @@ var game = function () {
                     else this.destroy();
                     collision.obj.destroy();
                 }
+                else if (collision.obj.isA("Caparazon") && collision.obj.p.movimiento) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
+                    sumaEnemigo();
+                    if (this.p.reaparecer) {
+                        var nuevo = new Q.EnemyVolador({
+                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+                            y_reaparicion: this.p.y_reaparicion, x: this.p.x_reaparicion, vy: this.p.velocidadY,
+                            vx: this.p.velocidadX, y: this.p.y_reaparicion, velocidadX: this.p.velocidadX, velocidadY: this.p.velocidadY, horizontal: this.p.horizontal,
+                            maxX: this.p.maxX, maxY: this.p.maxY, minX: this.p.minX, minY: this.p.minY
+                        });
+                        var stag = this.stage;
+                        this.destroy();
+                        window.setTimeout(function () {
+                            stag.insert(nuevo);
+                        }, 10000);
+                    }
+                    else this.destroy();
+                    collision.obj.destroy();
+                }
                 else {
                     this.p.vx = this.p.velocidadX;
                     this.p.vy = this.p.velocidadY;
@@ -1172,7 +1241,6 @@ var game = function () {
                     }
                     else this.destroy();
                 }
-                // Esto de aqui no se si funciona
                 else if (collision.obj.isA("Player") && collision.obj.p.helicoptero) {
                     Q.clearStages();
                     Q.stageScene("endLevel", 1, { label: "You Died" });
@@ -1198,6 +1266,25 @@ var game = function () {
                     else this.destroy();
                     collision.obj.destroy();
                 }
+                else if (collision.obj.isA("Caparazon") && collision.obj.p.movimiento) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
+                    sumaEnemigo();
+                    if (this.p.reaparecer) {
+                        var nuevo = new Q.EnemyVolador({
+                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+                            y_reaparicion: this.p.y_reaparicion, x: this.p.x_reaparicion, vy: this.p.velocidadY,
+                            vx: this.p.velocidadX, y: this.p.y_reaparicion, velocidadX: this.p.velocidadX, velocidadY: this.p.velocidadY, horizontal: this.p.horizontal,
+                            maxX: this.p.maxX, maxY: this.p.maxY, minX: this.p.minX, minY: this.p.minY
+                        });
+                        var stag = this.stage;
+                        this.destroy();
+                        window.setTimeout(function () {
+                            stag.insert(nuevo);
+                        }, 10000);
+                    }
+                    else this.destroy();
+                    collision.obj.destroy();
+                }                
                 else {
                     this.p.vx = this.p.velocidadX;
                     this.p.vy = this.p.velocidadY;
@@ -1359,7 +1446,7 @@ var game = function () {
                 var items = this.stage.items;
                 for (let i = 0; i < items.length; i++) {
                     if (items[i].isA("EnemyTerrestre") || items[i].isA("EnemyVolador")
-                        || items[i].isA("Planta") || items[i].isA("Manzana")) {
+                        || items[i].isA("Planta") || items[i].isA("Manzana") || items[i].isA("Koopa")) {
 
                         let medidas = items[i]["p"];
                         let x_ = Number(medidas["x"]);
@@ -1420,6 +1507,23 @@ var game = function () {
                                 window.setTimeout(function () {
                                     stag.insert(nuevo);
                                 }, 5000);
+                            }
+                            else if (items[i].isA("Koopa") && items[i]["p"]["reaparecer"]) {
+                                console.log(items[i]["p"]["estado"]);
+                                sumaEnemigo();
+                                var nuevo = new Q.Koopa({
+                                    sprite: items[i]["p"]["sprite"], sheet: items[i]["p"]["sheet"],
+                                    reaparecer: items[i]["p"]["reaparecer"], x_reaparicion: items[i]["p"]["x_reaparicion"],
+                                    y_reaparicion: items[i]["p"]["y_reaparicion"], y_caida: items[i]["p"]["y_caida"],
+                                    x: items[i]["p"]["x_reaparicion"], vx: items[i]["p"]["velocidad"], vy: items[i]["p"]["vy"],
+                                    y: items[i]["p"]["y_reaparicion"], darVuelta: items[i]["p"]["darVuelta"], velocidad: items[i]["p"]["velocidad"],
+                                    x_vueltaMax: items[i]["p"]["x_vueltaMax"], x_vueltaMin: items[i]["p"]["x_vueltaMin"]
+                                });
+                                var stag = this.stage;
+                                items[i].destroy();
+                                window.setTimeout(function () {
+                                    stag.insert(nuevo);
+                                }, 10000);
                             }
                             else items[i].destroy();
                             if (huevos == 0) {
@@ -1753,6 +1857,22 @@ var game = function () {
                     Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
                     sumaEnemigo();
                     huevos = 0;
+                    if (this.p.reaparecer) {
+                        var nuevo = new Q.Planta({
+                            sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x: this.p.x, y: this.p.y
+                        });
+                        var stag = this.stage;
+                        this.destroy();
+                        window.setTimeout(function () {
+                            stag.insert(nuevo);
+                        }, 10000);
+                    }
+                    else this.destroy();
+                    collision.obj.destroy();
+                }
+                else if (collision.obj.isA("Caparazon") && collision.obj.p.movimiento) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
+                    sumaEnemigo();
                     if (this.p.reaparecer) {
                         var nuevo = new Q.Planta({
                             sprite: this.p.sprite, sheet: this.p.sheet, reaparecer: this.p.reaparecer, x: this.p.x, y: this.p.y
@@ -2557,6 +2677,172 @@ var game = function () {
         },
         step: function(dt) {
             this.play("run_left");
+        }
+    });
+
+    //Enemy(fantasmas de colores terrestres)
+    Q.Sprite.extend("Koopa", {
+        init: function (p) {
+            this._super(p, {
+                sprite: "koopa_animations",
+                sheet: "koopa", //Obligatorio
+                vx: 0, //Obligatorio
+                vy: 200,
+                reaparecer: true, //Obligatorio
+                x_reaparicion: 0, //Obligatorio si reaparicion = true
+                y_reaparicion: 0, //Obligatorio si reaparicion = true
+                y_caida: 0, //Obligatorio si reaparicion = true
+                darVuelta: false,
+                x_vueltaMax: 0, //Obligatorio si darVuelta = true
+                x_vueltaMin: 0, //Obligatorio si darVuelta = true
+                velocidad: 0
+                //x e y también son obligatorias
+            });
+            this.add('2d, aiBounce, animation');
+            this.on("bump.bottom, bump.left, bump.right", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    Q.clearStages();
+                    Q.stageScene("endLevel", 1, { label: "You Died" });
+                    collision.obj.destroy();
+                }
+                else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
+                    sumaEnemigo();
+                    huevos = 0;
+                    collision.obj.destroy();
+                    this.stage.insert(new Q.Caparazon({x: this.p.x, y: this.p.y, reaparecer : this.p.reaparecer, x_reaparicion: this.p.x_reaparicion, y_reaparicion: this.p.y_reaparicion}));
+                    this.destroy();
+                }
+            });
+            //Si le salta encima el player lo mata
+            this.on("bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    sumaEnemigo();
+                    collision.obj.p.vy = -200;
+                    this.stage.insert(new Q.Caparazon({x: this.p.x, y: this.p.y, reaparecer : this.p.reaparecer, x_reaparicion: this.p.x_reaparicion, y_reaparicion: this.p.y_reaparicion}));
+                    this.destroy();
+                }
+                else if (collision.obj.isA("Egg")) {
+                    Q.audio.play("SonidoAlMatarEnemigosConHuevo.mp3");
+                    sumaEnemigo();
+                    huevos = 0;
+                    collision.obj.destroy();
+                    this.stage.insert(new Q.Caparazon({x: this.p.x, y: this.p.y, reaparecer : this.p.reaparecer, x_reaparicion: this.p.x_reaparicion, y_reaparicion: this.p.y_reaparicion}));
+                    this.destroy();
+                }
+            });
+        },
+        step: function (dt) {
+            if (this.p.vx > 0)
+                this.play("run_right1");
+            else if (this.p.vx < 0)
+                this.play("run_left1");
+                        if (this.p.reaparecer) { //Reaparición si el enmigo se cae
+                if (this.p.y >= this.p.y_caida) {
+                    this.p.x = this.p.x_reaparicion;
+                    this.p.y = this.p.y_reaparicion;
+                }
+            }
+            if (this.p.darVuelta && !this.p.dandoVuelta) { //Movimiento cuando no hay obstaculos
+                if (this.p.x >= this.p.x_vueltaMax) {
+                    this.p.vx = - this.p.velocidad;
+                }
+                else if (this.p.x <= this.p.x_vueltaMin) {
+                    this.p.vx = this.p.velocidad;
+                }
+            }
+        }
+    });
+
+    //Enemy(fantasmas de colores terrestres)
+    Q.Sprite.extend("Caparazon", {
+        init: function (p) {
+            this._super(p, {
+                sprite: "koopa_animations",
+                sheet: "caparazon", //Obligatorio
+                vx: 0, //Obligatorio
+                vy: 200,
+                movimiento: false,
+                tiempo: 0
+                //x e y también son obligatorias
+            });
+            this.add('2d, aiBounce, animation');
+            this.on("bump.bottom", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    if(this.p.muerte) {
+                        Q.clearStages();
+                        Q.stageScene("endLevel", 1, { label: "You Died" });
+                        collision.obj.destroy();
+                    }
+                }
+            });
+            this.on("bump.right", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    if(this.p.muerte) {
+                        Q.clearStages();
+                        Q.stageScene("endLevel", 1, { label: "You Died" });
+                        collision.obj.destroy();
+                    }
+                    else {
+                        this.p.vx = -150;
+                        this.play("caparazon_left");
+                        this.p.movimiento = true;
+                    }
+                }
+            });
+            this.on("bump.left", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    if(this.p.muerte) {
+                        Q.clearStages();
+                        Q.stageScene("endLevel", 1, { label: "You Died" });
+                        collision.obj.destroy();
+                    }
+                    else {
+                        this.p.vx = 150;
+                        this.play("caparazon_right");
+                        this.p.movimiento = true;
+                    }
+                }
+            });
+            //Si le salta encima el player lo mata
+            this.on("bump.top", function (collision) {
+                if (collision.obj.isA("Player")) {
+                    this.p.vx = 0
+                    this.play("stop");
+                    this.p.movimiento = false;
+                    this.p.muerte = false;
+                }
+            });
+        },
+        step: function (dt) {
+            if(this.p.movimiento) {
+                this.p.tiempo += dt;
+                if(this.p.tiempo > 0.2) {
+                    this.p.muerte = true;
+                }
+            }
+            else this.p.tiempo = 0;
+            if (this.p.vx > 0)
+                this.play("caparazon_right");
+            else if (this.p.vx < 0)
+                this.play("caparazon_left");
+            else if (this.p.vx == 0)
+                this.play("stop");
+            if (this.p.reaparecer) { //Reaparición si el enmigo se cae
+                if (this.p.y >= this.p.y_caida) {
+                    var nuevo = new Q.Koopa({
+                        reaparecer: this.p.reaparecer, x_reaparicion: this.p.x_reaparicion,
+                        y_reaparicion: this.p.y_reaparicion, y_caida: this.p.y_caida, x: this.p.x_reaparicion, vy: 200,
+                        vx: this.p.velocidad, y: this.p.y_reaparicion, darVuelta: this.p.darVuelta, velocidad: this.p.velocidad,
+                        x_vueltaMax: this.p.x_vueltaMax, x_vueltaMin: this.p.x_vueltaMin
+                    });
+                    var stag = this.stage;
+                    this.destroy();
+                    window.setTimeout(function () {
+                        stag.insert(nuevo);
+                    }, 10000);
+                }
+            }
         }
     });
 }
