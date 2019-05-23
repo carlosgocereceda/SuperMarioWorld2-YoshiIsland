@@ -3,7 +3,7 @@ var game = function () {
         huevos,
         numeroMonedas = [0, 0, 0, 0, 0],
         numeroTiempo = [0, 0, 0, 0, 0],
-        vidas = 5, maxVida = 10,
+        vidas = 10, maxVida = 15,
         enemigosMuertos = 0, enemigosParaVida = 5,
         musica = "",
         tiempo,
