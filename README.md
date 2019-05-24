@@ -16,6 +16,7 @@ El juego que hemos desarrollado se basa en el Yoshi Island original, aunque inco
 - Los mapas han sido desarrollado con [Tiled](https://www.mapeditor.org/ "Tiled").
 - Algunos Sprites han sido modificados por nosotros.
 - HTML y CSS para otros aspectos técnicos no vinculados directamente con las mecánicas de juego.
+
 ## Niveles del juego
 El juego está formado por niveles:
 - Nivel 1: Se trata de un primer nivel para que el jugador conozca las mecánicas básicas.
@@ -42,6 +43,20 @@ Entre otras, hemos implementado las siguientes mecánicas:
 	- Enemigos matados.
 	- Monedas recogidas.
 
+## Enemigos implementados
+
+[![](https://drive.google.com/uc?export=download&id=11VEozk-V1jSu7qdK9Qb_zooNVcPHBrmi)](https://drive.google.com/uc?export=download&id=11VEozk-V1jSu7qdK9Qb_zooNVcPHBrmi)
+
+## Algunas de las mecánicas anteriormente mencionadas
+- Cañones
+
+[![](https://drive.google.com/uc?export=download&id=1cT9lI8hCuQKZlxO6OwKlDW8UznJClpxQ)](https://drive.google.com/uc?export=download&id=1cT9lI8hCuQKZlxO6OwKlDW8UznJClpxQ)
+- Helicóptero
+
+[![](https://drive.google.com/uc?export=download&id=1X29nK7TDKEp-kjIAlPHLdkhpsfzPuMBo)](https://drive.google.com/uc?export=download&id=1X29nK7TDKEp-kjIAlPHLdkhpsfzPuMBo)
+- Hud
+
+[![](https://drive.google.com/uc?export=download&id=1nvZn4Gh2zIm2SYC1BF34AbERM4aWEern)](https://drive.google.com/uc?export=download&id=1nvZn4Gh2zIm2SYC1BF34AbERM4aWEern)
 ## Sobre los creadores
 Somos tres estudiantes del Ingeniería del Software en la Universidad Complutense:
 - [Gullermo Delgado Yepes](https://github.com/GDelga "Gullermo Delgado Yepes")
