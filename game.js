@@ -38,7 +38,7 @@ var game = function () {
         "MusicaMenu.mp3, MusicaMoneda.mp3, MusicaWin.mp3, MusicaNoVidas.mp3, MusicaNivel1.mp3, MusicaNivel2.mp3, " +
         "MusicaNivel3.mp3, yoshi-tongue.mp3, bebeMarioLlorando.png, bebeLlorando.json, timer.png, timer.json, " +
         "YoshiFlotar.mp3, YoshiSalto.mp3, SonidoPonerHuevo.mp3, SonidoDispararHuevo.mp3, SonidoAlMatarEnemigosConHuevo.mp3, " +
-        "MusicaCaidaOMuerte.mp3, GAMEOVER.json, bowserGAMEOVER.png, musicaJardin.mp3, yoshi4.tmx, bosque.png, plataforma.png, plataformaRoja.png, plataforma.json, " + 
+        "MusicaCaidaOMuerte.mp3, GAMEOVER.json, bowserGAMEOVER.png, yoshi4.tmx, bosque.png, plataforma.png, plataformaRoja.png, plataforma.json, " + 
         " plataformaRoja.json, clavos.png, clavos.json, manzana.png, manzana.json, bowser.png, bowser.json, luigi.png, luigi.json, " +
         "koopa.png, koopa.json, MusicaPuntos.mp3, bebeContento.png, bebeContento.json"
         , function () {
